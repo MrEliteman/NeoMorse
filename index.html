@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Neo Morse 0.4</title>
+<title>Neo Morse 0.5</title>
 
 <style>
     body {
@@ -124,6 +124,32 @@
         letter-spacing: 2px;
     }
 
+    .settings-row {
+        margin-bottom: 20px;
+    }
+
+    .settings-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .settings-row label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .range-value {
+        display: inline-block;
+        margin-top: 6px;
+        color: #666;
+        font-size: 14px;
+    }
+
     #playButton {
         background: #111;
         color: white;
@@ -164,7 +190,7 @@
 <h1>Neo Morse</h1>
 
 <div class="subtitle">
-    Переводчик азбуки Морзе — версия 0.4
+    Переводчик азбуки Морзе — версия 0.5
 </div>
 
 
@@ -265,6 +291,68 @@
     </button>
 
     <div id="status"></div>
+
+</div>
+
+
+<!-- =========================
+     НАСТРОЙКИ ЗВУКА
+========================= -->
+
+<div class="box">
+
+    <div class="label">
+        Настройки звука
+    </div>
+
+    <div class="settings-row">
+
+        <label for="speedRange">
+            Скорость
+        </label>
+
+        <input
+            type="range"
+            id="speedRange"
+            min="0.25"
+            max="3"
+            step="0.25"
+            value="1"
+        >
+
+        <span
+            class="range-value"
+            id="speedValue"
+        >
+            1×
+        </span>
+
+    </div>
+
+
+    <div class="settings-row">
+
+        <label for="pitchRange">
+            Тональность
+        </label>
+
+        <input
+            type="range"
+            id="pitchRange"
+            min="300"
+            max="1200"
+            step="50"
+            value="650"
+        >
+
+        <span
+            class="range-value"
+            id="pitchValue"
+        >
+            650 Гц
+        </span>
+
+    </div>
 
 </div>
 
@@ -472,12 +560,30 @@ const languageSelect =
 const morseTableBody =
     document.getElementById("morseTableBody");
 
+const speedRange =
+    document.getElementById("speedRange");
+
+const speedValue =
+    document.getElementById("speedValue");
+
+const pitchRange =
+    document.getElementById("pitchRange");
+
+const pitchValue =
+    document.getElementById("pitchValue");
+
 
 /* =========================
-   ТЕКУЩИЙ РЕЖИМ
+   СОСТОЯНИЕ
 ========================= */
 
 let mode = "encode";
+
+let isPlaying = false;
+
+let stopPlayback = false;
+
+let currentAudioContext = null;
 
 
 /* =========================
@@ -487,9 +593,7 @@ let mode = "encode";
 function getMorse() {
 
     if (languageSelect.value === "en") {
-
         return MORSE_EN;
-
     }
 
     return MORSE_RU;
@@ -711,6 +815,34 @@ function updateMorseTable() {
 
 
 /* =========================
+   НАСТРОЙКИ СКОРОСТИ
+========================= */
+
+speedRange.addEventListener(
+    "input",
+    function () {
+
+        speedValue.textContent =
+            speedRange.value + "×";
+    }
+);
+
+
+/* =========================
+   НАСТРОЙКИ ТОНАЛЬНОСТИ
+========================= */
+
+pitchRange.addEventListener(
+    "input",
+    function () {
+
+        pitchValue.textContent =
+            pitchRange.value + " Гц";
+    }
+);
+
+
+/* =========================
    СМЕНА ЯЗЫКА
 ========================= */
 
@@ -733,6 +865,8 @@ languageSelect.addEventListener(
 encodeButton.addEventListener(
     "click",
     function () {
+
+        stopPlaybackNow();
 
         mode = "encode";
 
@@ -771,6 +905,8 @@ decodeButton.addEventListener(
     "click",
     function () {
 
+        stopPlaybackNow();
+
         mode = "decode";
 
         decodeButton.classList.add(
@@ -808,6 +944,8 @@ translateButton.addEventListener(
     "click",
     function () {
 
+        stopPlaybackNow();
+
         translate();
     }
 );
@@ -820,6 +958,8 @@ translateButton.addEventListener(
 clearButton.addEventListener(
     "click",
     function () {
+
+        stopPlaybackNow();
 
         input.value = "";
 
@@ -872,34 +1012,31 @@ copyButton.addEventListener(
 
 
 /* =========================
-   ЗВУК МОРЗЕ — 0.4
+   ВСПОМОГАТЕЛЬНАЯ ПАУЗА
 ========================= */
-
-/*
-    Стандартная схема:
-
-    точка  = 1 единица
-    тире   = 3 единицы
-
-    между элементами буквы = 1
-    между буквами = 3
-    между словами = 7
-*/
-
-const DOT_DURATION = 100;
-const FREQUENCY = 650;
 
 function sleep(ms) {
 
     return new Promise(
-        resolve => setTimeout(resolve, ms)
+        resolve =>
+            setTimeout(resolve, ms)
     );
 }
 
 
+/* =========================
+   СОЗДАНИЕ ЗВУКА
+========================= */
+
 function playTone(duration) {
 
     return new Promise(resolve => {
+
+        if (stopPlayback) {
+
+            resolve();
+            return;
+        }
 
         const AudioContext =
             window.AudioContext ||
@@ -911,25 +1048,30 @@ function playTone(duration) {
             return;
         }
 
-        const audioContext =
+        currentAudioContext =
             new AudioContext();
 
         const oscillator =
-            audioContext.createOscillator();
+            currentAudioContext
+                .createOscillator();
 
         const gain =
-            audioContext.createGain();
-
-        oscillator.frequency.value =
-            FREQUENCY;
+            currentAudioContext
+                .createGain();
 
         oscillator.type =
             "sine";
 
+        oscillator.frequency.value =
+            Number(pitchRange.value);
+
+        gain.gain.value =
+            0.15;
+
         oscillator.connect(gain);
 
         gain.connect(
-            audioContext.destination
+            currentAudioContext.destination
         );
 
         oscillator.start();
@@ -937,9 +1079,16 @@ function playTone(duration) {
         setTimeout(
             function () {
 
-                oscillator.stop();
+                try {
+                    oscillator.stop();
+                } catch (error) {}
 
-                audioContext.close();
+                try {
+                    currentAudioContext.close();
+                } catch (error) {}
+
+                currentAudioContext =
+                    null;
 
                 resolve();
 
@@ -949,6 +1098,51 @@ function playTone(duration) {
     });
 }
 
+
+/* =========================
+   ОСТАНОВКА
+========================= */
+
+function stopPlaybackNow() {
+
+    stopPlayback = true;
+
+    isPlaying = false;
+
+    if (currentAudioContext) {
+
+        try {
+            currentAudioContext.close();
+        } catch (error) {}
+
+        currentAudioContext =
+            null;
+    }
+
+    playButton.textContent =
+        "▶ Воспроизвести";
+}
+
+
+/* =========================
+   ПОЛУЧЕНИЕ МОРЗЕ
+========================= */
+
+function getPlaybackMorse() {
+
+    if (mode === "encode") {
+
+        return result.textContent;
+
+    }
+
+    return input.value.trim();
+}
+
+
+/* =========================
+   ВОСПРОИЗВЕДЕНИЕ
+========================= */
 
 async function playMorseSound(morseText) {
 
@@ -964,11 +1158,33 @@ async function playMorseSound(morseText) {
         return;
     }
 
+    stopPlayback = false;
+
+    isPlaying = true;
+
+    playButton.textContent =
+        "■ Остановить";
+
     status.textContent =
         "Воспроизведение...";
 
+
+    /*
+        Базовая единица времени.
+        Чем выше скорость,
+        тем короче сигнал.
+    */
+
+    const speed =
+        Number(speedRange.value);
+
+    const dotDuration =
+        100 / speed;
+
+
     const words =
         morseText.split("/");
+
 
     for (
         let w = 0;
@@ -976,11 +1192,16 @@ async function playMorseSound(morseText) {
         w++
     ) {
 
+        if (stopPlayback) {
+            break;
+        }
+
         const letters =
             words[w]
                 .trim()
                 .split(/\s+/)
                 .filter(Boolean);
+
 
         for (
             let l = 0;
@@ -988,8 +1209,13 @@ async function playMorseSound(morseText) {
             l++
         ) {
 
+            if (stopPlayback) {
+                break;
+            }
+
             const code =
                 letters[l];
+
 
             for (
                 let i = 0;
@@ -997,122 +1223,17 @@ async function playMorseSound(morseText) {
                 i++
             ) {
 
+                if (stopPlayback) {
+                    break;
+                }
+
                 const symbol =
                     code[i];
+
 
                 if (symbol === ".") {
 
                     await playTone(
-                        DOT_DURATION
+                        dotDuration
                     );
-
-                } else if (
-                    symbol === "-"
-                ) {
-
-                    await playTone(
-                        DOT_DURATION * 3
-                    );
-
-                }
-
-                /*
-                    Пауза между
-                    точкой и тире
-                */
-
-                if (
-                    i <
-                    code.length - 1
-                ) {
-
-                    await sleep(
-                        DOT_DURATION
-                    );
-                }
-            }
-
-            /*
-                Пауза между буквами
-            */
-
-            if (
-                l <
-                letters.length - 1
-            ) {
-
-                await sleep(
-                    DOT_DURATION * 3
-                );
-            }
-        }
-
-        /*
-            Пауза между словами
-        */
-
-        if (
-            w <
-            words.length - 1
-        ) {
-
-            await sleep(
-                DOT_DURATION * 7
-            );
-        }
-    }
-
-    status.textContent =
-        "Воспроизведение завершено";
-}
-
-
-/* =========================
-   КНОПКА ВОСПРОИЗВЕДЕНИЯ
-========================= */
-
-playButton.addEventListener(
-    "click",
-    function () {
-
-        let morseText;
-
-        /*
-            Если мы в режиме
-            Текст → Морзе,
-            результат уже является Морзе.
-        */
-
-        if (mode === "encode") {
-
-            morseText =
-                result.textContent;
-
-        } else {
-
-            /*
-                В режиме Морзе → текст
-                берём исходный введённый код.
-            */
-
-            morseText =
-                input.value.trim();
-        }
-
-        playMorseSound(
-            morseText
-        );
-    }
-);
-
-
-/* =========================
-   ЗАПУСК
-========================= */
-
-updateMorseTable();
-
-</script>
-
-</body>
-</html>
+    
