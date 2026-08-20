@@ -1171,9 +1171,586 @@ function stopPlayback() {
     );
 }
 
-
 /* ==================================================
    ПОЛУЧИТЬ КОД ДЛЯ ЗВУКА
 ================================================== */
 
-func
+function getMorseForPlayback() {
+
+    /*
+        В режиме Текст → Морзе
+        используем уже полученный результат.
+    */
+
+    if (mode === "encode") {
+
+        const morse =
+            result.textContent.trim();
+
+        if (
+            !morse ||
+            morse === "Здесь появится результат"
+        ) {
+            return "";
+        }
+
+        return morse;
+    }
+
+
+    /*
+        В режиме Морзе → текст
+        используем введённый пользователем Морзе-код.
+    */
+
+    return input.value.trim();
+}
+
+
+/* ==================================================
+   ВОСПРОИЗВЕДЕНИЕ ОДНОГО СИГНАЛА
+================================================== */
+
+function playTone(duration) {
+
+    return new Promise(function(resolve) {
+
+        if (
+            stopRequested ||
+            !audioContext
+        ) {
+
+            resolve();
+            return;
+        }
+
+
+        oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.value =
+            Number(pitchRange.value);
+
+
+        gain.gain.value = 0.15;
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+
+        setTimeout(function() {
+
+            if (oscillator) {
+
+                try {
+                    oscillator.stop();
+                } catch (error) {}
+
+                oscillator = null;
+            }
+
+            resolve();
+
+        }, duration);
+
+    });
+}
+
+
+/* ==================================================
+   ПАУЗА
+================================================== */
+
+function wait(ms) {
+
+    return new Promise(function(resolve) {
+
+        setTimeout(resolve, ms);
+
+    });
+}
+
+
+/* ==================================================
+   СОЗДАНИЕ AUDIO CONTEXT
+================================================== */
+
+function createAudio() {
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+
+    if (!AudioContext) {
+
+        status.textContent =
+            "Браузер не поддерживает звук";
+
+        return false;
+    }
+
+
+    audioContext =
+        new AudioContext();
+
+
+    /*
+        На некоторых мобильных браузерах
+        AudioContext после первого запуска
+        может быть приостановлен.
+    */
+
+    if (
+        audioContext.state === "suspended"
+    ) {
+
+        audioContext.resume();
+    }
+
+
+    return true;
+}
+
+
+/* ==================================================
+   ОСТАНОВКА ВОСПРОИЗВЕДЕНИЯ
+================================================== */
+
+function stopPlayback() {
+
+    stopRequested = true;
+
+    isPlaying = false;
+
+
+    /*
+        Останавливаем текущий сигнал.
+    */
+
+    if (oscillator) {
+
+        try {
+            oscillator.stop();
+        } catch (error) {}
+
+        oscillator = null;
+    }
+
+
+    /*
+        Закрываем AudioContext.
+    */
+
+    if (audioContext) {
+
+        try {
+            audioContext.close();
+        } catch (error) {}
+
+        audioContext = null;
+    }
+
+
+    /*
+        Возвращаем кнопку
+        в обычное состояние.
+    */
+
+    playButton.textContent =
+        "▶ Воспроизвести";
+
+    playButton.classList.remove(
+        "playing"
+    );
+}
+
+
+/* ==================================================
+   ВОСПРОИЗВЕДЕНИЕ МОРЗЕ
+================================================== */
+
+async function playMorseSound(morseText) {
+
+    /*
+        Проверяем, есть ли вообще
+        что воспроизводить.
+    */
+
+    if (
+        !morseText ||
+        morseText ===
+        "Здесь появится результат"
+    ) {
+
+        status.textContent =
+            "Сначала получи перевод";
+
+        return;
+    }
+
+
+    /*
+        Создаём звук.
+    */
+
+    if (!createAudio()) {
+
+        return;
+    }
+
+
+    /*
+        Начинаем новое воспроизведение.
+    */
+
+    stopRequested = false;
+
+    isPlaying = true;
+
+
+    playButton.textContent =
+        "■ Остановить";
+
+    playButton.classList.add(
+        "playing"
+    );
+
+
+    status.textContent =
+        "Воспроизведение...";
+
+
+    /*
+        Базовая длительность точки.
+
+        100 мс при скорости 1×.
+        Чем выше скорость,
+        тем быстрее воспроизведение.
+    */
+
+    const speed =
+        Number(speedRange.value);
+
+    const dot =
+        100 / speed;
+
+
+    /*
+        Разделяем слова.
+    */
+
+    const words =
+        morseText.split("/");
+
+
+    /*
+        Воспроизводим каждое слово.
+    */
+
+    for (
+        let w = 0;
+        w < words.length;
+        w++
+    ) {
+
+        if (stopRequested) {
+            break;
+        }
+
+
+        const word =
+            words[w].trim();
+
+
+        if (!word) {
+            continue;
+        }
+
+
+        /*
+            Внутри слова буквы
+            разделены пробелами.
+        */
+
+        const letters =
+            word.split(/\s+/);
+
+
+        for (
+            let l = 0;
+            l < letters.length;
+            l++
+        ) {
+
+            if (stopRequested) {
+                break;
+            }
+
+
+            const code =
+                letters[l];
+
+
+            /*
+                Воспроизводим каждый
+                символ Морзе.
+            */
+
+            for (
+                let i = 0;
+                i < code.length;
+                i++
+            ) {
+
+                if (stopRequested) {
+                    break;
+                }
+
+
+                const symbol =
+                    code[i];
+
+
+                /*
+                    Точка.
+                */
+
+                if (symbol === ".") {
+
+                    await playTone(
+                        dot
+                    );
+                }
+
+
+                /*
+                    Тире.
+                */
+
+                else if (
+                    symbol === "-"
+                ) {
+
+                    await playTone(
+                        dot * 3
+                    );
+                }
+
+
+                /*
+                    Пауза между точкой
+                    и следующим символом.
+                */
+
+                if (
+                    i <
+                    code.length - 1 &&
+                    !stopRequested
+                ) {
+
+                    await wait(
+                        dot
+                    );
+                }
+            }
+
+
+            /*
+                Пауза между буквами.
+            */
+
+            if (
+                l <
+                letters.length - 1 &&
+                !stopRequested
+            ) {
+
+                await wait(
+                    dot * 3
+                );
+            }
+        }
+
+
+        /*
+            Пауза между словами.
+        */
+
+        if (
+            w <
+            words.length - 1 &&
+            !stopRequested
+        ) {
+
+            await wait(
+                dot * 7
+            );
+        }
+    }
+
+
+    /*
+        Запоминаем,
+        была ли остановка.
+    */
+
+    const wasStopped =
+        stopRequested;
+
+
+    /*
+        Останавливаем остатки звука.
+    */
+
+    if (oscillator) {
+
+        try {
+            oscillator.stop();
+        } catch (error) {}
+
+        oscillator = null;
+    }
+
+
+    /*
+        Закрываем AudioContext.
+    */
+
+    if (audioContext) {
+
+        try {
+            await audioContext.close();
+        } catch (error) {}
+
+        audioContext = null;
+    }
+
+
+    /*
+        Воспроизведение закончено.
+    */
+
+    isPlaying = false;
+
+
+    playButton.textContent =
+        "▶ Воспроизвести";
+
+    playButton.classList.remove(
+        "playing"
+    );
+
+
+    if (wasStopped) {
+
+        status.textContent =
+            "Воспроизведение остановлено";
+
+    } else {
+
+        status.textContent =
+            "Воспроизведение завершено";
+    }
+}
+
+
+/* ==================================================
+   КНОПКА ВОСПРОИЗВЕСТИ / ОСТАНОВИТЬ
+================================================== */
+
+playButton.addEventListener(
+    "click",
+    function() {
+
+        /*
+            Если звук уже идёт,
+            повторное нажатие
+            полностью его останавливает.
+
+            НОВОЕ воспроизведение
+            при этом не создаётся.
+        */
+
+        if (isPlaying) {
+
+            stopPlayback();
+
+            status.textContent =
+                "Воспроизведение остановлено";
+
+            return;
+        }
+
+
+        /*
+            Получаем Морзе,
+            который нужно воспроизвести.
+        */
+
+        const morseText =
+            getMorseForPlayback();
+
+
+        /*
+            Запускаем воспроизведение.
+        */
+
+        playMorseSound(
+            morseText
+        );
+    }
+);
+
+
+/* ==================================================
+   СКОРОСТЬ
+================================================== */
+
+speedRange.addEventListener(
+    "input",
+    function() {
+
+        speedValue.textContent =
+            speedRange.value + "×";
+    }
+);
+
+
+/* ==================================================
+   ТОНАЛЬНОСТЬ
+================================================== */
+
+pitchRange.addEventListener(
+    "input",
+    function() {
+
+        pitchValue.textContent =
+            pitchRange.value + " Гц";
+    }
+);
+
+
+/* ==================================================
+   ПЕРВОНАЧАЛЬНАЯ ТАБЛИЦА
+================================================== */
+
+updateMorseTable();
+
+</script>
+
+</body>
+</html>
