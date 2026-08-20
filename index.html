@@ -12,44 +12,37 @@
 
 <meta
     name="theme-color"
-    content="#f5f5f5"
-    id="themeColor"
+    content="#111111"
 >
 
-<title>Neo Morse 0.7</title>
+<title>Neo Morse 0.6</title>
+
 
 <style>
 
 /* ==================================================
-   BASE
+   ОСНОВА
 ================================================== */
 
 * {
     box-sizing: border-box;
 }
 
-html {
-    min-height: 100%;
-}
-
 body {
 
     margin: 0;
-
-    min-height: 100vh;
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
 
-    background: #f0f1f3;
+    background:
+        #eef0f2;
 
     color: #111;
 
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
+    min-height: 100vh;
 }
 
 
@@ -62,129 +55,7 @@ body {
     margin: 0 auto;
 
     padding:
-        14px 12px 35px;
-}
-
-
-/* ==================================================
-   DARK MODE
-================================================== */
-
-body.dark {
-
-    background: #101112;
-
-    color: #f1f1f1;
-}
-
-body.dark .card {
-
-    background: #191b1d;
-
-    border-color: #303236;
-
-    box-shadow:
-        0 4px 15px
-        rgba(
-            0,
-            0,
-            0,
-            0.25
-        );
-}
-
-body.dark .subtitle,
-body.dark .version,
-body.dark .label,
-body.dark .setting-value,
-body.dark .play-status,
-body.dark #status,
-body.dark .footer {
-
-    color: #9b9da1;
-}
-
-body.dark textarea,
-body.dark select {
-
-    background: #111315;
-
-    color: #f1f1f1;
-
-    border-color: #3a3c40;
-}
-
-body.dark button {
-
-    background: #1d1f21;
-
-    color: #f1f1f1;
-
-    border-color: #3a3c40;
-}
-
-body.dark button:hover {
-
-    background: #292b2e;
-}
-
-body.dark button.active,
-body.dark button.primary {
-
-    background: #f1f1f1;
-
-    color: #111;
-
-    border-color: #f1f1f1;
-}
-
-body.dark .result {
-
-    background: #111315;
-
-    color: #f1f1f1;
-}
-
-body.dark .table-wrapper {
-
-    border-color: #35373a;
-}
-
-body.dark .morse-table {
-
-    background: #191b1d;
-
-    color: #f1f1f1;
-}
-
-body.dark .morse-table th {
-
-    background: #25272a;
-}
-
-body.dark .morse-table th,
-body.dark .morse-table td {
-
-    border-color: #35373a;
-}
-
-body.dark .theme-button {
-
-    background: #f1f1f1;
-
-    color: #111;
-
-    border-color: #f1f1f1;
-}
-
-body.dark .status-light {
-
-    background: #555;
-}
-
-body.dark .status-light.active {
-
-    background: #f1f1f1;
+        18px 14px 35px;
 }
 
 
@@ -196,12 +67,11 @@ body.dark .status-light.active {
 
     display: flex;
 
-    justify-content:
-        space-between;
+    justify-content: space-between;
 
     align-items: center;
 
-    margin-bottom: 14px;
+    margin-bottom: 15px;
 }
 
 .brand {
@@ -215,9 +85,8 @@ body.dark .status-light.active {
 
 .logo {
 
-    width: 43px;
-
-    height: 43px;
+    width: 42px;
+    height: 42px;
 
     border-radius: 12px;
 
@@ -227,75 +96,35 @@ body.dark .status-light.active {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: center;
+
+    align-items: center;
 
     font-weight: bold;
 
-    font-size: 17px;
-
-    flex-shrink: 0;
-}
-
-body.dark .logo {
-
-    background: #f1f1f1;
-
-    color: #111;
+    font-size: 18px;
 }
 
 h1 {
 
     margin: 0;
 
-    font-size: 24px;
-
-    line-height: 1.1;
+    font-size: 25px;
 }
 
 .version {
 
-    margin-top: 4px;
+    font-size: 12px;
 
     color: #777;
 
-    font-size: 12px;
-}
-
-.header-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-}
-
-.theme-button {
-
-    width: 42px;
-
-    height: 42px;
-
-    padding: 0;
-
-    margin: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 18px;
+    margin-top: 3px;
 }
 
 .status-light {
 
-    width: 9px;
-
-    height: 9px;
+    width: 11px;
+    height: 11px;
 
     border-radius: 50%;
 
@@ -317,17 +146,16 @@ h1 {
     background: white;
 
     border:
-        1px solid #ddd;
+        1px solid #dedede;
 
-    border-radius: 17px;
+    border-radius: 18px;
 
-    padding: 16px;
+    padding: 17px;
 
-    margin-bottom: 12px;
+    margin-bottom: 13px;
 
     box-shadow:
-        0 3px 12px
-        rgba(
+        0 3px 12px rgba(
             0,
             0,
             0,
@@ -336,13 +164,9 @@ h1 {
 }
 
 
-/* ==================================================
-   LABEL
-================================================== */
-
 .label {
 
-    font-size: 12px;
+    font-size: 13px;
 
     font-weight: bold;
 
@@ -364,91 +188,25 @@ select {
 
     width: 100%;
 
-    padding: 13px;
-
     border:
         1px solid #ccc;
 
     border-radius: 12px;
 
-    background: white;
-
-    color: #111;
+    padding: 13px;
 
     font-size: 16px;
+
+    background: #fff;
+
+    color: #111;
 
     outline: none;
 }
 
-select:focus {
-
-    border-color: #777;
-}
-
 
 /* ==================================================
-   BUTTONS
-================================================== */
-
-button {
-
-    padding: 12px 14px;
-
-    margin: 0;
-
-    border:
-        1px solid #ccc;
-
-    border-radius: 12px;
-
-    background: white;
-
-    color: #111;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    transition:
-        background 0.15s ease,
-        transform 0.1s ease;
-
-    -webkit-tap-highlight-color:
-        transparent;
-}
-
-button:hover {
-
-    background: #eee;
-}
-
-button:active {
-
-    transform:
-        scale(0.98);
-}
-
-button.active {
-
-    background: #111;
-
-    color: white;
-
-    border-color: #111;
-}
-
-button.primary {
-
-    background: #111;
-
-    color: white;
-
-    border-color: #111;
-}
-
-
-/* ==================================================
-   MODE
+   MODE BUTTONS
 ================================================== */
 
 .mode-buttons {
@@ -461,6 +219,50 @@ button.primary {
     gap: 8px;
 }
 
+button {
+
+    border:
+        1px solid #ccc;
+
+    border-radius: 12px;
+
+    background: white;
+
+    color: #111;
+
+    padding: 12px 14px;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition:
+        0.15s ease;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+button:active {
+
+    transform:
+        scale(0.98);
+}
+
+button:hover {
+
+    background: #f0f0f0;
+}
+
+button.active {
+
+    background: #111;
+
+    color: white;
+
+    border-color: #111;
+}
+
 
 /* ==================================================
    TEXTAREA
@@ -468,35 +270,29 @@ button.primary {
 
 textarea {
 
-    display: block;
-
     width: 100%;
 
-    min-height: 140px;
+    min-height: 145px;
 
     resize: vertical;
-
-    padding: 13px;
 
     border:
         1px solid #ccc;
 
-    border-radius: 13px;
+    border-radius: 14px;
 
-    background: white;
-
-    color: #111;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    padding: 14px;
 
     font-size: 18px;
 
     line-height: 1.45;
 
     outline: none;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 textarea:focus {
@@ -521,6 +317,20 @@ textarea:focus {
     margin-top: 9px;
 }
 
+.primary {
+
+    background: #111;
+
+    color: white;
+
+    border-color: #111;
+}
+
+.primary:hover {
+
+    background: #222;
+}
+
 
 /* ==================================================
    RESULT
@@ -528,23 +338,27 @@ textarea:focus {
 
 .result {
 
-    min-height: 85px;
+    min-height: 90px;
 
-    padding: 14px;
+    background:
+        #f0f1f2;
 
-    border-radius: 13px;
+    border-radius: 14px;
 
-    background: #eceef0;
+    padding: 15px;
 
-    color: #111;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-    font-size: 19px;
+    font-size: 20px;
 
     line-height: 1.5;
 
-    white-space: pre-wrap;
-
     word-break: break-word;
+
+    white-space: pre-wrap;
 }
 
 .result.morse {
@@ -558,10 +372,10 @@ textarea:focus {
 
 
 /* ==================================================
-   PLAYBACK
+   RADIO BUTTON
 ================================================== */
 
-.playback {
+.radio-control {
 
     display: flex;
 
@@ -569,16 +383,13 @@ textarea:focus {
 
     align-items: center;
 
-    text-align: center;
+    padding: 8px 0 4px;
 }
 
 .play-button {
 
-    width: 78px;
-
-    height: 78px;
-
-    padding: 0;
+    width: 125px;
+    height: 125px;
 
     border-radius: 50%;
 
@@ -586,18 +397,28 @@ textarea:focus {
 
     color: white;
 
-    border:
-        1px solid #111;
+    border: 7px solid #ddd;
+
+    font-size: 17px;
+
+    font-weight: bold;
 
     display: flex;
 
-    align-items: center;
-
     justify-content: center;
 
-    font-size: 24px;
+    align-items: center;
 
-    margin: 4px 0 9px;
+    margin: 8px 0 12px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(
+            0,
+            0,
+            0,
+            0.15
+        );
 }
 
 .play-button:hover {
@@ -607,16 +428,18 @@ textarea:focus {
 
 .play-button.playing {
 
-    background: #555;
+    background: #444;
+
+    border-color: #aaa;
 }
 
 .play-status {
 
-    min-height: 18px;
+    font-size: 13px;
 
     color: #777;
 
-    font-size: 13px;
+    text-align: center;
 }
 
 
@@ -626,7 +449,7 @@ textarea:focus {
 
 .setting {
 
-    margin-bottom: 17px;
+    margin-bottom: 18px;
 }
 
 .setting:last-child {
@@ -638,16 +461,13 @@ textarea:focus {
 
     display: flex;
 
-    justify-content:
-        space-between;
-
-    align-items: center;
-
-    margin-bottom: 8px;
+    justify-content: space-between;
 
     font-size: 14px;
 
     font-weight: bold;
+
+    margin-bottom: 8px;
 }
 
 .setting-value {
@@ -675,10 +495,10 @@ input[type="range"] {
 
     overflow-x: auto;
 
+    border-radius: 12px;
+
     border:
         1px solid #ddd;
-
-    border-radius: 12px;
 }
 
 .morse-table {
@@ -694,17 +514,18 @@ input[type="range"] {
 .morse-table th,
 .morse-table td {
 
-    padding: 9px;
-
-    text-align: center;
+    padding: 10px;
 
     border-bottom:
         1px solid #ddd;
+
+    text-align: center;
 }
 
 .morse-table th {
 
-    background: #f0f0f0;
+    background:
+        #f0f0f0;
 
     font-size: 13px;
 }
@@ -750,13 +571,13 @@ input[type="range"] {
 
 .footer {
 
-    padding-top: 5px;
-
     text-align: center;
 
     color: #888;
 
     font-size: 12px;
+
+    padding-top: 4px;
 }
 
 
@@ -769,19 +590,19 @@ input[type="range"] {
     .app {
 
         padding:
-            11px 9px 28px;
+            12px 10px 28px;
     }
 
     .card {
 
-        padding: 14px;
-
         border-radius: 16px;
+
+        padding: 14px;
     }
 
     h1 {
 
-        font-size: 22px;
+        font-size: 23px;
     }
 
     textarea {
@@ -798,15 +619,15 @@ input[type="range"] {
 
     .play-button {
 
-        width: 72px;
-
-        height: 72px;
+        width: 115px;
+        height: 115px;
     }
+
 }
 
 
 /* ==================================================
-   SMALL MOBILE
+   VERY SMALL SCREENS
 ================================================== */
 
 @media (max-width: 360px) {
@@ -818,16 +639,10 @@ input[type="range"] {
             1fr;
     }
 
-    .header-actions {
+    .play-button {
 
-        gap: 5px;
-    }
-
-    .theme-button {
-
-        width: 38px;
-
-        height: 38px;
+        width: 105px;
+        height: 105px;
     }
 }
 
@@ -835,7 +650,9 @@ input[type="range"] {
 
 </head>
 
+
 <body>
+
 
 <div class="app">
 
@@ -859,31 +676,17 @@ input[type="range"] {
             </h1>
 
             <div class="version">
-                Morse translator · 0.7
+                Morse translator · 0.6
             </div>
 
         </div>
 
     </div>
 
-
-    <div class="header-actions">
-
-        <button
-            id="themeButton"
-            class="theme-button"
-            aria-label="Переключить тему"
-            title="Переключить тему"
-        >
-            ☾
-        </button>
-
-        <div
-            id="statusLight"
-            class="status-light"
-        ></div>
-
-    </div>
+    <div
+        id="statusLight"
+        class="status-light"
+    ></div>
 
 </header>
 
@@ -1035,9 +838,7 @@ input[type="range"] {
 
     <div class="actions">
 
-        <button
-            id="copyButton"
-        >
+        <button id="copyButton">
             Копировать
         </button>
 
@@ -1053,21 +854,20 @@ input[type="range"] {
 
 
 <!-- ==================================================
-     PLAYBACK
+     RADIO / AUDIO
 ================================================== -->
 
 <div class="card">
 
     <div class="label">
-        Воспроизведение
+        Морзе-радио
     </div>
 
-    <div class="playback">
+    <div class="radio-control">
 
         <button
             id="playButton"
             class="play-button"
-            aria-label="Воспроизвести"
         >
             ▶
         </button>
@@ -1076,7 +876,7 @@ input[type="range"] {
             id="playStatus"
             class="play-status"
         >
-            Готово к воспроизведению
+            Готово к передаче
         </div>
 
     </div>
@@ -1091,7 +891,7 @@ input[type="range"] {
 <div class="card">
 
     <div class="label">
-        Настройки звука
+        Настройки передачи
     </div>
 
 
@@ -1197,8 +997,9 @@ input[type="range"] {
 
 
 <div class="footer">
+    Neo Morse 0.6 · Open Code
+</div>
 
-    Neo Morse 0.7 · Open Code
 
 </div>
 
@@ -1206,7 +1007,7 @@ input[type="range"] {
 <script>
 
 /* ==================================================
-   MORSE — INTERNATIONAL
+   INTERNATIONAL MORSE
 ================================================== */
 
 const INTERNATIONAL = {
@@ -1393,7 +1194,40 @@ const AZ_EXTRA = {
     "Ü": "..--",
     "V": "...-",
     "Y": "-.--",
-    "Z": "--.."
+    "Z": "--..",
+
+    "a": ".-",
+    "b": "-...",
+    "c": "-.-.",
+    "ç": "-.-..",
+    "d": "-..",
+    "e": ".",
+    "ə": ".-..-",
+    "f": "..-.",
+    "g": "--.",
+    "ğ": "--.-.",
+    "h": "....",
+    "x": "-..-",
+    "ı": "..",
+    "i": ".-..-",
+    "j": ".---",
+    "k": "-.-",
+    "q": "--.-",
+    "l": ".-..",
+    "m": "--",
+    "n": "-.",
+    "o": "---",
+    "ö": "---.",
+    "p": ".--.",
+    "r": ".-.",
+    "s": "...",
+    "ş": "----",
+    "t": "-",
+    "u": "..-",
+    "ü": "..--",
+    "v": "...-",
+    "y": "-.--",
+    "z": "--.."
 };
 
 
@@ -1409,7 +1243,8 @@ const TR_EXTRA = {
     "I": "..",
     "Ö": "---.",
     "Ş": "----",
-    "Ü": "..--"
+    "Ü": "..--",
+    "ı": ".."
 };
 
 
@@ -1443,7 +1278,8 @@ const FR_EXTRA = {
     "Ï": "..",
     "Ô": "---.",
     "Ù": "..--",
-    "Û": "..--"
+    "Û": "..--",
+    "Ü": "..--"
 };
 
 
@@ -1502,7 +1338,7 @@ const PT_EXTRA = {
 
 
 /* ==================================================
-   LANGUAGE MAPS
+   СОЗДАНИЕ ЯЗЫКОВ
 ================================================== */
 
 function makeLatinMap(extra) {
@@ -1516,4222 +1352,25 @@ function makeLatinMap(extra) {
 
 const LANGUAGES = {
 
-    az:
-        makeLatinMap(AZ_EXTRA),
+    az: makeLatinMap(AZ_EXTRA),
 
-    ru:
-        RU_EXTRA,
+    en: makeLatinMap({}),
 
-    en:
-        makeLatinMap({}),
+    tr: makeLatinMap(TR_EXTRA),
 
-    tr:
-        makeLatinMap(TR_EXTRA),
+    de: makeLatinMap(DE_EXTRA),
 
-    de:
-        makeLatinMap(DE_EXTRA),
+    fr: makeLatinMap(FR_EXTRA),
 
-    fr:
-        makeLatinMap(FR_EXTRA),
+    es: makeLatinMap(ES_EXTRA),
 
-    es:
-        makeLatinMap(ES_EXTRA),
+    it: makeLatinMap(IT_EXTRA),
 
-    it:
-        makeLatinMap(IT_EXTRA),
+    pt: makeLatinMap(PT_EXTRA),
 
-    pt:
-        makeLatinMap(PT_EXTRA),
+    ru: RU_EXTRA,
 
-    uk:
-        UK_EXTRA
+    uk: UK_EXTRA
 };
 
 
-/* ==================================================
-   ELEMENTS
-================================================== */
-
-const input =
-    document.getElementById(
-        "input"
-    );
-
-const result =
-    document.getElementById(
-        "result"
-    );
-
-const languageSelect =
-    document.getElementById(
-        "languageSelect"
-    );
-
-const encodeButton =
-    document.getElementById(
-        "encodeButton"
-    );
-
-const decodeButton =
-    document.getElementById(
-        "decodeButton"
-    );
-
-const translateButton =
-    document.getElementById(
-        "translateButton"
-    );
-
-const clearButton =
-    document.getElementById(
-        "clearButton"
-    );
-
-const copyButton =
-    document.getElementById(
-        "copyButton"
-    );
-
-const useResultButton =
-    document.getElementById(
-        "useResultButton"
-    );
-
-const playButton =
-    document.getElementById(
-        "playButton"
-    );
-
-const playStatus =
-    document.getElementById(
-        "playStatus"
-    );
-
-const status =
-    document.getElementById(
-        "status"
-    );
-
-const statusLight =
-    document.getElementById(
-        "statusLight"
-    );
-
-const inputLabel =
-    document.getElementById(
-        "inputLabel"
-    );
-
-const resultLabel =
-    document.getElementById(
-        "resultLabel"
-    );
-
-const tableBody =
-    document.getElementById(
-        "morseTableBody"
-    );
-
-const speedRange =
-    document.getElementById(
-        "speedRange"
-    );
-
-const speedValue =
-    document.getElementById(
-        "speedValue"
-    );
-
-const pitchRange =
-    document.getElementById(
-        "pitchRange"
-    );
-
-const pitchValue =
-    document.getElementById(
-        "pitchValue"
-    );
-
-const themeButton =
-    document.getElementById(
-        "themeButton"
-    );
-
-const themeColor =
-    document.getElementById(
-        "themeColor"
-    );
-
-
-/* ==================================================
-   STATE
-================================================== */
-
-let mode =
-    "encode";
-
-let isPlaying =
-    false;
-
-let stopRequested =
-    false;
-
-let audioContext =
-    null;
-
-let oscillator =
-    null;
-
-
-/* ==================================================
-   CURRENT LANGUAGE
-================================================== */
-
-function getCurrentMorse() {
-
-    const language =
-        languageSelect.value;
-
-    return LANGUAGES[
-        language
-    ];
-}
-
-
-/* ==================================================
-   REVERSE MORSE
-================================================== */
-
-function createReverseMorse(
-    morse
-) {
-
-    const reverse = {};
-
-    for (
-        const symbol in morse
-    ) {
-
-        const code =
-            morse[symbol];
-
-        if (
-            reverse[code] ===
-            undefined
-        ) {
-
-            reverse[code] =
-                symbol;
-        }
-    }
-
-    return reverse;
-}
-
-
-/* ==================================================
-   TEXT NORMALIZATION
-================================================== */
-
-function normalizeText(
-    text
-) {
-
-    return text
-        .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
-        .toUpperCase();
-}
-
-
-/* ==================================================
-   TEXT → MORSE
-================================================== */
-
-function textToMorse(
-    text
-) {
-
-    const morse =
-        getCurrentMorse();
-
-    const original =
-        text.toUpperCase();
-
-    const output = [];
-
-    for (
-        let i = 0;
-        i < original.length;
-        i++
-    ) {
-
-        const character =
-            original[i];
-
-        if (
-            character === " "
-        ) {
-
-            output.push(
-                "/"
-            );
-
-            continue;
-        }
-
-        if (
-            morse[character]
-        ) {
-
-            output.push(
-                morse[character]
-            );
-
-            continue;
-        }
-
-        const normalized =
-            normalizeText(
-                character
-            );
-
-        if (
-            morse[normalized]
-        ) {
-
-            output.push(
-                morse[normalized]
-            );
-        }
-    }
-
-    return output.join(
-        " "
-    );
-}
-
-
-/* ==================================================
-   MORSE → TEXT
-================================================== */
-
-function morseToText(
-    text
-) {
-
-    const reverse =
-        createReverseMorse(
-            getCurrentMorse()
-        );
-
-    text =
-        text.trim();
-
-    if (
-        text === ""
-    ) {
-
-        return "";
-    }
-
-    const words =
-        text.split(
-            "/"
-        );
-
-    const output = [];
-
-    for (
-        let w = 0;
-        w < words.length;
-        w++
-    ) {
-
-        const word =
-            words[w].trim();
-
-        if (
-            word === ""
-        ) {
-
-            continue;
-        }
-
-        const letters =
-            word.split(
-                /\s+/
-            );
-
-        let decoded =
-            "";
-
-        for (
-            let i = 0;
-            i < letters.length;
-            i++
-        ) {
-
-            const code =
-                letters[i];
-
-            if (
-                reverse[code]
-            ) {
-
-                decoded +=
-                    reverse[code];
-
-            } else {
-
-                decoded +=
-                    "?";
-            }
-        }
-
-        output.push(
-            decoded
-        );
-    }
-
-    return output.join(
-        " "
-    );
-}
-
-
-/* ==================================================
-   TRANSLATE
-================================================== */
-
-function translate() {
-
-    stopPlayback();
-
-    const text =
-        input.value;
-
-    if (
-        text.trim() ===
-        ""
-    ) {
-
-        result.textContent =
-            "Здесь появится результат";
-
-        status.textContent =
-            "";
-
-        return;
-    }
-
-    let translated =
-        "";
-
-    if (
-        mode ===
-        "encode"
-    ) {
-
-        translated =
-            textToMorse(
-                text
-            );
-
-        result.classList.add(
-            "morse"
-        );
-
-        resultLabel.textContent =
-            "Азбука Морзе";
-
-    } else {
-
-        translated =
-            morseToText(
-                text
-            );
-
-        result.classList.remove(
-            "morse"
-        );
-
-        resultLabel.textContent =
-            "Текст";
-    }
-
-    if (
-        translated ===
-        ""
-    ) {
-
-        result.textContent =
-            "Не удалось выполнить перевод";
-
-        status.textContent =
-            "Проверь введённые данные";
-
-        return;
-    }
-
-    result.textContent =
-        translated;
-
-    status.textContent =
-        "Готово";
-}
-
-
-/* ==================================================
-   UPDATE MORSE TABLE
-================================================== */
-
-function updateMorseTable() {
-
-    const morse =
-        getCurrentMorse();
-
-    tableBody.innerHTML =
-        "";
-
-    const symbols =
-        Object.keys(
-            morse
-        );
-
-    for (
-        let i = 0;
-        i < symbols.length;
-        i++
-    ) {
-
-        const symbol =
-            symbols[i];
-
-        const row =
-            document.createElement(
-                "tr"
-            );
-
-        const symbolCell =
-            document.createElement(
-                "td"
-            );
-
-        const codeCell =
-            document.createElement(
-                "td"
-            );
-
-        symbolCell.textContent =
-            symbol;
-
-        codeCell.textContent =
-            morse[symbol];
-
-        codeCell.className =
-            "morse-code";
-
-        row.appendChild(
-            symbolCell
-        );
-
-        row.appendChild(
-            codeCell
-        );
-
-        tableBody.appendChild(
-            row
-        );
-    }
-}
-
-
-/* ==================================================
-   RESET RESULT
-================================================== */
-
-function resetResult() {
-
-    result.textContent =
-        "Здесь появится результат";
-
-    status.textContent =
-        "";
-
-    playStatus.textContent =
-        "Готово к воспроизведению";
-}
-
-
-/* ==================================================
-   LANGUAGE CHANGE
-================================================== */
-
-languageSelect.addEventListener(
-    "change",
-    function() {
-
-        stopPlayback();
-
-        updateMorseTable();
-
-        resetResult();
-
-        if (
-            mode ===
-            "encode"
-        ) {
-
-            input.placeholder =
-                "Напиши текст...";
-
-        } else {
-
-            input.placeholder =
-                "Например: ... --- ...";
-        }
-
-        status.textContent =
-            "Язык изменён";
-    }
-);
-
-
-/* ==================================================
-   ENCODE MODE
-================================================== */
-
-encodeButton.addEventListener(
-    "click",
-    function() {
-
-        stopPlayback();
-
-        mode =
-            "encode";
-
-        encodeButton.classList.add(
-            "active"
-        );
-
-        decodeButton.classList.remove(
-            "active"
-        );
-
-        inputLabel.textContent =
-            "Текст";
-
-        resultLabel.textContent =
-            "Азбука Морзе";
-
-        input.placeholder =
-            "Напиши текст...";
-
-        input.value =
-            "";
-
-        result.classList.add(
-            "morse"
-        );
-
-        resetResult();
-    }
-);
-
-
-/* ==================================================
-   DECODE MODE
-================================================== */
-
-decodeButton.addEventListener(
-    "click",
-    function() {
-
-        stopPlayback();
-
-        mode =
-            "decode";
-
-        decodeButton.classList.add(
-            "active"
-        );
-
-        encodeButton.classList.remove(
-            "active"
-        );
-
-        inputLabel.textContent =
-            "Азбука Морзе";
-
-        resultLabel.textContent =
-            "Текст";
-
-        input.placeholder =
-            "Например: ... --- ...";
-
-        input.value =
-            "";
-
-        result.classList.remove(
-            "morse"
-        );
-
-        resetResult();
-    }
-);
-
-
-/* ==================================================
-   TRANSLATE BUTTON
-================================================== */
-
-translateButton.addEventListener(
-    "click",
-    function() {
-
-        translate();
-    }
-);
-
-
-/* ==================================================
-   CLEAR BUTTON
-================================================== */
-
-clearButton.addEventListener(
-    "click",
-    function() {
-
-        stopPlayback();
-
-        input.value =
-            "";
-
-        resetResult();
-    }
-);
-
-
-/* ==================================================
-   COPY RESULT
-================================================== */
-
-copyButton.addEventListener(
-    "click",
-    async function() {
-
-        const text =
-            result.textContent;
-
-        if (
-            !text ||
-            text ===
-            "Здесь появится результат"
-        ) {
-
-            status.textContent =
-                "Нечего копировать";
-
-            return;
-        }
-
-        try {
-
-            await navigator
-                .clipboard
-                .writeText(
-                    text
-                );
-
-            status.textContent =
-                "Скопировано";
-
-        } catch (
-            error
-        ) {
-
-            status.textContent =
-                "Не удалось скопировать";
-        }
-    }
-);
-
-
-/* ==================================================
-   USE RESULT
-================================================== */
-
-useResultButton.addEventListener(
-    "click",
-    function() {
-
-        const text =
-            result.textContent;
-
-        if (
-            !text ||
-            text ===
-            "Здесь появится результат"
-        ) {
-
-            status.textContent =
-                "Результат пуст";
-
-            return;
-        }
-
-        input.value =
-            text;
-
-        status.textContent =
-            "Результат перенесён";
-    }
-);
-
-
-/* ==================================================
-   SPEED DISPLAY
-================================================== */
-
-speedRange.addEventListener(
-    "input",
-    function() {
-
-        const value =
-            Number(
-                speedRange.value
-            );
-
-        speedValue.textContent =
-            value + "×";
-    }
-);
-
-
-/* ==================================================
-   PITCH DISPLAY
-================================================== */
-
-pitchRange.addEventListener(
-    "input",
-    function() {
-
-        const value =
-            Number(
-                pitchRange.value
-            );
-
-        pitchValue.textContent =
-            value + " Гц";
-    }
-);
-
-
-/* ==================================================
-   AUDIO SUPPORT
-================================================== */
-
-function getAudioContextClass() {
-
-    return (
-        window.AudioContext ||
-        window.webkitAudioContext
-    );
-}
-
-
-/* ==================================================
-   CREATE AUDIO CONTEXT
-================================================== */
-
-function createAudio() {
-
-    const AudioContextClass =
-        getAudioContextClass();
-
-    if (
-        !AudioContextClass
-    ) {
-
-        status.textContent =
-            "Этот браузер не поддерживает воспроизведение звука";
-
-        return false;
-    }
-
-    try {
-
-        audioContext =
-            new AudioContextClass();
-
-        if (
-            audioContext.state ===
-            "suspended"
-        ) {
-
-            audioContext.resume();
-        }
-
-        return true;
-
-    } catch (
-        error
-    ) {
-
-        status.textContent =
-            "Не удалось запустить звук";
-
-        return false;
-    }
-}
-
-
-/* ==================================================
-   WAIT
-================================================== */
-
-function wait(
-    milliseconds
-) {
-
-    return new Promise(
-        function(resolve) {
-
-            setTimeout(
-                resolve,
-                milliseconds
-            );
-        }
-    );
-}
-
-
-/* ==================================================
-   PLAY TONE
-================================================== */
-
-function playTone(
-    duration
-) {
-
-    return new Promise(
-        function(resolve) {
-
-            if (
-                stopRequested ||
-                !audioContext
-            ) {
-
-                resolve();
-
-                return;
-            }
-
-            oscillator =
-                audioContext
-                    .createOscillator();
-
-            const gain =
-                audioContext
-                    .createGain();
-
-            oscillator.type =
-                "sine";
-
-            oscillator.frequency.value =
-                Number(
-                    pitchRange.value
-                );
-
-            gain.gain.value =
-                0.15;
-
-            oscillator.connect(
-                gain
-            );
-
-            gain.connect(
-                audioContext.destination
-            );
-
-            oscillator.start();
-
-            setTimeout(
-                function() {
-
-                    if (
-                        oscillator
-                    ) {
-
-                        try {
-
-                            oscillator.stop();
-
-                        } catch (
-                            error
-                        ) {}
-
-                        oscillator =
-                            null;
-                    }
-
-                    resolve();
-
-                },
-                duration
-            );
-        }
-    );
-        }
-
-
-    /* ==================================================
-   GET MORSE FOR PLAYBACK
-================================================== */
-
-function getMorseForPlayback() {
-
-    let morse = "";
-
-    if (
-        mode === "encode"
-    ) {
-
-        morse =
-            result.textContent.trim();
-
-    } else {
-
-        morse =
-            textToMorse(
-                input.value
-            );
-    }
-
-    if (
-        !morse ||
-        morse ===
-        "Здесь появится результат"
-    ) {
-
-        return "";
-    }
-
-    return morse;
-}
-
-
-/* ==================================================
-   STOP PLAYBACK
-================================================== */
-
-function stopPlayback() {
-
-    stopRequested =
-        true;
-
-    isPlaying =
-        false;
-
-    if (
-        oscillator
-    ) {
-
-        try {
-
-            oscillator.stop();
-
-        } catch (
-            error
-        ) {}
-
-        oscillator =
-            null;
-    }
-
-    if (
-        audioContext
-    ) {
-
-        try {
-
-            audioContext.close();
-
-        } catch (
-            error
-        ) {}
-
-        audioContext =
-            null;
-    }
-
-    playButton.textContent =
-        "▶";
-
-    playButton.classList.remove(
-        "playing"
-    );
-
-    statusLight.classList.remove(
-        "active"
-    );
-
-    playStatus.textContent =
-        "Готово к воспроизведению";
-}
-
-
-/* ==================================================
-   PLAY MORSE SOUND
-================================================== */
-
-async function playMorseSound(
-    morseText
-) {
-
-    if (
-        !morseText
-    ) {
-
-        status.textContent =
-            "Нечего воспроизводить";
-
-        return;
-    }
-
-    if (
-        !createAudio()
-    ) {
-
-        return;
-    }
-
-    stopRequested =
-        false;
-
-    isPlaying =
-        true;
-
-    playButton.textContent =
-        "■";
-
-    playButton.classList.add(
-        "playing"
-    );
-
-    statusLight.classList.add(
-        "active"
-    );
-
-    playStatus.textContent =
-        "Воспроизведение...";
-
-    status.textContent =
-        "Воспроизведение...";
-
-
-    const speed =
-        Number(
-            speedRange.value
-        );
-
-    const dot =
-        100 / speed;
-
-
-    const words =
-        morseText.split(
-            "/"
-        );
-
-
-    for (
-        let wordIndex = 0;
-        wordIndex < words.length;
-        wordIndex++
-    ) {
-
-        if (
-            stopRequested
-        ) {
-
-            break;
-        }
-
-        const word =
-            words[
-                wordIndex
-            ].trim();
-
-        if (
-            word === ""
-        ) {
-
-            continue;
-        }
-
-        const letters =
-            word.split(
-                /\s+/
-            );
-
-
-        for (
-            let letterIndex = 0;
-            letterIndex < letters.length;
-            letterIndex++
-        ) {
-
-            if (
-                stopRequested
-            ) {
-
-                break;
-            }
-
-            const code =
-                letters[
-                    letterIndex
-                ];
-
-
-            for (
-                let symbolIndex = 0;
-                symbolIndex < code.length;
-                symbolIndex++
-            ) {
-
-                if (
-                    stopRequested
-                ) {
-
-                    break;
-                }
-
-                const symbol =
-                    code[
-                        symbolIndex
-                    ];
-
-
-                if (
-                    symbol === "."
-                ) {
-
-                    await playTone(
-                        dot
-                    );
-
-                } else if (
-                    symbol === "-"
-                ) {
-
-                    await playTone(
-                        dot * 3
-                    );
-                }
-
-
-                if (
-                    symbolIndex <
-                        code.length - 1 &&
-                    !stopRequested
-                ) {
-
-                    await wait(
-                        dot
-                    );
-                }
-            }
-
-
-            if (
-                letterIndex <
-                    letters.length - 1 &&
-                !stopRequested
-            ) {
-
-                await wait(
-                    dot * 3
-                );
-            }
-        }
-
-
-        if (
-            wordIndex <
-                words.length - 1 &&
-            !stopRequested
-        ) {
-
-            await wait(
-                dot * 7
-            );
-        }
-    }
-
-
-    const wasStopped =
-        stopRequested;
-
-
-    if (
-        oscillator
-    ) {
-
-        try {
-
-            oscillator.stop();
-
-        } catch (
-            error
-        ) {}
-
-        oscillator =
-            null;
-    }
-
-
-    if (
-        audioContext
-    ) {
-
-        try {
-
-            await audioContext.close();
-
-        } catch (
-            error
-        ) {}
-
-        audioContext =
-            null;
-    }
-
-
-    isPlaying =
-        false;
-
-    playButton.textContent =
-        "▶";
-
-    playButton.classList.remove(
-        "playing"
-    );
-
-    statusLight.classList.remove(
-        "active"
-    );
-
-
-    if (
-        wasStopped
-    ) {
-
-        playStatus.textContent =
-            "Воспроизведение остановлено";
-
-        status.textContent =
-            "Остановлено";
-
-    } else {
-
-        playStatus.textContent =
-            "Воспроизведение завершено";
-
-        status.textContent =
-            "Готово";
-    }
-}
-
-
-/* ==================================================
-   PLAY / STOP BUTTON
-================================================== */
-
-playButton.addEventListener(
-    "click",
-    function() {
-
-        /*
-           Если звук уже играет,
-           повторное нажатие
-           останавливает его.
-
-           Новый звук при этом
-           НЕ запускается.
-        */
-
-        if (
-            isPlaying
-        ) {
-
-            stopPlayback();
-
-            status.textContent =
-                "Воспроизведение остановлено";
-
-            return;
-        }
-
-
-        const morse =
-            getMorseForPlayback();
-
-
-        if (
-            !morse
-        ) {
-
-            status.textContent =
-                "Нечего воспроизводить";
-
-            return;
-        }
-
-
-        playMorseSound(
-            morse
-        );
-    }
-);
-
-
-/* ==================================================
-   KEYBOARD CONTROL
-================================================== */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        /*
-           Пробел запускает /
-           останавливает звук,
-           если пользователь
-           не печатает текст.
-        */
-
-        if (
-            event.code !==
-            "Space"
-        ) {
-
-            return;
-        }
-
-        if (
-            document.activeElement ===
-            input
-        ) {
-
-            return;
-        }
-
-        event.preventDefault();
-
-        if (
-            isPlaying
-        ) {
-
-            stopPlayback();
-
-        } else {
-
-            const morse =
-                getMorseForPlayback();
-
-            if (
-                morse
-            ) {
-
-                playMorseSound(
-                    morse
-                );
-            }
-        }
-    }
-);
-
-
-/* ==================================================
-   INPUT ENTER SHORTCUT
-================================================== */
-
-input.addEventListener(
-    "keydown",
-    function(event) {
-
-        /*
-           Ctrl + Enter
-           выполняет перевод.
-        */
-
-        if (
-            event.ctrlKey &&
-            event.key ===
-                "Enter"
-        ) {
-
-            event.preventDefault();
-
-            translate();
-        }
-    }
-);
-
-
-/* ==================================================
-   AUTO TRANSLATION
-================================================== */
-
-let autoTranslateTimer =
-    null;
-
-
-input.addEventListener(
-    "input",
-    function() {
-
-        clearTimeout(
-            autoTranslateTimer
-        );
-
-        /*
-           Небольшая задержка,
-           чтобы приложение
-           не переводило текст
-           после каждого символа
-           слишком резко.
-        */
-
-        autoTranslateTimer =
-            setTimeout(
-                function() {
-
-                    if (
-                        input.value.trim()
-                    ) {
-
-                        translate();
-                    }
-
-                },
-                250
-            );
-    }
-);
-
-
-/* ==================================================
-   TABLE SEARCH
-================================================== */
-
-const tableSearch =
-    document.getElementById(
-        "tableSearch"
-    );
-
-
-if (
-    tableSearch
-) {
-
-    tableSearch.addEventListener(
-        "input",
-        function() {
-
-            const query =
-                tableSearch.value
-                    .trim()
-                    .toUpperCase();
-
-            const rows =
-                tableBody.querySelectorAll(
-                    "tr"
-                );
-
-            rows.forEach(
-                function(row) {
-
-                    const text =
-                        row.textContent
-                            .toUpperCase();
-
-                    if (
-                        text.includes(
-                            query
-                        )
-                    ) {
-
-                        row.style.display =
-                            "";
-
-                    } else {
-
-                        row.style.display =
-                            "none";
-                    }
-                }
-            );
-        }
-    );
-}
-
-
-/* ==================================================
-   TABLE ROW CLICK
-================================================== */
-
-tableBody.addEventListener(
-    "click",
-    function(event) {
-
-        const row =
-            event.target.closest(
-                "tr"
-            );
-
-        if (
-            !row
-        ) {
-
-            return;
-        }
-
-        const cells =
-            row.querySelectorAll(
-                "td"
-            );
-
-        if (
-            cells.length < 2
-        ) {
-
-            return;
-        }
-
-        const symbol =
-            cells[0]
-                .textContent;
-
-        const code =
-            cells[1]
-                .textContent;
-
-
-        if (
-            mode ===
-            "decode"
-        ) {
-
-            if (
-                input.value &&
-                !input.value.endsWith(
-                    " "
-                )
-            ) {
-
-                input.value +=
-                    " ";
-            }
-
-            input.value +=
-                code;
-
-        } else {
-
-            if (
-                input.value &&
-                !input.value.endsWith(
-                    " "
-                )
-            ) {
-
-                input.value +=
-                    symbol;
-
-            } else {
-
-                input.value +=
-                    symbol;
-            }
-        }
-
-
-        status.textContent =
-            symbol +
-            " — " +
-            code;
-    }
-);
-
-
-/* ==================================================
-   COPY MORSE QUICKLY
-================================================== */
-
-const copyMorseButton =
-    document.getElementById(
-        "copyMorseButton"
-    );
-
-
-if (
-    copyMorseButton
-) {
-
-    copyMorseButton.addEventListener(
-        "click",
-        async function() {
-
-            const text =
-                result.textContent;
-
-            if (
-                !text ||
-                text ===
-                "Здесь появится результат"
-            ) {
-
-                status.textContent =
-                    "Нечего копировать";
-
-                return;
-            }
-
-            try {
-
-                await navigator
-                    .clipboard
-                    .writeText(
-                        text
-                    );
-
-                status.textContent =
-                    "Скопировано";
-
-            } catch (
-                error
-            ) {
-
-                status.textContent =
-                    "Ошибка копирования";
-            }
-        }
-    );
-}
-
-
-/* ==================================================
-   SHARE RESULT
-================================================== */
-
-const shareButton =
-    document.getElementById(
-        "shareButton"
-    );
-
-
-if (
-    shareButton
-) {
-
-    shareButton.addEventListener(
-        "click",
-        async function() {
-
-            const text =
-                result.textContent;
-
-            if (
-                !text ||
-                text ===
-                "Здесь появится результат"
-            ) {
-
-                status.textContent =
-                    "Нечего отправлять";
-
-                return;
-            }
-
-
-            if (
-                navigator.share
-            ) {
-
-                try {
-
-                    await navigator.share(
-                        {
-                            title:
-                                "Neo Morse",
-
-                            text:
-                                text
-                        }
-                    );
-
-                    status.textContent =
-                        "Готово";
-
-                } catch (
-                    error
-                ) {
-
-                    if (
-                        error.name !==
-                        "AbortError"
-                    ) {
-
-                        status.textContent =
-                            "Не удалось отправить";
-                    }
-                }
-
-            } else {
-
-                try {
-
-                    await navigator
-                        .clipboard
-                        .writeText(
-                            text
-                        );
-
-                    status.textContent =
-                        "Скопировано";
-
-                } catch (
-                    error
-                ) {
-
-                    status.textContent =
-                        "Не удалось скопировать";
-                }
-            }
-        }
-    );
-}
-
-
-/* ==================================================
-   RESET AUDIO WHEN PAGE HIDDEN
-================================================== */
-
-document.addEventListener(
-    "visibilitychange",
-    function() {
-
-        if (
-            document.hidden &&
-            isPlaying
-        ) {
-
-            stopPlayback();
-        }
-    }
-);
-
-
-/* ==================================================
-   RESET AUDIO BEFORE UNLOAD
-================================================== */
-
-window.addEventListener(
-    "beforeunload",
-    function() {
-
-        stopPlayback();
-    }
-);
-
-
-/* ==================================================
-   THEME
-================================================== */
-
-function applyTheme(
-    dark
-) {
-
-    if (
-        dark
-    ) {
-
-        document.body.classList.add(
-            "dark"
-        );
-
-        themeButton.textContent =
-            "☀";
-
-        if (
-            themeColor
-        ) {
-
-            themeColor.setAttribute(
-                "content",
-                "#101112"
-            );
-        }
-
-        localStorage.setItem(
-            "neoMorseTheme",
-            "dark"
-        );
-
-    } else {
-
-        document.body.classList.remove(
-            "dark"
-        );
-
-        themeButton.textContent =
-            "☾";
-
-        if (
-            themeColor
-        ) {
-
-            themeColor.setAttribute(
-                "content",
-                "#f5f5f5"
-            );
-        }
-
-        localStorage.setItem(
-            "neoMorseTheme",
-            "light"
-        );
-    }
-}
-
-
-/* ==================================================
-   THEME BUTTON
-================================================== */
-
-themeButton.addEventListener(
-    "click",
-    function() {
-
-        const dark =
-            document.body.classList.contains(
-                "dark"
-            );
-
-        applyTheme(
-            !dark
-        );
-    }
-);
-
-
-/* ==================================================
-   SYSTEM DARK MODE
-================================================== */
-
-const systemTheme =
-    window.matchMedia(
-        "(prefers-color-scheme: dark)"
-    );
-
-
-systemTheme.addEventListener(
-    "change",
-    function(event) {
-
-        const saved =
-            localStorage.getItem(
-                "neoMorseTheme"
-            );
-
-        /*
-           Если пользователь
-           сам выбрал тему,
-           системное изменение
-           её не переопределяет.
-        */
-
-        if (
-            saved
-        ) {
-
-            return;
-        }
-
-        applyTheme(
-            event.matches
-        );
-    }
-);
-
-
-/* ==================================================
-   LOAD SAVED THEME
-================================================== */
-
-const savedTheme =
-    localStorage.getItem(
-        "neoMorseTheme"
-    );
-
-
-if (
-    savedTheme ===
-    "dark"
-) {
-
-    applyTheme(
-        true
-    );
-
-} else if (
-    savedTheme ===
-    "light"
-) {
-
-    applyTheme(
-        false
-    );
-
-} else {
-
-    applyTheme(
-        systemTheme.matches
-    );
-}
-
-
-/* ==================================================
-   INITIAL TABLE
-================================================== */
-
-updateMorseTable();
-
-
-/* ==================================================
-   INITIAL SPEED
-================================================== */
-
-if (
-    speedRange &&
-    speedValue
-) {
-
-    speedValue.textContent =
-        speedRange.value +
-        "×";
-}
-
-
-/* ==================================================
-   INITIAL PITCH
-================================================== */
-
-if (
-    pitchRange &&
-    pitchValue
-) {
-
-    pitchValue.textContent =
-        pitchRange.value +
-        " Гц";
-}
-
-
-/* ==================================================
-   INITIAL PLAY STATE
-================================================== */
-
-isPlaying =
-    false;
-
-stopRequested =
-    false;
-
-playButton.textContent =
-    "▶";
-
-playStatus.textContent =
-    "Готово к воспроизведению";
-
-statusLight.classList.remove(
-    "active"
-);
-
-
-/* ==================================================
-   INITIAL MODE
-================================================== */
-
-mode =
-    "encode";
-
-encodeButton.classList.add(
-    "active"
-);
-
-decodeButton.classList.remove(
-    "active"
-);
-
-inputLabel.textContent =
-    "Текст";
-
-resultLabel.textContent =
-    "Азбука Морзе";
-
-input.placeholder =
-    "Напиши текст...";
-
-
-/* ==================================================
-   MOBILE TOUCH
-================================================== */
-
-document.addEventListener(
-    "touchstart",
-    function() {
-
-        /*
-           Позволяет браузеру
-           активировать аудиоконтекст
-           после первого касания.
-        */
-
-        if (
-            audioContext &&
-            audioContext.state ===
-                "suspended"
-        ) {
-
-            audioContext.resume();
-        }
-    },
-    {
-        passive: true
-    }
-);
-
-
-/* ==================================================
-   PREVENT DOUBLE TAP ZOOM
-================================================== */
-
-let lastTouchEnd =
-    0;
-
-document.addEventListener(
-    "touchend",
-    function(event) {
-
-        const now =
-            Date.now();
-
-        if (
-            now - lastTouchEnd <=
-            300
-        ) {
-
-            event.preventDefault();
-        }
-
-        lastTouchEnd =
-            now;
-    },
-    {
-        passive: false
-    }
-);
-
-
-/* ==================================================
-   MOBILE TEXTAREA
-================================================== */
-
-input.addEventListener(
-    "focus",
-    function() {
-
-        input.classList.add(
-            "focused"
-        );
-    }
-);
-
-
-input.addEventListener(
-    "blur",
-    function() {
-
-        input.classList.remove(
-            "focused"
-        );
-    }
-);
-
-
-/* ==================================================
-   ERROR HANDLER
-================================================== */
-
-window.addEventListener(
-    "error",
-    function(event) {
-
-        console.error(
-            "Neo Morse:",
-            event.error ||
-            event.message
-        );
-    }
-);
-
-
-    /* ==================================================
-   UNHANDLED PROMISES
-================================================== */
-
-window.addEventListener(
-    "unhandledrejection",
-    function(event) {
-
-        console.error(
-            "Neo Morse Promise:",
-            event.reason
-        );
-    }
-);
-
-
-    /* ==================================================
-   FINAL INITIALIZATION
-================================================== */
-
-function initializeApp() {
-
-    /*
-       Проверяем наличие основных
-       элементов интерфейса.
-    */
-
-    const requiredElements = [
-
-        input,
-        result,
-        languageSelect,
-        encodeButton,
-        decodeButton,
-        translateButton,
-        clearButton,
-        copyButton,
-        playButton,
-        tableBody,
-        speedRange,
-        pitchRange,
-        themeButton
-    ];
-
-    let elementsReady =
-        true;
-
-
-    for (
-        let i = 0;
-        i < requiredElements.length;
-        i++
-    ) {
-
-        if (
-            !requiredElements[i]
-        ) {
-
-            elementsReady =
-                false;
-
-            console.error(
-                "Neo Morse: отсутствует элемент интерфейса."
-            );
-        }
-    }
-
-
-    if (
-        !elementsReady
-    ) {
-
-        return;
-    }
-
-
-    updateMorseTable();
-
-    result.textContent =
-        "Здесь появится результат";
-
-    status.textContent =
-        "";
-
-    playStatus.textContent =
-        "Готово к воспроизведению";
-}
-
-
-/* ==================================================
-   LANGUAGE LABELS
-================================================== */
-
-function updateLanguageDescription() {
-
-    const languageInfo =
-        document.getElementById(
-            "languageInfo"
-        );
-
-    if (
-        !languageInfo
-    ) {
-
-        return;
-    }
-
-    const descriptions = {
-
-        az:
-            "Азербайджанский",
-
-        ru:
-            "Русский",
-
-        en:
-            "English",
-
-        tr:
-            "Türkçe",
-
-        de:
-            "Deutsch",
-
-        fr:
-            "Français",
-
-        es:
-            "Español",
-
-        it:
-            "Italiano",
-
-        pt:
-            "Português",
-
-        uk:
-            "Українська"
-    };
-
-
-    const language =
-        languageSelect.value;
-
-    languageInfo.textContent =
-        descriptions[
-            language
-        ] ||
-        "Язык";
-}
-
-
-languageSelect.addEventListener(
-    "change",
-    updateLanguageDescription
-);
-
-
-/* ==================================================
-   LANGUAGE SELECT KEYBOARD
-================================================== */
-
-languageSelect.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key ===
-            "Enter"
-        ) {
-
-            updateMorseTable();
-        }
-    }
-);
-
-
-/* ==================================================
-   TABLE SORTING
-================================================== */
-
-const sortTableButton =
-    document.getElementById(
-        "sortTableButton"
-    );
-
-
-if (
-    sortTableButton
-) {
-
-    let reversed =
-        false;
-
-    sortTableButton.addEventListener(
-        "click",
-        function() {
-
-            const rows =
-                Array.from(
-                    tableBody.querySelectorAll(
-                        "tr"
-                    )
-                );
-
-
-            rows.sort(
-                function(a, b) {
-
-                    const aText =
-                        a.children[0]
-                            .textContent;
-
-                    const bText =
-                        b.children[0]
-                            .textContent;
-
-                    return reversed
-                        ? bText.localeCompare(
-                            aText
-                        )
-                        : aText.localeCompare(
-                            bText
-                        );
-                }
-            );
-
-
-            reversed =
-                !reversed;
-
-
-            rows.forEach(
-                function(row) {
-
-                    tableBody.appendChild(
-                        row
-                    );
-                }
-            );
-        }
-    );
-}
-
-
-/* ==================================================
-   TABLE CLEAR SEARCH
-================================================== */
-
-const clearTableSearch =
-    document.getElementById(
-        "clearTableSearch"
-    );
-
-
-if (
-    clearTableSearch
-) {
-
-    clearTableSearch.addEventListener(
-        "click",
-        function() {
-
-            if (
-                tableSearch
-            ) {
-
-                tableSearch.value =
-                    "";
-            }
-
-
-            const rows =
-                tableBody.querySelectorAll(
-                    "tr"
-                );
-
-
-            rows.forEach(
-                function(row) {
-
-                    row.style.display =
-                        "";
-                }
-            );
-        }
-    );
-}
-
-
-/* ==================================================
-   QUICK MORSE BUTTONS
-================================================== */
-
-const quickButtons =
-    document.querySelectorAll(
-        "[data-morse]"
-    );
-
-
-quickButtons.forEach(
-    function(button) {
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                const code =
-                    button.dataset.morse;
-
-                if (
-                    !code
-                ) {
-
-                    return;
-                }
-
-
-                if (
-                    mode ===
-                    "decode"
-                ) {
-
-                    if (
-                        input.value &&
-                        !input.value.endsWith(
-                            " "
-                        )
-                    ) {
-
-                        input.value +=
-                            " ";
-                    }
-
-                    input.value +=
-                        code;
-
-                } else {
-
-                    input.value +=
-                        code;
-                }
-
-
-                status.textContent =
-                    "Добавлено";
-            }
-        );
-    }
-);
-
-
-/* ==================================================
-   DELETE LAST MORSE SYMBOL
-================================================== */
-
-const deleteLastButton =
-    document.getElementById(
-        "deleteLastButton"
-    );
-
-
-if (
-    deleteLastButton
-) {
-
-    deleteLastButton.addEventListener(
-        "click",
-        function() {
-
-            input.value =
-                input.value.slice(
-                    0,
-                    -1
-                );
-
-            status.textContent =
-                "Удалено";
-        }
-    );
-}
-
-
-/* ==================================================
-   BACKSPACE SUPPORT
-================================================== */
-
-input.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key !==
-            "Backspace"
-        ) {
-
-            return;
-        }
-
-        /*
-           Ничего дополнительно
-           не делаем.
-           Браузер сам удалит
-           символ.
-        */
-    }
-);
-
-
-/* ==================================================
-   INPUT CHARACTER COUNTER
-================================================== */
-
-const characterCounter =
-    document.getElementById(
-        "characterCounter"
-    );
-
-
-function updateCharacterCounter() {
-
-    if (
-        !characterCounter
-    ) {
-
-        return;
-    }
-
-    characterCounter.textContent =
-        input.value.length +
-        " символов";
-}
-
-
-input.addEventListener(
-    "input",
-    updateCharacterCounter
-);
-
-updateCharacterCounter();
-
-
-/* ==================================================
-   RESULT CHARACTER COUNTER
-================================================== */
-
-const resultCounter =
-    document.getElementById(
-        "resultCounter"
-    );
-
-
-function updateResultCounter() {
-
-    if (
-        !resultCounter
-    ) {
-
-        return;
-    }
-
-    const text =
-        result.textContent;
-
-    if (
-        !text ||
-        text ===
-        "Здесь появится результат"
-    ) {
-
-        resultCounter.textContent =
-            "0 символов";
-
-        return;
-    }
-
-    resultCounter.textContent =
-        text.length +
-        " символов";
-}
-
-
-const originalTranslate =
-    translate;
-
-
-translate = function() {
-
-    originalTranslate();
-
-    updateResultCounter();
-};
-
-
-updateResultCounter();
-
-
-/* ==================================================
-   COPY STATUS RESET
-================================================== */
-
-let statusTimer =
-    null;
-
-
-function temporaryStatus(
-    message,
-    duration = 2000
-) {
-
-    status.textContent =
-        message;
-
-    clearTimeout(
-        statusTimer
-    );
-
-    statusTimer =
-        setTimeout(
-            function() {
-
-                if (
-                    !isPlaying
-                ) {
-
-                    status.textContent =
-                        "";
-                }
-
-            },
-            duration
-        );
-}
-
-
-/* ==================================================
-   MOBILE HAPTIC FEEDBACK
-================================================== */
-
-function vibrateShort() {
-
-    if (
-        navigator.vibrate
-    ) {
-
-        try {
-
-            navigator.vibrate(
-                15
-            );
-
-        } catch (
-            error
-        ) {}
-    }
-}
-
-
-/* ==================================================
-   PLAY BUTTON HAPTIC
-================================================== */
-
-playButton.addEventListener(
-    "click",
-    function() {
-
-        vibrateShort();
-    }
-);
-
-
-/* ==================================================
-   TRANSLATE HAPTIC
-================================================== */
-
-translateButton.addEventListener(
-    "click",
-    function() {
-
-        vibrateShort();
-    }
-);
-
-
-/* ==================================================
-   CLEAR HAPTIC
-================================================== */
-
-clearButton.addEventListener(
-    "click",
-    function() {
-
-        vibrateShort();
-    }
-);
-
-
-/* ==================================================
-   THEME HAPTIC
-================================================== */
-
-themeButton.addEventListener(
-    "click",
-    function() {
-
-        vibrateShort();
-    }
-);
-
-
-/* ==================================================
-   PLAYBACK SPEED PRESETS
-================================================== */
-
-const speedButtons =
-    document.querySelectorAll(
-        "[data-speed]"
-    );
-
-
-speedButtons.forEach(
-    function(button) {
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                const speed =
-                    Number(
-                        button.dataset.speed
-                    );
-
-                if (
-                    !Number.isNaN(
-                        speed
-                    )
-                {
-
-                    speedRange.value =
-                        speed;
-
-                    speedValue.textContent =
-                        speed +
-                        "×";
-
-                    vibrateShort();
-                }
-            }
-        );
-    }
-);
-
-
-/* ==================================================
-   PITCH PRESETS
-================================================== */
-
-const pitchButtons =
-    document.querySelectorAll(
-        "[data-pitch]"
-    );
-
-
-pitchButtons.forEach(
-    function(button) {
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                const pitch =
-                    Number(
-                        button.dataset.pitch
-                    );
-
-                if (
-                    !Number.isNaN(
-                        pitch
-                    )
-                ) {
-
-                    pitchRange.value =
-                        pitch;
-
-                    pitchValue.textContent =
-                        pitch +
-                        " Гц";
-
-                    vibrateShort();
-                }
-            }
-        );
-    }
-);
-
-
-/* ==================================================
-   SAVE AUDIO SETTINGS
-================================================== */
-
-function saveAudioSettings() {
-
-    localStorage.setItem(
-        "neoMorseSpeed",
-        speedRange.value
-    );
-
-    localStorage.setItem(
-        "neoMorsePitch",
-        pitchRange.value
-    );
-}
-
-
-/* ==================================================
-   LOAD AUDIO SETTINGS
-================================================== */
-
-function loadAudioSettings() {
-
-    const savedSpeed =
-        localStorage.getItem(
-            "neoMorseSpeed"
-        );
-
-    const savedPitch =
-        localStorage.getItem(
-            "neoMorsePitch"
-        );
-
-
-    if (
-        savedSpeed !== null
-    ) {
-
-        const value =
-            Number(
-                savedSpeed
-            );
-
-        if (
-            !Number.isNaN(
-                value
-            )
-        ) {
-
-            speedRange.value =
-                value;
-        }
-    }
-
-
-    if (
-        savedPitch !== null
-    ) {
-
-        const value =
-            Number(
-                savedPitch
-            );
-
-        if (
-            !Number.isNaN(
-                value
-            )
-        ) {
-
-            pitchRange.value =
-                value;
-        }
-    }
-
-
-    speedValue.textContent =
-        speedRange.value +
-        "×";
-
-    pitchValue.textContent =
-        pitchRange.value +
-        " Гц";
-}
-
-
-speedRange.addEventListener(
-    "change",
-    saveAudioSettings
-);
-
-
-pitchRange.addEventListener(
-    "change",
-    saveAudioSettings
-);
-
-
-loadAudioSettings();
-
-
-/* ==================================================
-   SAVE LANGUAGE
-================================================== */
-
-languageSelect.addEventListener(
-    "change",
-    function() {
-
-        localStorage.setItem(
-            "neoMorseLanguage",
-            languageSelect.value
-        );
-    }
-);
-
-
-/* ==================================================
-   LOAD LANGUAGE
-================================================== */
-
-const savedLanguage =
-    localStorage.getItem(
-        "neoMorseLanguage"
-    );
-
-
-if (
-    savedLanguage &&
-    LANGUAGES[
-        savedLanguage
-    ]
-) {
-
-    languageSelect.value =
-        savedLanguage;
-}
-
-
-/* ==================================================
-   UPDATE LANGUAGE UI
-================================================== */
-
-updateLanguageDescription();
-
-updateMorseTable();
-
-
-/* ==================================================
-   RESET BUTTON
-================================================== */
-
-const resetSettingsButton =
-    document.getElementById(
-        "resetSettingsButton"
-    );
-
-
-if (
-    resetSettingsButton
-) {
-
-    resetSettingsButton.addEventListener(
-        "click",
-        function() {
-
-            stopPlayback();
-
-            localStorage.removeItem(
-                "neoMorseTheme"
-            );
-
-            localStorage.removeItem(
-                "neoMorseLanguage"
-            );
-
-            localStorage.removeItem(
-                "neoMorseSpeed"
-            );
-
-            localStorage.removeItem(
-                "neoMorsePitch"
-            );
-
-
-            languageSelect.value =
-                "az";
-
-            speedRange.value =
-                "1";
-
-            pitchRange.value =
-                "700";
-
-
-            speedValue.textContent =
-                "1×";
-
-            pitchValue.textContent =
-                "700 Гц";
-
-
-            applyTheme(
-                false
-            );
-
-            updateMorseTable();
-
-            updateLanguageDescription();
-
-            resetResult();
-
-            temporaryStatus(
-                "Настройки сброшены"
-            );
-
-            vibrateShort();
-        }
-    );
-}
-
-
-/* ==================================================
-   COPY INPUT
-================================================== */
-
-const copyInputButton =
-    document.getElementById(
-        "copyInputButton"
-    );
-
-
-if (
-    copyInputButton
-) {
-
-    copyInputButton.addEventListener(
-        "click",
-        async function() {
-
-            const text =
-                input.value;
-
-            if (
-                !text
-            ) {
-
-                temporaryStatus(
-                    "Поле пустое"
-                );
-
-                return;
-            }
-
-            try {
-
-                await navigator
-                    .clipboard
-                    .writeText(
-                        text
-                    );
-
-                temporaryStatus(
-                    "Скопировано"
-                );
-
-            } catch (
-                error
-            ) {
-
-                temporaryStatus(
-                    "Ошибка копирования"
-                );
-            }
-        }
-    );
-}
-
-
-/* ==================================================
-   SWAP INPUT / RESULT
-================================================== */
-
-const swapButton =
-    document.getElementById(
-        "swapButton"
-    );
-
-
-if (
-    swapButton
-) {
-
-    swapButton.addEventListener(
-        "click",
-        function() {
-
-            const inputText =
-                input.value;
-
-            const resultText =
-                result.textContent;
-
-
-            if (
-                resultText ===
-                "Здесь появится результат"
-            ) {
-
-                return;
-            }
-
-
-            input.value =
-                resultText;
-
-            result.textContent =
-                inputText ||
-                "Здесь появится результат";
-
-
-            if (
-                mode ===
-                "encode"
-            ) {
-
-                mode =
-                    "decode";
-
-                encodeButton.classList.remove(
-                    "active"
-                );
-
-                decodeButton.classList.add(
-                    "active"
-                );
-
-                inputLabel.textContent =
-                    "Азбука Морзе";
-
-                resultLabel.textContent =
-                    "Текст";
-
-                result.classList.remove(
-                    "morse"
-                );
-
-            } else {
-
-                mode =
-                    "encode";
-
-                decodeButton.classList.remove(
-                    "active"
-                );
-
-                encodeButton.classList.add(
-                    "active"
-                );
-
-                inputLabel.textContent =
-                    "Текст";
-
-                resultLabel.textContent =
-                    "Азбука Морзе";
-
-                result.classList.add(
-                    "morse"
-                );
-            }
-
-
-            temporaryStatus(
-                "Режим изменён"
-            );
-
-            vibrateShort();
-        }
-    );
-}
-
-
-/* ==================================================
-   FOCUS INPUT
-================================================== */
-
-const focusInputButton =
-    document.getElementById(
-        "focusInputButton"
-    );
-
-
-if (
-    focusInputButton
-) {
-
-    focusInputButton.addEventListener(
-        "click",
-        function() {
-
-            input.focus();
-        }
-    );
-}
-
-
-/* ==================================================
-   SCROLL TO TABLE
-================================================== */
-
-const tableButton =
-    document.getElementById(
-        "tableButton"
-    );
-
-
-if (
-    tableButton
-) {
-
-    tableButton.addEventListener(
-        "click",
-        function() {
-
-            const table =
-                document.getElementById(
-                    "morseTable"
-                );
-
-            if (
-                table
-            ) {
-
-                table.scrollIntoView(
-                    {
-                        behavior:
-                            "smooth",
-
-                        block:
-                            "start"
-                    }
-                );
-            }
-        }
-    );
-}
-
-
- /* ==================================================
-   SCROLL TO TRANSLATOR
-================================================== */
-
-const translatorButton =
-    document.getElementById(
-        "translatorButton"
-    );
-
-
-if (
-    translatorButton
-) {
-
-    translatorButton.addEventListener(
-        "click",
-        function() {
-
-            const translator =
-                document.getElementById(
-                    "translator"
-                );
-
-            if (
-                translator
-            ) {
-
-                translator.scrollIntoView(
-                    {
-                        behavior:
-                            "smooth",
-
-                        block:
-                            "start"
-                    }
-                );
-            }
-        }
-    );
-}
-
-
-/* ==================================================
-   ONLINE STATUS
-================================================== */
-
-const connectionStatus =
-    document.getElementById(
-        "connectionStatus"
-    );
-
-
-function updateConnectionStatus() {
-
-    if (
-        !connectionStatus
-    ) {
-
-        return;
-    }
-
-    if (
-        navigator.onLine
-    ) {
-
-        connectionStatus.textContent =
-            "Онлайн";
-
-        connectionStatus.classList.add(
-            "online"
-        );
-
-        connectionStatus.classList.remove(
-            "offline"
-        );
-
-    } else {
-
-        connectionStatus.textContent =
-            "Офлайн";
-
-        connectionStatus.classList.remove(
-            "online"
-        );
-
-        connectionStatus.classList.add(
-            "offline"
-        );
-    }
-}
-
-
-window.addEventListener(
-    "online",
-    updateConnectionStatus
-);
-
-window.addEventListener(
-    "offline",
-    updateConnectionStatus
-);
-
-updateConnectionStatus();
-
-
-/* ==================================================
-   APP VERSION
-================================================== */
-
-const versionElement =
-    document.getElementById(
-        "appVersion"
-    );
-
-
-if (
-    versionElement
-) {
-
-    versionElement.textContent =
-        "Neo Morse 0.7";
-}
-
-
-/* ==================================================
-   CURRENT YEAR
-================================================== */
-
-const yearElement =
-    document.getElementById(
-        "currentYear"
-    );
-
-
-if (
-    yearElement
-) {
-
-    yearElement.textContent =
-        new Date()
-            .getFullYear();
-}
-
-
-/* ==================================================
-   START APP
-================================================== */
-
-initializeApp();
-
-updateLanguageDescription();
-
-updateCharacterCounter();
-
-updateResultCounter();
-
-updateConnectionStatus();
-
-
-/* ==================================================
-   END OF JAVASCRIPT
-================================================== */
-
-
-    /* ==================================================
-   FINAL UI HELPERS
-================================================== */
-
-/*
-   Эти функции не требуют дополнительных
-   библиотек и работают локально.
-*/
-
-function setStatus(
-    message
-) {
-
-    if (
-        status
-    ) {
-
-        status.textContent =
-            message;
-    }
-}
-
-
-/* ==================================================
-   RESULT UPDATE OBSERVER
-================================================== */
-
-if (
-    result
-) {
-
-    const resultObserver =
-        new MutationObserver(
-            function() {
-
-                updateResultCounter();
-            }
-        );
-
-
-    resultObserver.observe(
-        result,
-        {
-            childList: true,
-            characterData: true,
-            subtree: true
-        }
-    );
-}
-
-
-/* ==================================================
-   LANGUAGE INITIAL STATE
-================================================== */
-
-if (
-    languageSelect
-) {
-
-    if (
-        !languageSelect.value ||
-        !LANGUAGES[
-            languageSelect.value
-        ]
-    ) {
-
-        languageSelect.value =
-            "az";
-    }
-}
-
-
-/* ==================================================
-   ACCESSIBILITY
-================================================== */
-
-if (
-    playButton
-) {
-
-    playButton.setAttribute(
-        "aria-label",
-        "Воспроизвести или остановить азбуку Морзе"
-    );
-}
-
-
-if (
-    translateButton
-) {
-
-    translateButton.setAttribute(
-        "aria-label",
-        "Перевести"
-    );
-}
-
-
-if (
-    clearButton
-) {
-
-    clearButton.setAttribute(
-        "aria-label",
-        "Очистить"
-    );
-}
-
-
-if (
-    copyButton
-) {
-
-    copyButton.setAttribute(
-        "aria-label",
-        "Копировать результат"
-    );
-}
-
-
-/* ==================================================
-   SAVE LAST MODE
-================================================== */
-
-function saveMode() {
-
-    localStorage.setItem(
-        "neoMorseMode",
-        mode
-    );
-}
-
-
-function loadMode() {
-
-    const savedMode =
-        localStorage.getItem(
-            "neoMorseMode"
-        );
-
-
-    if (
-        savedMode ===
-        "decode"
-    ) {
-
-        mode =
-            "decode";
-
-        decodeButton.classList.add(
-            "active"
-        );
-
-        encodeButton.classList.remove(
-            "active"
-        );
-
-        inputLabel.textContent =
-            "Азбука Морзе";
-
-        resultLabel.textContent =
-            "Текст";
-
-        input.placeholder =
-            "Например: ... --- ...";
-
-        result.classList.remove(
-            "morse"
-        );
-
-    } else {
-
-        mode =
-            "encode";
-
-        encodeButton.classList.add(
-            "active"
-        );
-
-        decodeButton.classList.remove(
-            "active"
-        );
-
-        inputLabel.textContent =
-            "Текст";
-
-        resultLabel.textContent =
-            "Азбука Морзе";
-
-        input.placeholder =
-            "Напиши текст...";
-
-        result.classList.add(
-            "morse"
-        );
-    }
-}
-
-
-encodeButton.addEventListener(
-    "click",
-    saveMode
-);
-
-
-decodeButton.addEventListener(
-    "click",
-    saveMode
-);
-
-
-loadMode();
-
-
-/* ==================================================
-   RESTORE LANGUAGE TABLE
-================================================== */
-
-updateMorseTable();
-
-
-/* ==================================================
-   RESTORE AUDIO UI
-================================================== */
-
-if (
-    speedValue
-) {
-
-    speedValue.textContent =
-        Number(
-            speedRange.value
-        ) +
-        "×";
-}
-
-
-if (
-    pitchValue
-) {
-
-    pitchValue.textContent =
-        Number(
-            pitchRange.value
-        ) +
-        " Гц";
-}
-
-
-/* ==================================================
-   FINAL PLAYBACK SAFETY
-================================================== */
-
-window.addEventListener(
-    "pagehide",
-    function() {
-
-        stopPlayback();
-    }
-);
-
-
-/* ==================================================
-   PREVENT AUDIO DUPLICATION
-================================================== */
-
-let playbackToken =
-    0;
-
-
-async function safePlayMorse(
-    morse
-) {
-
-    playbackToken++;
-
-    const currentToken =
-        playbackToken;
-
-
-    if (
-        isPlaying
-    ) {
-
-        stopPlayback();
-    }
-
-
-    if (
-        !morse
-    ) {
-
-        return;
-    }
-
-
-    await playMorseSound(
-        morse
-    );
-
-
-    /*
-       Если за время воспроизведения
-       пользователь уже нажал кнопку
-       повторно, старый процесс
-       больше ничего не запускает.
-    */
-
-    if (
-        currentToken !==
-        playbackToken
-    ) {
-
-        return;
-    }
-}
-
-
-/* ==================================================
-   FINAL PLAY BUTTON LOGIC
-================================================== */
-
-playButton.onclick =
-    function() {
-
-        vibrateShort();
-
-
-        /*
-           Второе нажатие во время
-           воспроизведения = STOP.
-        */
-
-        if (
-            isPlaying
-        ) {
-
-            playbackToken++;
-
-            stopPlayback();
-
-            setStatus(
-                "Воспроизведение остановлено"
-            );
-
-            return;
-        }
-
-
-        const morse =
-            getMorseForPlayback();
-
-
-        if (
-            !morse
-        ) {
-
-            setStatus(
-                "Нечего воспроизводить"
-            );
-
-            return;
-        }
-
-
-        safePlayMorse(
-            morse
-        );
-    };
-
-
-/* ==================================================
-   CLEAN AUDIO AFTER STOP
-================================================== */
-
-function hardStopAudio() {
-
-    stopRequested =
-        true;
-
-    if (
-        oscillator
-    ) {
-
-        try {
-
-            oscillator.stop();
-
-        } catch (
-            error
-        ) {}
-
-        oscillator =
-            null;
-    }
-
-
-    if (
-        audioContext
-    ) {
-
-        try {
-
-            audioContext.close();
-
-        } catch (
-            error
-        ) {}
-
-        audioContext =
-            null;
-    }
-
-
-    isPlaying =
-        false;
-
-    if (
-        playButton
-    ) {
-
-        playButton.textContent =
-            "▶";
-
-        playButton.classList.remove(
-            "playing"
-        );
-    }
-
-
-    if (
-        statusLight
-    ) {
-
-        statusLight.classList.remove(
-            "active"
-        );
-    }
-}
-
-
-/* ==================================================
-   EMERGENCY STOP
-================================================== */
-
-const emergencyStopButton =
-    document.getElementById(
-        "emergencyStopButton"
-    );
-
-
-if (
-    emergencyStopButton
-) {
-
-    emergencyStopButton.addEventListener(
-        "click",
-        function() {
-
-            playbackToken++;
-
-            hardStopAudio();
-
-            setStatus(
-                "Звук остановлен"
-            );
-
-            vibrateShort();
-        }
-    );
-}
-
-
-/* ==================================================
-   DOUBLE CLICK PROTECTION
-================================================== */
-
-let lastPlayClick =
-    0;
-
-
-playButton.addEventListener(
-    "dblclick",
-    function(event) {
-
-        /*
-           Не запускаем два
-           воспроизведения подряд.
-        */
-
-        event.preventDefault();
-    }
-);
-
-
-/* ==================================================
-   RESPONSIVE VIEWPORT CHECK
-================================================== */
-
-function updateMobileMode() {
-
-    const isMobile =
-        window.innerWidth <=
-        700;
-
-
-    document.body.classList.toggle(
-        "mobile",
-        isMobile
-    );
-}
-
-
-window.addEventListener(
-    "resize",
-    updateMobileMode
-);
-
-
-updateMobileMode();
-
-
-/* ==================================================
-   ORIENTATION CHANGE
-================================================== */
-
-window.addEventListener(
-    "orientationchange",
-    function() {
-
-        setTimeout(
-            updateMobileMode,
-            100
-        );
-    }
-);
-
-
-/* ==================================================
-   PERSIST INPUT
-================================================== */
-
-const rememberInput =
-    document.getElementById(
-        "rememberInput"
-    );
-
-
-if (
-    rememberInput
-) {
-
-    rememberInput.checked =
-        localStorage.getItem(
-            "neoMorseRememberInput"
-        ) ===
-        "true";
-
-
-    rememberInput.addEventListener(
-        "change",
-        function() {
-
-            localStorage.setItem(
-                "neoMorseRememberInput",
-                rememberInput.checked
-            );
-
-
-            if (
-                !rememberInput.checked
-            ) {
-
-                localStorage.removeItem(
-                    "neoMorseInput"
-                );
-            }
-        }
-    );
-}
-
-
-/* ==================================================
-   SAVE INPUT
-================================================== */
-
-input.addEventListener(
-    "input",
-    function() {
-
-        if (
-            rememberInput &&
-            rememberInput.checked
-        ) {
-
-            localStorage.setItem(
-                "neoMorseInput",
-                input.value
-            );
-        }
-    }
-);
-
-
-/* ==================================================
-   LOAD INPUT
-================================================== */
-
-if (
-    rememberInput &&
-    rememberInput.checked
-) {
-
-    const savedInput =
-        localStorage.getItem(
-            "neoMorseInput"
-        );
-
-
-    if (
-        savedInput
-    ) {
-
-        input.value =
-            savedInput;
-    }
-}
-
-
-/* ==================================================
-   ENTER TO TRANSLATE
-================================================== */
-
-input.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key ===
-            "Enter" &&
-            event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            translate();
-        }
-    }
-);
-
-
-/* ==================================================
-   ESC TO STOP
-================================================== */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key ===
-            "Escape"
-        ) {
-
-            if (
-                isPlaying
-            ) {
-
-                playbackToken++;
-
-                stopPlayback();
-
-                setStatus(
-                    "Воспроизведение остановлено"
-                );
-            }
-        }
-    }
-);
-
-
-/* ==================================================
-   FINAL TABLE REFRESH
-================================================== */
-
-function refreshEverything() {
-
-    updateMorseTable();
-
-    updateLanguageDescription();
-
-    updateCharacterCounter();
-
-    updateResultCounter();
-
-    updateConnectionStatus();
-
-    updateMobileMode();
-}
-
-
-refreshEverything();
-
-
-/* ==================================================
-   FINAL APP READY
-================================================== */
-
-document.body.classList.add(
-    "app-ready"
-);
-
-
-if (
-    status
-) {
-
-    status.textContent =
-        "";
-}
-
-
-/* ==================================================
-   NEO MORSE 0.7
-   END OF JAVASCRIPT
-================================================== */
-
-</script>
-
-</body>
-</html>
