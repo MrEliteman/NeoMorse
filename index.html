@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Neo Morse 0.2</title>
+<title>Neo Morse 0.3</title>
 
 <style>
     body {
@@ -44,7 +44,8 @@
         border-radius: 10px;
     }
 
-    button {
+    button,
+    select {
         padding: 12px 16px;
         margin-top: 10px;
         margin-right: 5px;
@@ -55,13 +56,19 @@
         font-size: 15px;
     }
 
-    button:hover {
+    button:hover,
+    select:hover {
         background: #eee;
     }
 
     button.active {
         background: #111;
         color: white;
+    }
+
+    select {
+        width: 100%;
+        margin-right: 0;
     }
 
     .result {
@@ -83,6 +90,66 @@
         margin-top: 10px;
         color: #666;
     }
+
+    .table-title {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: 10px;
+    }
+
+    .morse-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    .morse-table th,
+    .morse-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .morse-table th {
+        background: #f0f0f0;
+    }
+
+    .morse-code {
+        font-family: monospace;
+        font-size: 17px;
+        letter-spacing: 2px;
+    }
+
+    @media (max-width: 500px) {
+
+        body {
+            margin: 15px auto;
+            padding: 12px;
+        }
+
+        .box {
+            padding: 15px;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 11px 12px;
+        }
+
+        .morse-table th,
+        .morse-table td {
+            padding: 8px 5px;
+            font-size: 14px;
+        }
+
+        .morse-code {
+            font-size: 15px;
+        }
+    }
 </style>
 </head>
 
@@ -91,9 +158,38 @@
 <h1>Neo Morse</h1>
 
 <div class="subtitle">
-    Переводчик азбуки Морзе — версия 0.2
+    Переводчик азбуки Морзе — версия 0.3
 </div>
 
+
+<!-- =========================
+     ВЫБОР ЯЗЫКА
+========================= -->
+
+<div class="box">
+
+    <div class="label">
+        Язык
+    </div>
+
+    <select id="languageSelect">
+
+        <option value="ru">
+            Русский
+        </option>
+
+        <option value="en">
+            English
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- =========================
+     РЕЖИМ
+========================= -->
 
 <div class="box">
 
@@ -111,6 +207,10 @@
 
 </div>
 
+
+<!-- =========================
+     ВВОД
+========================= -->
 
 <div class="box">
 
@@ -136,10 +236,14 @@
 </div>
 
 
+<!-- =========================
+     РЕЗУЛЬТАТ
+========================= -->
+
 <div class="box">
 
     <div class="label" id="resultLabel">
-        Результат
+        Азбука Морзе
     </div>
 
     <div id="result" class="result">
@@ -155,40 +259,80 @@
 </div>
 
 
+<!-- =========================
+     ТАБЛИЦА МОРЗЕ
+========================= -->
+
+<div class="box">
+
+    <h2 class="table-title">
+        Таблица Морзе
+    </h2>
+
+    <div class="table-wrapper">
+
+        <table class="morse-table">
+
+            <thead>
+
+                <tr>
+                    <th>Символ</th>
+                    <th>Морзе</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="morseTableBody">
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
 <script>
 
 /* =========================
-   АЗБУКА МОРЗЕ
+   РУССКАЯ АЗБУКА МОРЗЕ
 ========================= */
 
-const MORSE = {
+const MORSE_RU = {
 
-    A: ".-",
-    B: "-...",
-    C: "-.-.",
-    D: "-..",
-    E: ".",
-    F: "..-.",
-    G: "--.",
-    H: "....",
-    I: "..",
-    J: ".---",
-    K: "-.-",
-    L: ".-..",
-    M: "--",
-    N: "-.",
-    O: "---",
-    P: ".--.",
-    Q: "--.-",
-    R: ".-.",
-    S: "...",
-    T: "-",
-    U: "..-",
-    V: "...-",
-    W: ".--",
-    X: "-..-",
-    Y: "-.--",
-    Z: "--..",
+    "А": ".-",
+    "Б": "-...",
+    "В": ".--",
+    "Г": "--.",
+    "Д": "-..",
+    "Е": ".",
+    "Ё": ".",
+    "Ж": "...-",
+    "З": "--..",
+    "И": "..",
+    "Й": ".---",
+    "К": "-.-",
+    "Л": ".-..",
+    "М": "--",
+    "Н": "-.",
+    "О": "---",
+    "П": ".--.",
+    "Р": ".-.",
+    "С": "...",
+    "Т": "-",
+    "У": "..-",
+    "Ф": "..-.",
+    "Х": "....",
+    "Ц": "-.-.",
+    "Ч": "---.",
+    "Ш": "----",
+    "Щ": "--.-",
+    "Ъ": "--.--",
+    "Ы": "-.--",
+    "Ь": "-..-",
+    "Э": "..-..",
+    "Ю": "..--",
+    "Я": ".-.-",
 
     "0": "-----",
     "1": ".----",
@@ -199,21 +343,115 @@ const MORSE = {
     "6": "-....",
     "7": "--...",
     "8": "---..",
-    "9": "----."
+    "9": "----.",
+
+    ".": ".-.-.-",
+    ",": "--..--",
+    "?": "..--..",
+    "!": "-.-.--",
+    ":": "---...",
+    ";": "-.-.-.",
+    "-": "-....-",
+    "\"": ".-..-.",
+    "(": "-.--.",
+    ")": "-.--.-",
+    "/": "-..-.",
+    "@": ".--.-."
 };
+
+
+/* =========================
+   АНГЛИЙСКАЯ АЗБУКА МОРЗЕ
+========================= */
+
+const MORSE_EN = {
+
+    "A": ".-",
+    "B": "-...",
+    "C": "-.-.",
+    "D": "-..",
+    "E": ".",
+    "F": "..-.",
+    "G": "--.",
+    "H": "....",
+    "I": "..",
+    "J": ".---",
+    "K": "-.-",
+    "L": ".-..",
+    "M": "--",
+    "N": "-.",
+    "O": "---",
+    "P": ".--.",
+    "Q": "--.-",
+    "R": ".-.",
+    "S": "...",
+    "T": "-",
+    "U": "..-",
+    "V": "...-",
+    "W": ".--",
+    "X": "-..-",
+    "Y": "-.--",
+    "Z": "--..",
+
+    "0": "-----",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----.",
+
+    ".": ".-.-.-",
+    ",": "--..--",
+    "?": "..--..",
+    "!": "-.-.--",
+    ":": "---...",
+    ";": "-.-.-.",
+    "-": "-....-",
+    "\"": ".-..-.",
+    "(": "-.--.",
+    ")": "-.--.-",
+    "/": "-..-.",
+    "@": ".--.-."
+};
+
+
+/* =========================
+   ВЫБОР АЛФАВИТА
+========================= */
+
+function getMorse() {
+
+    const language =
+        languageSelect.value;
+
+    if (language === "en") {
+        return MORSE_EN;
+    }
+
+    return MORSE_RU;
+}
 
 
 /* =========================
    ОБРАТНАЯ ТАБЛИЦА
 ========================= */
 
-const REVERSE = {};
+function createReverseMorse(morse) {
 
-for (const letter in MORSE) {
+    const reverse = {};
 
-    const code = MORSE[letter];
+    for (const character in morse) {
 
-    REVERSE[code] = letter;
+        const code = morse[character];
+
+        reverse[code] = character;
+    }
+
+    return reverse;
 }
 
 
@@ -251,6 +489,12 @@ const resultLabel =
 const status =
     document.getElementById("status");
 
+const languageSelect =
+    document.getElementById("languageSelect");
+
+const morseTableBody =
+    document.getElementById("morseTableBody");
+
 
 /* =========================
    ТЕКУЩИЙ РЕЖИМ
@@ -265,11 +509,18 @@ let mode = "encode";
 
 function textToMorse(text) {
 
+    const morse =
+        getMorse();
+
     text = text.toUpperCase();
 
     let output = "";
 
-    for (let i = 0; i < text.length; i++) {
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
 
         const character = text[i];
 
@@ -277,10 +528,10 @@ function textToMorse(text) {
 
             output += "/ ";
 
-        } else if (MORSE[character]) {
+        } else if (morse[character]) {
 
-            output += MORSE[character] + " ";
-
+            output +=
+                morse[character] + " ";
         }
 
     }
@@ -295,37 +546,56 @@ function textToMorse(text) {
 
 function morseToText(text) {
 
+    const morse =
+        getMorse();
+
+    const reverse =
+        createReverseMorse(morse);
+
     text = text.trim();
 
     if (text === "") {
         return "";
     }
 
-    const words = text.split("/");
+    const words =
+        text.split("/");
 
     let resultText = "";
 
-    for (let w = 0; w < words.length; w++) {
+    for (
+        let w = 0;
+        w < words.length;
+        w++
+    ) {
 
         const letters =
             words[w].trim().split(/\s+/);
 
-        for (let i = 0; i < letters.length; i++) {
+        for (
+            let i = 0;
+            i < letters.length;
+            i++
+        ) {
 
-            const code = letters[i];
+            const code =
+                letters[i];
 
-            if (REVERSE[code]) {
+            if (reverse[code]) {
 
-                resultText += REVERSE[code];
+                resultText +=
+                    reverse[code];
 
             } else {
 
                 resultText += "?";
-
             }
         }
 
-        if (w < words.length - 1) {
+        if (
+            w <
+            words.length - 1
+        ) {
 
             resultText += " ";
         }
@@ -341,9 +611,12 @@ function morseToText(text) {
 
 function translate() {
 
-    const text = input.value;
+    const text =
+        input.value;
 
-    if (text.trim() === "") {
+    if (
+        text.trim() === ""
+    ) {
 
         result.textContent =
             "Здесь появится результат";
@@ -366,10 +639,74 @@ function translate() {
             morseToText(text);
     }
 
-    result.textContent = translated;
+    result.textContent =
+        translated;
 
-    status.textContent = "Готово";
+    status.textContent =
+        "Готово";
 }
+
+
+/* =========================
+   ОБНОВЛЕНИЕ ТАБЛИЦЫ
+========================= */
+
+function updateMorseTable() {
+
+    const morse =
+        getMorse();
+
+    morseTableBody.innerHTML = "";
+
+    for (const character in morse) {
+
+        const row =
+            document.createElement("tr");
+
+        const symbolCell =
+            document.createElement("td");
+
+        const morseCell =
+            document.createElement("td");
+
+        symbolCell.textContent =
+            character;
+
+        morseCell.textContent =
+            morse[character];
+
+        morseCell.className =
+            "morse-code";
+
+        row.appendChild(
+            symbolCell
+        );
+
+        row.appendChild(
+            morseCell
+        );
+
+        morseTableBody.appendChild(
+            row
+        );
+    }
+}
+
+
+/* =========================
+   СМЕНА ЯЗЫКА
+========================= */
+
+languageSelect.addEventListener(
+    "change",
+    function () {
+
+        updateMorseTable();
+
+        status.textContent =
+            "Язык таблицы изменён";
+    }
+);
 
 
 /* =========================
@@ -382,8 +719,13 @@ encodeButton.addEventListener(
 
         mode = "encode";
 
-        encodeButton.classList.add("active");
-        decodeButton.classList.remove("active");
+        encodeButton.classList.add(
+            "active"
+        );
+
+        decodeButton.classList.remove(
+            "active"
+        );
 
         inputLabel.textContent =
             "Текст";
@@ -414,8 +756,13 @@ decodeButton.addEventListener(
 
         mode = "decode";
 
-        decodeButton.classList.add("active");
-        encodeButton.classList.remove("active");
+        decodeButton.classList.add(
+            "active"
+        );
+
+        encodeButton.classList.remove(
+            "active"
+        );
 
         inputLabel.textContent =
             "Азбука Морзе";
@@ -480,7 +827,8 @@ copyButton.addEventListener(
 
         if (
             text === "" ||
-            text === "Здесь появится результат"
+            text ===
+            "Здесь появится результат"
         ) {
 
             status.textContent =
@@ -491,7 +839,8 @@ copyButton.addEventListener(
 
         try {
 
-            await navigator.clipboard.writeText(text);
+            await navigator.clipboard
+                .writeText(text);
 
             status.textContent =
                 "Скопировано";
@@ -503,6 +852,13 @@ copyButton.addEventListener(
         }
     }
 );
+
+
+/* =========================
+   ЗАПУСК
+========================= */
+
+updateMorseTable();
 
 </script>
 
