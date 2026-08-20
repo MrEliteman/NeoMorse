@@ -1,166 +1,510 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neo Morse 0.1</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-        }
+<title>Neo Morse 0.2</title>
 
-        textarea {
-            width: 100%;
-            height: 120px;
-            font-size: 18px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #f5f5f5;
+        color: #111;
+    }
 
-        button {
-            padding: 12px 18px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+    h1 {
+        margin-bottom: 5px;
+    }
 
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            min-height: 40px;
-            background: #eeeeee;
-            font-size: 20px;
-            word-break: break-word;
-        }
-    </style>
+    .subtitle {
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .box {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+    }
+
+    textarea {
+        width: 100%;
+        height: 140px;
+        box-sizing: border-box;
+        resize: vertical;
+        padding: 12px;
+        font-size: 18px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
+
+    button {
+        padding: 12px 16px;
+        margin-top: 10px;
+        margin-right: 5px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    button:hover {
+        background: #eee;
+    }
+
+    button.active {
+        background: #111;
+        color: white;
+    }
+
+    .result {
+        min-height: 70px;
+        padding: 15px;
+        background: #eee;
+        border-radius: 10px;
+        font-size: 20px;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    .label {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #status {
+        margin-top: 10px;
+        color: #666;
+    }
+</style>
 </head>
 
 <body>
 
-    <h1>Neo Morse</h1>
+<h1>Neo Morse</h1>
 
-    <p>Напиши текст:</p>
+<div class="subtitle">
+    Переводчик азбуки Морзе — версия 0.2
+</div>
 
-    <textarea id="input" placeholder="Например: SOS"></textarea>
+
+<div class="box">
+
+    <div class="label">
+        Режим
+    </div>
+
+    <button id="encodeButton" class="active">
+        Текст → Морзе
+    </button>
+
+    <button id="decodeButton">
+        Морзе → текст
+    </button>
+
+</div>
+
+
+<div class="box">
+
+    <div class="label" id="inputLabel">
+        Текст
+    </div>
+
+    <textarea
+        id="input"
+        placeholder="Напиши текст..."
+    ></textarea>
 
     <br>
 
     <button id="translateButton">
-        Перевести в Морзе
+        Перевести
     </button>
 
     <button id="clearButton">
         Очистить
     </button>
 
-    <div id="result">
+</div>
+
+
+<div class="box">
+
+    <div class="label" id="resultLabel">
+        Результат
+    </div>
+
+    <div id="result" class="result">
         Здесь появится результат
     </div>
 
+    <button id="copyButton">
+        Копировать
+    </button>
 
-    <script>
-        // Азбука Морзе
-        const morse = {
-            A: ".-",
-            B: "-...",
-            C: "-.-.",
-            D: "-..",
-            E: ".",
-            F: "..-.",
-            G: "--.",
-            H: "....",
-            I: "..",
-            J: ".---",
-            K: "-.-",
-            L: ".-..",
-            M: "--",
-            N: "-.",
-            O: "---",
-            P: ".--.",
-            Q: "--.-",
-            R: ".-.",
-            S: "...",
-            T: "-",
-            U: "..-",
-            V: "...-",
-            W: ".--",
-            X: "-..-",
-            Y: "-.--",
-            Z: "--..",
+    <div id="status"></div>
 
-            "0": "-----",
-            "1": ".----",
-            "2": "..---",
-            "3": "...--",
-            "4": "....-",
-            "5": ".....",
-            "6": "-....",
-            "7": "--...",
-            "8": "---..",
-            "9": "----."
-        };
+</div>
 
 
-        // Получаем элементы страницы
-        const input = document.getElementById("input");
-        const result = document.getElementById("result");
+<script>
 
-        const translateButton =
-            document.getElementById("translateButton");
+/* =========================
+   АЗБУКА МОРЗЕ
+========================= */
 
-        const clearButton =
-            document.getElementById("clearButton");
+const MORSE = {
+
+    A: ".-",
+    B: "-...",
+    C: "-.-.",
+    D: "-..",
+    E: ".",
+    F: "..-.",
+    G: "--.",
+    H: "....",
+    I: "..",
+    J: ".---",
+    K: "-.-",
+    L: ".-..",
+    M: "--",
+    N: "-.",
+    O: "---",
+    P: ".--.",
+    Q: "--.-",
+    R: ".-.",
+    S: "...",
+    T: "-",
+    U: "..-",
+    V: "...-",
+    W: ".--",
+    X: "-..-",
+    Y: "-.--",
+    Z: "--..",
+
+    "0": "-----",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----."
+};
 
 
-        // Переводим текст в Морзе
-        function translateToMorse() {
+/* =========================
+   ОБРАТНАЯ ТАБЛИЦА
+========================= */
 
-            const text = input.value.toUpperCase();
+const REVERSE = {};
 
-            let output = "";
+for (const letter in MORSE) {
 
-            for (let i = 0; i < text.length; i++) {
+    const code = MORSE[letter];
 
-                const character = text[i];
+    REVERSE[code] = letter;
+}
 
-                // Пробел между словами
-                if (character === " ") {
-                    output += "/ ";
-                    continue;
-                }
 
-                // Если символ существует в таблице
-                if (morse[character]) {
-                    output += morse[character] + " ";
-                }
-            }
+/* =========================
+   ЭЛЕМЕНТЫ
+========================= */
 
-            result.textContent = output.trim();
+const input =
+    document.getElementById("input");
+
+const result =
+    document.getElementById("result");
+
+const translateButton =
+    document.getElementById("translateButton");
+
+const clearButton =
+    document.getElementById("clearButton");
+
+const copyButton =
+    document.getElementById("copyButton");
+
+const encodeButton =
+    document.getElementById("encodeButton");
+
+const decodeButton =
+    document.getElementById("decodeButton");
+
+const inputLabel =
+    document.getElementById("inputLabel");
+
+const resultLabel =
+    document.getElementById("resultLabel");
+
+const status =
+    document.getElementById("status");
+
+
+/* =========================
+   ТЕКУЩИЙ РЕЖИМ
+========================= */
+
+let mode = "encode";
+
+
+/* =========================
+   ТЕКСТ → МОРЗЕ
+========================= */
+
+function textToMorse(text) {
+
+    text = text.toUpperCase();
+
+    let output = "";
+
+    for (let i = 0; i < text.length; i++) {
+
+        const character = text[i];
+
+        if (character === " ") {
+
+            output += "/ ";
+
+        } else if (MORSE[character]) {
+
+            output += MORSE[character] + " ";
+
         }
 
+    }
 
-        // Кнопка перевода
-        translateButton.addEventListener(
-            "click",
-            translateToMorse
-        );
+    return output.trim();
+}
 
 
-        // Кнопка очистки
-        clearButton.addEventListener(
-            "click",
-            function () {
+/* =========================
+   МОРЗЕ → ТЕКСТ
+========================= */
 
-                input.value = "";
+function morseToText(text) {
 
-                result.textContent =
-                    "Здесь появится результат";
+    text = text.trim();
+
+    if (text === "") {
+        return "";
+    }
+
+    const words = text.split("/");
+
+    let resultText = "";
+
+    for (let w = 0; w < words.length; w++) {
+
+        const letters =
+            words[w].trim().split(/\s+/);
+
+        for (let i = 0; i < letters.length; i++) {
+
+            const code = letters[i];
+
+            if (REVERSE[code]) {
+
+                resultText += REVERSE[code];
+
+            } else {
+
+                resultText += "?";
+
             }
-        );
-    </script>
+        }
+
+        if (w < words.length - 1) {
+
+            resultText += " ";
+        }
+    }
+
+    return resultText;
+}
+
+
+/* =========================
+   ПЕРЕВОД
+========================= */
+
+function translate() {
+
+    const text = input.value;
+
+    if (text.trim() === "") {
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+
+        return;
+    }
+
+    let translated;
+
+    if (mode === "encode") {
+
+        translated =
+            textToMorse(text);
+
+    } else {
+
+        translated =
+            morseToText(text);
+    }
+
+    result.textContent = translated;
+
+    status.textContent = "Готово";
+}
+
+
+/* =========================
+   РЕЖИМ ТЕКСТ → МОРЗЕ
+========================= */
+
+encodeButton.addEventListener(
+    "click",
+    function () {
+
+        mode = "encode";
+
+        encodeButton.classList.add("active");
+        decodeButton.classList.remove("active");
+
+        inputLabel.textContent =
+            "Текст";
+
+        resultLabel.textContent =
+            "Азбука Морзе";
+
+        input.placeholder =
+            "Напиши текст...";
+
+        input.value = "";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+/* =========================
+   РЕЖИМ МОРЗЕ → ТЕКСТ
+========================= */
+
+decodeButton.addEventListener(
+    "click",
+    function () {
+
+        mode = "decode";
+
+        decodeButton.classList.add("active");
+        encodeButton.classList.remove("active");
+
+        inputLabel.textContent =
+            "Азбука Морзе";
+
+        resultLabel.textContent =
+            "Текст";
+
+        input.placeholder =
+            "Например: ... --- ...";
+
+        input.value = "";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+/* =========================
+   КНОПКА ПЕРЕВОДА
+========================= */
+
+translateButton.addEventListener(
+    "click",
+    function () {
+
+        translate();
+    }
+);
+
+
+/* =========================
+   ОЧИСТКА
+========================= */
+
+clearButton.addEventListener(
+    "click",
+    function () {
+
+        input.value = "";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+/* =========================
+   КОПИРОВАНИЕ
+========================= */
+
+copyButton.addEventListener(
+    "click",
+    async function () {
+
+        const text =
+            result.textContent;
+
+        if (
+            text === "" ||
+            text === "Здесь появится результат"
+        ) {
+
+            status.textContent =
+                "Нечего копировать";
+
+            return;
+        }
+
+        try {
+
+            await navigator.clipboard.writeText(text);
+
+            status.textContent =
+                "Скопировано";
+
+        } catch (error) {
+
+            status.textContent =
+                "Не удалось скопировать";
+        }
+    }
+);
+
+</script>
 
 </body>
 </html>
