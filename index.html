@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#111111">
+
+    <title>Neo Morse</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+
+        <div>
+            <div class="logo">Neo Morse</div>
+
+            <div class="subtitle">
+                Универсальный переводчик азбуки Морзе
+            </div>
+        </div>
+
+        <button
+            id="themeButton"
+            class="theme-button"
+            type="button"
+            aria-label="Изменить тему">
+            ◐
+        </button>
+
+    </header>
+
+
+    <!-- LANGUAGE -->
+
+    <section class="card">
+
+        <div class="label">
+            ЯЗЫК
+        </div>
+
+        <select id="language">
+
+            <option value="ru">
+                🇷🇺 Русский
+            </option>
+
+            <option value="az">
+                🇦🇿 Азербайджанский
+            </option>
+
+            <option value="en">
+                🇬🇧 Английский
+            </option>
+
+            <option value="tr">
+                🇹🇷 Турецкий
+            </option>
+
+            <option value="de">
+                🇩🇪 Немецкий
+            </option>
+
+            <option value="fr">
+                🇫🇷 Французский
+            </option>
+
+            <option value="es">
+                🇪🇸 Испанский
+            </option>
+
+        </select>
+
+    </section>
+
+
+    <!-- MODE -->
+
+    <section class="card">
+
+        <div class="label">
+            РЕЖИМ
+        </div>
+
+        <div class="mode-buttons">
+
+            <button
+                id="encodeMode"
+                class="active"
+                type="button">
+                Текст → Морзе
+            </button>
+
+            <button
+                id="decodeMode"
+                type="button">
+                Морзе → текст
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- INPUT -->
+
+    <section class="card">
+
+        <div
+            id="inputLabel"
+            class="label">
+            ТЕКСТ
+        </div>
+
+        <textarea
+            id="input"
+            spellcheck="false"
+            placeholder="Напишите сообщение..."></textarea>
+
+
+        <div class="input-bottom">
+
+            <span>
+                Символов:
+                <strong id="counter">0</strong>
+            </span>
+
+            <button
+                id="clearInput"
+                type="button">
+                Очистить
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESULT -->
+
+    <section class="card">
+
+        <div
+            id="resultLabel"
+            class="label">
+            АЗБУКА МОРЗЕ
+        </div>
+
+        <div
+            id="result"
+            class="result empty">
+            Здесь появится результат
+        </div>
+
+
+        <div class="button-grid">
+
+            <button
+                id="playButton"
+                class="primary"
+                type="button">
+                ▶ Воспроизвести
+            </button>
+
+            <button
+                id="stopButton"
+                type="button"
+                disabled>
+                ■ Стоп
+            </button>
+
+        </div>
+
+
+        <div class="button-grid secondary">
+
+            <button
+                id="copyButton"
+                type="button">
+                Копировать
+            </button>
+
+            <button
+                id="resetButton"
+                type="button">
+                Сбросить
+            </button>
+
+        </div>
+
+
+        <div
+            id="status"
+            class="status">
+        </div>
+
+    </section>
+
+
+    <!-- SOUND SETTINGS -->
+
+    <section class="card">
+
+        <div class="label">
+            НАСТРОЙКИ ЗВУКА
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-header">
+
+                <span>
+                    Скорость
+                </span>
+
+                <span id="speedValue">
+                    15 WPM
+                </span>
+
+            </div>
+
+            <input
+                id="speed"
+                type="range"
+                min="5"
+                max="35"
+                value="15">
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-header">
+
+                <span>
+                    Частота
+                </span>
+
+                <span id="frequencyValue">
+                    700 Hz
+                </span>
+
+            </div>
+
+            <input
+                id="frequency"
+                type="range"
+                min="300"
+                max="1200"
+                value="700">
+
+        </div>
+
+    </section>
+
+
+    <!-- MORSE GUIDE -->
+
+    <section class="card">
+
+        <div class="label">
+            ТАБЛИЦА МОРЗЕ
+        </div>
+
+        <div id="guide" class="guide"></div>
+
+    </section>
+
+
+    <footer>
+        Neo Morse · Version 1.1
+    </footer>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
