@@ -1374,3 +1374,1207 @@ const LANGUAGES = {
 };
 
 
+/* ==================================================
+   ELEMENTS
+================================================== */
+
+const input =
+    document.getElementById(
+        "input"
+    );
+
+const result =
+    document.getElementById(
+        "result"
+    );
+
+const languageSelect =
+    document.getElementById(
+        "languageSelect"
+    );
+
+const encodeButton =
+    document.getElementById(
+        "encodeButton"
+    );
+
+const decodeButton =
+    document.getElementById(
+        "decodeButton"
+    );
+
+const translateButton =
+    document.getElementById(
+        "translateButton"
+    );
+
+const clearButton =
+    document.getElementById(
+        "clearButton"
+    );
+
+const copyButton =
+    document.getElementById(
+        "copyButton"
+    );
+
+const useResultButton =
+    document.getElementById(
+        "useResultButton"
+    );
+
+const playButton =
+    document.getElementById(
+        "playButton"
+    );
+
+const playStatus =
+    document.getElementById(
+        "playStatus"
+    );
+
+const status =
+    document.getElementById(
+        "status"
+    );
+
+const statusLight =
+    document.getElementById(
+        "statusLight"
+    );
+
+const inputLabel =
+    document.getElementById(
+        "inputLabel"
+    );
+
+const resultLabel =
+    document.getElementById(
+        "resultLabel"
+    );
+
+const tableBody =
+    document.getElementById(
+        "morseTableBody"
+    );
+
+const speedRange =
+    document.getElementById(
+        "speedRange"
+    );
+
+const speedValue =
+    document.getElementById(
+        "speedValue"
+    );
+
+const pitchRange =
+    document.getElementById(
+        "pitchRange"
+    );
+
+const pitchValue =
+    document.getElementById(
+        "pitchValue"
+    );
+
+
+/* ==================================================
+   STATE
+================================================== */
+
+let mode = "encode";
+
+let isPlaying = false;
+
+let stopRequested = false;
+
+let audioContext = null;
+
+let oscillator = null;
+
+
+/* ==================================================
+   CURRENT MORSE
+================================================== */
+
+function getCurrentMorse() {
+
+    return LANGUAGES[
+        languageSelect.value
+    ];
+}
+
+
+/* ==================================================
+   REVERSE MORSE
+================================================== */
+
+function createReverseMorse(morse) {
+
+    const reverse = {};
+
+    for (
+        const symbol in morse
+    ) {
+
+        const code =
+            morse[symbol];
+
+        if (
+            reverse[code] === undefined
+        ) {
+
+            reverse[code] =
+                symbol;
+        }
+    }
+
+    return reverse;
+}
+
+
+/* ==================================================
+   TEXT → MORSE
+================================================== */
+
+function textToMorse(text) {
+
+    const morse =
+        getCurrentMorse();
+
+    text =
+        text.toUpperCase();
+
+    const output = [];
+
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        const character =
+            text[i];
+
+
+        if (
+            character === " "
+        ) {
+
+            output.push("/");
+
+            continue;
+        }
+
+
+        if (
+            morse[character]
+        ) {
+
+            output.push(
+                morse[character]
+            );
+        }
+    }
+
+
+    return output.join(" ");
+}
+
+
+/* ==================================================
+   MORSE → TEXT
+================================================== */
+
+function morseToText(text) {
+
+    const reverse =
+        createReverseMorse(
+            getCurrentMorse()
+        );
+
+    text =
+        text.trim();
+
+
+    if (!text) {
+
+        return "";
+    }
+
+
+    const words =
+        text.split("/");
+
+    const output = [];
+
+
+    for (
+        let w = 0;
+        w < words.length;
+        w++
+    ) {
+
+        const word =
+            words[w].trim();
+
+
+        if (!word) {
+
+            continue;
+        }
+
+
+        const letters =
+            word.split(/\s+/);
+
+        let decoded = "";
+
+
+        for (
+            let i = 0;
+            i < letters.length;
+            i++
+        ) {
+
+            const code =
+                letters[i];
+
+
+            if (
+                reverse[code]
+            ) {
+
+                decoded +=
+                    reverse[code];
+
+            } else {
+
+                decoded += "?";
+            }
+        }
+
+
+        output.push(
+            decoded
+        );
+    }
+
+
+    return output.join(" ");
+}
+
+
+/* ==================================================
+   TRANSLATE
+================================================== */
+
+function translate() {
+
+    stopPlayback();
+
+    const text =
+        input.value;
+
+
+    if (
+        text.trim() === ""
+    ) {
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+
+        return;
+    }
+
+
+    if (
+        mode === "encode"
+    ) {
+
+        result.textContent =
+            textToMorse(text);
+
+        result.classList.add(
+            "morse"
+        );
+
+        resultLabel.textContent =
+            "Азбука Морзе";
+
+    } else {
+
+        result.textContent =
+            morseToText(text);
+
+        result.classList.remove(
+            "morse"
+        );
+
+        resultLabel.textContent =
+            "Текст";
+    }
+
+
+    status.textContent =
+        "Готово";
+}
+
+
+    /* ==================================================
+   UPDATE TABLE
+================================================== */
+
+function updateMorseTable() {
+
+    const morse =
+        getCurrentMorse();
+
+    tableBody.innerHTML = "";
+
+    Object.keys(morse).forEach(
+        function(symbol) {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+            const symbolCell =
+                document.createElement(
+                    "td"
+                );
+
+            const codeCell =
+                document.createElement(
+                    "td"
+                );
+
+            symbolCell.textContent =
+                symbol;
+
+            codeCell.textContent =
+                morse[symbol];
+
+            codeCell.className =
+                "morse-code";
+
+            row.appendChild(
+                symbolCell
+            );
+
+            row.appendChild(
+                codeCell
+            );
+
+            tableBody.appendChild(
+                row
+            );
+        }
+    );
+}
+
+
+/* ==================================================
+   LANGUAGE
+================================================== */
+
+languageSelect.addEventListener(
+    "change",
+    function() {
+
+        stopPlayback();
+
+        updateMorseTable();
+
+        status.textContent =
+            "Язык изменён";
+    }
+);
+
+
+/* ==================================================
+   ENCODE MODE
+================================================== */
+
+encodeButton.addEventListener(
+    "click",
+    function() {
+
+        stopPlayback();
+
+        mode = "encode";
+
+        encodeButton.classList.add(
+            "active"
+        );
+
+        decodeButton.classList.remove(
+            "active"
+        );
+
+        inputLabel.textContent =
+            "Текст";
+
+        resultLabel.textContent =
+            "Азбука Морзе";
+
+        input.placeholder =
+            "Напиши текст...";
+
+        result.classList.add(
+            "morse"
+        );
+
+        input.value = "";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+/* ==================================================
+   DECODE MODE
+================================================== */
+
+decodeButton.addEventListener(
+    "click",
+    function() {
+
+        stopPlayback();
+
+        mode = "decode";
+
+        decodeButton.classList.add(
+            "active"
+        );
+
+        encodeButton.classList.remove(
+            "active"
+        );
+
+        inputLabel.textContent =
+            "Азбука Морзе";
+
+        resultLabel.textContent =
+            "Текст";
+
+        input.placeholder =
+            "Например: ... --- ...";
+
+        result.classList.remove(
+            "morse"
+        );
+
+        input.value = "";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+/* ==================================================
+   TRANSLATE BUTTON
+================================================== */
+
+translateButton.addEventListener(
+    "click",
+    translate
+);
+
+
+/* ==================================================
+   CLEAR
+================================================== */
+
+clearButton.addEventListener(
+    "click",
+    function() {
+
+        stopPlayback();
+
+        input.value = "";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+
+        playStatus.textContent =
+            "Готово к передаче";
+    }
+);
+
+
+/* ==================================================
+   COPY
+================================================== */
+
+copyButton.addEventListener(
+    "click",
+    async function() {
+
+        const text =
+            result.textContent;
+
+        if (
+            !text ||
+            text ===
+            "Здесь появится результат"
+        ) {
+
+            status.textContent =
+                "Нечего копировать";
+
+            return;
+        }
+
+        try {
+
+            await navigator.clipboard
+                .writeText(text);
+
+            status.textContent =
+                "Скопировано";
+
+        } catch (error) {
+
+            status.textContent =
+                "Не удалось скопировать";
+        }
+    }
+);
+
+
+/* ==================================================
+   USE RESULT
+================================================== */
+
+useResultButton.addEventListener(
+    "click",
+    function() {
+
+        const text =
+            result.textContent;
+
+        if (
+            !text ||
+            text ===
+            "Здесь появится результат"
+        ) {
+
+            status.textContent =
+                "Результат пуст";
+
+            return;
+        }
+
+        input.value =
+            text;
+
+        status.textContent =
+            "Результат перенесён";
+    }
+);
+
+
+/* ==================================================
+   SPEED
+================================================== */
+
+speedRange.addEventListener(
+    "input",
+    function() {
+
+        speedValue.textContent =
+            speedRange.value + "×";
+    }
+);
+
+
+/* ==================================================
+   PITCH
+================================================== */
+
+pitchRange.addEventListener(
+    "input",
+    function() {
+
+        pitchValue.textContent =
+            pitchRange.value + " Гц";
+    }
+);
+
+
+/* ==================================================
+   AUDIO CONTEXT
+================================================== */
+
+function createAudio() {
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+    if (!AudioContext) {
+
+        status.textContent =
+            "Браузер не поддерживает звук";
+
+        return false;
+    }
+
+    audioContext =
+        new AudioContext();
+
+    if (
+        audioContext.state ===
+        "suspended"
+    ) {
+
+        audioContext.resume();
+    }
+
+    return true;
+}
+
+
+/* ==================================================
+   TONE
+================================================== */
+
+function playTone(duration) {
+
+    return new Promise(
+        function(resolve) {
+
+            if (
+                stopRequested ||
+                !audioContext
+            ) {
+
+                resolve();
+
+                return;
+            }
+
+            oscillator =
+                audioContext
+                    .createOscillator();
+
+            const gain =
+                audioContext
+                    .createGain();
+
+            oscillator.type =
+                "sine";
+
+            oscillator.frequency.value =
+                Number(
+                    pitchRange.value
+                );
+
+            gain.gain.value =
+                0.15;
+
+            oscillator.connect(
+                gain
+            );
+
+            gain.connect(
+                audioContext.destination
+            );
+
+            oscillator.start();
+
+            setTimeout(
+                function() {
+
+                    if (oscillator) {
+
+                        try {
+
+                            oscillator.stop();
+
+                        } catch (error) {}
+
+                        oscillator =
+                            null;
+                    }
+
+                    resolve();
+
+                },
+                duration
+            );
+        }
+    );
+}
+
+
+/* ==================================================
+   WAIT
+================================================== */
+
+function wait(ms) {
+
+    return new Promise(
+        function(resolve) {
+
+            setTimeout(
+                resolve,
+                ms
+            );
+        }
+    );
+}
+
+
+/* ==================================================
+   STOP PLAYBACK
+================================================== */
+
+function stopPlayback() {
+
+    stopRequested = true;
+
+    isPlaying = false;
+
+    if (oscillator) {
+
+        try {
+
+            oscillator.stop();
+
+        } catch (error) {}
+
+        oscillator = null;
+    }
+
+    if (audioContext) {
+
+        try {
+
+            audioContext.close();
+
+        } catch (error) {}
+
+        audioContext = null;
+    }
+
+    playButton.textContent =
+        "▶";
+
+    playButton.classList.remove(
+        "playing"
+    );
+
+    statusLight.classList.remove(
+        "active"
+    );
+
+    playStatus.textContent =
+        "Готово к передаче";
+}
+
+
+    /* ==================================================
+   GET MORSE FOR PLAYBACK
+================================================== */
+
+function getMorseForPlayback() {
+
+    if (
+        mode === "encode"
+    ) {
+
+        const morse =
+            result.textContent.trim();
+
+        if (
+            !morse ||
+            morse ===
+            "Здесь появится результат"
+        ) {
+
+            return "";
+        }
+
+        return morse;
+    }
+
+    return input.value.trim();
+}
+
+
+/* ==================================================
+   PLAY MORSE SOUND
+================================================== */
+
+async function playMorseSound(
+    morseText
+) {
+
+    if (
+        !morseText
+    ) {
+
+        status.textContent =
+            "Сначала получи перевод";
+
+        return;
+    }
+
+
+    if (
+        !createAudio()
+    ) {
+
+        return;
+    }
+
+
+    stopRequested = false;
+
+    isPlaying = true;
+
+
+    playButton.textContent =
+        "■";
+
+    playButton.classList.add(
+        "playing"
+    );
+
+    statusLight.classList.add(
+        "active"
+    );
+
+    playStatus.textContent =
+        "Передача...";
+
+    status.textContent =
+        "Воспроизведение...";
+
+
+    /*
+       Скорость:
+
+       1×  = обычная
+       2×  = в два раза быстрее
+       0.5× = в два раза медленнее
+    */
+
+    const speed =
+        Number(
+            speedRange.value
+        );
+
+
+    const dot =
+        100 / speed;
+
+
+    /*
+       Делим сообщение
+       на слова через /
+    */
+
+    const words =
+        morseText.split("/");
+
+
+    for (
+        let w = 0;
+        w < words.length;
+        w++
+    ) {
+
+        if (
+            stopRequested
+        ) {
+
+            break;
+        }
+
+
+        const word =
+            words[w].trim();
+
+
+        if (!word) {
+
+            continue;
+        }
+
+
+        /*
+           Отдельные буквы
+        */
+
+        const letters =
+            word.split(/\s+/);
+
+
+        for (
+            let l = 0;
+            l < letters.length;
+            l++
+        ) {
+
+            if (
+                stopRequested
+            ) {
+
+                break;
+            }
+
+
+            const code =
+                letters[l];
+
+
+            /*
+               Каждый символ:
+               . = точка
+               - = тире
+            */
+
+            for (
+                let i = 0;
+                i < code.length;
+                i++
+            ) {
+
+                if (
+                    stopRequested
+                ) {
+
+                    break;
+                }
+
+
+                const symbol =
+                    code[i];
+
+
+                if (
+                    symbol === "."
+                ) {
+
+                    await playTone(
+                        dot
+                    );
+
+                } else if (
+                    symbol === "-"
+                ) {
+
+                    await playTone(
+                        dot * 3
+                    );
+                }
+
+
+                /*
+                   Пауза между
+                   элементами одной буквы
+                */
+
+                if (
+                    i <
+                        code.length - 1 &&
+                    !stopRequested
+                ) {
+
+                    await wait(
+                        dot
+                    );
+                }
+            }
+
+
+            /*
+               Пауза между буквами
+            */
+
+            if (
+                l <
+                    letters.length - 1 &&
+                !stopRequested
+            ) {
+
+                await wait(
+                    dot * 3
+                );
+            }
+        }
+
+
+        /*
+           Пауза между словами
+        */
+
+        if (
+            w <
+                words.length - 1 &&
+            !stopRequested
+        ) {
+
+            await wait(
+                dot * 7
+            );
+        }
+    }
+
+
+    const wasStopped =
+        stopRequested;
+
+
+    /*
+       Останавливаем
+       оставшийся генератор
+    */
+
+    if (oscillator) {
+
+        try {
+
+            oscillator.stop();
+
+        } catch (error) {}
+
+        oscillator = null;
+    }
+
+
+    /*
+       Закрываем AudioContext
+    */
+
+    if (audioContext) {
+
+        try {
+
+            await audioContext.close();
+
+        } catch (error) {}
+
+        audioContext = null;
+    }
+
+
+    isPlaying = false;
+
+
+    playButton.textContent =
+        "▶";
+
+    playButton.classList.remove(
+        "playing"
+    );
+
+    statusLight.classList.remove(
+        "active"
+    );
+
+
+    if (
+        wasStopped
+    ) {
+
+        playStatus.textContent =
+            "Передача остановлена";
+
+        status.textContent =
+            "Воспроизведение остановлено";
+
+    } else {
+
+        playStatus.textContent =
+            "Передача завершена";
+
+        status.textContent =
+            "Воспроизведение завершено";
+    }
+}
+
+
+/* ==================================================
+   PLAY / STOP BUTTON
+================================================== */
+
+playButton.addEventListener(
+    "click",
+    function() {
+
+        /*
+           Если звук уже идёт,
+           повторное нажатие
+           НЕ запускает второй звук.
+
+           Оно останавливает текущий.
+        */
+
+        if (
+            isPlaying
+        ) {
+
+            stopPlayback();
+
+            status.textContent =
+                "Воспроизведение остановлено";
+
+            return;
+        }
+
+
+        const morse =
+            getMorseForPlayback();
+
+
+        playMorseSound(
+            morse
+        );
+    }
+);
+
+
+/* ==================================================
+   INITIAL TABLE
+================================================== */
+
+updateMorseTable();
+
+
+/* ==================================================
+   INITIAL VALUES
+================================================== */
+
+speedValue.textContent =
+    speedRange.value + "×";
+
+pitchValue.textContent =
+    pitchRange.value + " Гц";
+
+
+/* ==================================================
+   END
+================================================== */
+
+
+</script >
+
+</body>
+</html>
