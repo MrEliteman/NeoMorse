@@ -3,285 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo Morse 0.1</title>
 
-    <meta name="theme-color" content="#111111">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
 
-    <title>Neo Morse</title>
+        textarea {
+            width: 100%;
+            height: 120px;
+            font-size: 18px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        button {
+            padding: 12px 18px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            min-height: 40px;
+            background: #eeeeee;
+            font-size: 20px;
+            word-break: break-word;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="app">
+    <h1>Neo Morse</h1>
+
+    <p>Напиши текст:</p>
+
+    <textarea id="input" placeholder="Например: SOS"></textarea>
+
+    <br>
+
+    <button id="translateButton">
+        Перевести в Морзе
+    </button>
+
+    <button id="clearButton">
+        Очистить
+    </button>
+
+    <div id="result">
+        Здесь появится результат
+    </div>
+
+
+    <script>
+        // Азбука Морзе
+        const morse = {
+            A: ".-",
+            B: "-...",
+            C: "-.-.",
+            D: "-..",
+            E: ".",
+            F: "..-.",
+            G: "--.",
+            H: "....",
+            I: "..",
+            J: ".---",
+            K: "-.-",
+            L: ".-..",
+            M: "--",
+            N: "-.",
+            O: "---",
+            P: ".--.",
+            Q: "--.-",
+            R: ".-.",
+            S: "...",
+            T: "-",
+            U: "..-",
+            V: "...-",
+            W: ".--",
+            X: "-..-",
+            Y: "-.--",
+            Z: "--..",
+
+            "0": "-----",
+            "1": ".----",
+            "2": "..---",
+            "3": "...--",
+            "4": "....-",
+            "5": ".....",
+            "6": "-....",
+            "7": "--...",
+            "8": "---..",
+            "9": "----."
+        };
+
+
+        // Получаем элементы страницы
+        const input = document.getElementById("input");
+        const result = document.getElementById("result");
+
+        const translateButton =
+            document.getElementById("translateButton");
+
+        const clearButton =
+            document.getElementById("clearButton");
+
+
+        // Переводим текст в Морзе
+        function translateToMorse() {
+
+            const text = input.value.toUpperCase();
+
+            let output = "";
+
+            for (let i = 0; i < text.length; i++) {
+
+                const character = text[i];
+
+                // Пробел между словами
+                if (character === " ") {
+                    output += "/ ";
+                    continue;
+                }
+
+                // Если символ существует в таблице
+                if (morse[character]) {
+                    output += morse[character] + " ";
+                }
+            }
+
+            result.textContent = output.trim();
+        }
+
 
-    <header class="header">
+        // Кнопка перевода
+        translateButton.addEventListener(
+            "click",
+            translateToMorse
+        );
 
-        <div>
-            <div class="logo">Neo Morse</div>
 
-            <div class="subtitle">
-                Универсальный переводчик азбуки Морзе
-            </div>
-        </div>
+        // Кнопка очистки
+        clearButton.addEventListener(
+            "click",
+            function () {
 
-        <button
-            id="themeButton"
-            class="theme-button"
-            type="button"
-            aria-label="Изменить тему">
-            ◐
-        </button>
+                input.value = "";
 
-    </header>
-
-
-    <!-- LANGUAGE -->
-
-    <section class="card">
-
-        <div class="label">
-            ЯЗЫК
-        </div>
-
-        <select id="language">
-
-            <option value="ru">
-                🇷🇺 Русский
-            </option>
-
-            <option value="az">
-                🇦🇿 Азербайджанский
-            </option>
-
-            <option value="en">
-                🇬🇧 Английский
-            </option>
-
-            <option value="tr">
-                🇹🇷 Турецкий
-            </option>
-
-            <option value="de">
-                🇩🇪 Немецкий
-            </option>
-
-            <option value="fr">
-                🇫🇷 Французский
-            </option>
-
-            <option value="es">
-                🇪🇸 Испанский
-            </option>
-
-        </select>
-
-    </section>
-
-
-    <!-- MODE -->
-
-    <section class="card">
-
-        <div class="label">
-            РЕЖИМ
-        </div>
-
-        <div class="mode-buttons">
-
-            <button
-                id="encodeMode"
-                class="active"
-                type="button">
-                Текст → Морзе
-            </button>
-
-            <button
-                id="decodeMode"
-                type="button">
-                Морзе → текст
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- INPUT -->
-
-    <section class="card">
-
-        <div
-            id="inputLabel"
-            class="label">
-            ТЕКСТ
-        </div>
-
-        <textarea
-            id="input"
-            spellcheck="false"
-            placeholder="Напишите сообщение..."></textarea>
-
-
-        <div class="input-bottom">
-
-            <span>
-                Символов:
-                <strong id="counter">0</strong>
-            </span>
-
-            <button
-                id="clearInput"
-                type="button">
-                Очистить
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- RESULT -->
-
-    <section class="card">
-
-        <div
-            id="resultLabel"
-            class="label">
-            АЗБУКА МОРЗЕ
-        </div>
-
-        <div
-            id="result"
-            class="result empty">
-            Здесь появится результат
-        </div>
-
-
-        <div class="button-grid">
-
-            <button
-                id="playButton"
-                class="primary"
-                type="button">
-                ▶ Воспроизвести
-            </button>
-
-            <button
-                id="stopButton"
-                type="button"
-                disabled>
-                ■ Стоп
-            </button>
-
-        </div>
-
-
-        <div class="button-grid secondary">
-
-            <button
-                id="copyButton"
-                type="button">
-                Копировать
-            </button>
-
-            <button
-                id="resetButton"
-                type="button">
-                Сбросить
-            </button>
-
-        </div>
-
-
-        <div
-            id="status"
-            class="status">
-        </div>
-
-    </section>
-
-
-    <!-- SOUND SETTINGS -->
-
-    <section class="card">
-
-        <div class="label">
-            НАСТРОЙКИ ЗВУКА
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-header">
-
-                <span>
-                    Скорость
-                </span>
-
-                <span id="speedValue">
-                    15 WPM
-                </span>
-
-            </div>
-
-            <input
-                id="speed"
-                type="range"
-                min="5"
-                max="35"
-                value="15">
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-header">
-
-                <span>
-                    Частота
-                </span>
-
-                <span id="frequencyValue">
-                    700 Hz
-                </span>
-
-            </div>
-
-            <input
-                id="frequency"
-                type="range"
-                min="300"
-                max="1200"
-                value="700">
-
-        </div>
-
-    </section>
-
-
-    <!-- MORSE GUIDE -->
-
-    <section class="card">
-
-        <div class="label">
-            ТАБЛИЦА МОРЗЕ
-        </div>
-
-        <div id="guide" class="guide"></div>
-
-    </section>
-
-
-    <footer>
-        Neo Morse · Version 1.1
-    </footer>
-
-</div>
-
-
-<script src="script.js"></script>
+                result.textContent =
+                    "Здесь появится результат";
+            }
+        );
+    </script>
 
 </body>
 </html>
