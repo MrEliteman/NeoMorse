@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Neo Morse 0.3</title>
+<title>Neo Morse 0.4</title>
 
 <style>
     body {
@@ -124,6 +124,12 @@
         letter-spacing: 2px;
     }
 
+    #playButton {
+        background: #111;
+        color: white;
+        border-color: #111;
+    }
+
     @media (max-width: 500px) {
 
         body {
@@ -158,12 +164,12 @@
 <h1>Neo Morse</h1>
 
 <div class="subtitle">
-    Переводчик азбуки Морзе — версия 0.3
+    Переводчик азбуки Морзе — версия 0.4
 </div>
 
 
 <!-- =========================
-     ВЫБОР ЯЗЫКА
+     ЯЗЫК
 ========================= -->
 
 <div class="box">
@@ -252,6 +258,10 @@
 
     <button id="copyButton">
         Копировать
+    </button>
+
+    <button id="playButton">
+        ▶ Воспроизвести
     </button>
 
     <div id="status"></div>
@@ -420,42 +430,6 @@ const MORSE_EN = {
 
 
 /* =========================
-   ВЫБОР АЛФАВИТА
-========================= */
-
-function getMorse() {
-
-    const language =
-        languageSelect.value;
-
-    if (language === "en") {
-        return MORSE_EN;
-    }
-
-    return MORSE_RU;
-}
-
-
-/* =========================
-   ОБРАТНАЯ ТАБЛИЦА
-========================= */
-
-function createReverseMorse(morse) {
-
-    const reverse = {};
-
-    for (const character in morse) {
-
-        const code = morse[character];
-
-        reverse[code] = character;
-    }
-
-    return reverse;
-}
-
-
-/* =========================
    ЭЛЕМЕНТЫ
 ========================= */
 
@@ -473,6 +447,9 @@ const clearButton =
 
 const copyButton =
     document.getElementById("copyButton");
+
+const playButton =
+    document.getElementById("playButton");
 
 const encodeButton =
     document.getElementById("encodeButton");
@@ -504,6 +481,40 @@ let mode = "encode";
 
 
 /* =========================
+   ВЫБОР АЛФАВИТА
+========================= */
+
+function getMorse() {
+
+    if (languageSelect.value === "en") {
+
+        return MORSE_EN;
+
+    }
+
+    return MORSE_RU;
+}
+
+
+/* =========================
+   ОБРАТНАЯ ТАБЛИЦА
+========================= */
+
+function createReverseMorse(morse) {
+
+    const reverse = {};
+
+    for (const character in morse) {
+
+        reverse[morse[character]] =
+            character;
+    }
+
+    return reverse;
+}
+
+
+/* =========================
    ТЕКСТ → МОРЗЕ
 ========================= */
 
@@ -512,7 +523,8 @@ function textToMorse(text) {
     const morse =
         getMorse();
 
-    text = text.toUpperCase();
+    text =
+        text.toUpperCase();
 
     let output = "";
 
@@ -522,18 +534,20 @@ function textToMorse(text) {
         i++
     ) {
 
-        const character = text[i];
+        const character =
+            text[i];
 
         if (character === " ") {
 
             output += "/ ";
 
-        } else if (morse[character]) {
+        } else if (
+            morse[character]
+        ) {
 
             output +=
                 morse[character] + " ";
         }
-
     }
 
     return output.trim();
@@ -552,7 +566,8 @@ function morseToText(text) {
     const reverse =
         createReverseMorse(morse);
 
-    text = text.trim();
+    text =
+        text.trim();
 
     if (text === "") {
         return "";
@@ -570,7 +585,9 @@ function morseToText(text) {
     ) {
 
         const letters =
-            words[w].trim().split(/\s+/);
+            words[w]
+                .trim()
+                .split(/\s+/);
 
         for (
             let i = 0;
@@ -648,7 +665,7 @@ function translate() {
 
 
 /* =========================
-   ОБНОВЛЕНИЕ ТАБЛИЦЫ
+   ТАБЛИЦА
 ========================= */
 
 function updateMorseTable() {
@@ -784,7 +801,7 @@ decodeButton.addEventListener(
 
 
 /* =========================
-   КНОПКА ПЕРЕВОДА
+   ПЕРЕВОД
 ========================= */
 
 translateButton.addEventListener(
@@ -850,6 +867,241 @@ copyButton.addEventListener(
             status.textContent =
                 "Не удалось скопировать";
         }
+    }
+);
+
+
+/* =========================
+   ЗВУК МОРЗЕ — 0.4
+========================= */
+
+/*
+    Стандартная схема:
+
+    точка  = 1 единица
+    тире   = 3 единицы
+
+    между элементами буквы = 1
+    между буквами = 3
+    между словами = 7
+*/
+
+const DOT_DURATION = 100;
+const FREQUENCY = 650;
+
+function sleep(ms) {
+
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+}
+
+
+function playTone(duration) {
+
+    return new Promise(resolve => {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) {
+
+            resolve();
+            return;
+        }
+
+        const audioContext =
+            new AudioContext();
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        oscillator.frequency.value =
+            FREQUENCY;
+
+        oscillator.type =
+            "sine";
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+        oscillator.start();
+
+        setTimeout(
+            function () {
+
+                oscillator.stop();
+
+                audioContext.close();
+
+                resolve();
+
+            },
+            duration
+        );
+    });
+}
+
+
+async function playMorseSound(morseText) {
+
+    if (
+        !morseText ||
+        morseText ===
+        "Здесь появится результат"
+    ) {
+
+        status.textContent =
+            "Сначала получи перевод";
+
+        return;
+    }
+
+    status.textContent =
+        "Воспроизведение...";
+
+    const words =
+        morseText.split("/");
+
+    for (
+        let w = 0;
+        w < words.length;
+        w++
+    ) {
+
+        const letters =
+            words[w]
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean);
+
+        for (
+            let l = 0;
+            l < letters.length;
+            l++
+        ) {
+
+            const code =
+                letters[l];
+
+            for (
+                let i = 0;
+                i < code.length;
+                i++
+            ) {
+
+                const symbol =
+                    code[i];
+
+                if (symbol === ".") {
+
+                    await playTone(
+                        DOT_DURATION
+                    );
+
+                } else if (
+                    symbol === "-"
+                ) {
+
+                    await playTone(
+                        DOT_DURATION * 3
+                    );
+
+                }
+
+                /*
+                    Пауза между
+                    точкой и тире
+                */
+
+                if (
+                    i <
+                    code.length - 1
+                ) {
+
+                    await sleep(
+                        DOT_DURATION
+                    );
+                }
+            }
+
+            /*
+                Пауза между буквами
+            */
+
+            if (
+                l <
+                letters.length - 1
+            ) {
+
+                await sleep(
+                    DOT_DURATION * 3
+                );
+            }
+        }
+
+        /*
+            Пауза между словами
+        */
+
+        if (
+            w <
+            words.length - 1
+        ) {
+
+            await sleep(
+                DOT_DURATION * 7
+            );
+        }
+    }
+
+    status.textContent =
+        "Воспроизведение завершено";
+}
+
+
+/* =========================
+   КНОПКА ВОСПРОИЗВЕДЕНИЯ
+========================= */
+
+playButton.addEventListener(
+    "click",
+    function () {
+
+        let morseText;
+
+        /*
+            Если мы в режиме
+            Текст → Морзе,
+            результат уже является Морзе.
+        */
+
+        if (mode === "encode") {
+
+            morseText =
+                result.textContent;
+
+        } else {
+
+            /*
+                В режиме Морзе → текст
+                берём исходный введённый код.
+            */
+
+            morseText =
+                input.value.trim();
+        }
+
+        playMorseSound(
+            morseText
+        );
     }
 );
 
