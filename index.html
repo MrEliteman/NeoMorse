@@ -1826,19 +1826,64 @@ updateMorseTable();
 
 
 /* ==================================================
-   DARK MODE + LOCAL STORAGE
-   Neo Morse 0.6
+   NEO MORSE 0.6
+   FULL LOCAL STORAGE
 ================================================== */
 
-const themeButton =
-    document.getElementById("themeButton");
+const STORAGE_KEYS = {
 
-const THEME_STORAGE_KEY =
-    "neoMorseTheme";
+    theme: "neoMorse_theme",
+    language: "neoMorse_language",
+    mode: "neoMorse_mode",
+    speed: "neoMorse_speed",
+    pitch: "neoMorse_pitch",
+    input: "neoMorse_input"
+
+};
 
 
 /* ==================================================
-   ОБНОВЛЕНИЕ ТЕКСТА КНОПКИ
+   БЕЗОПАСНАЯ РАБОТА С LOCAL STORAGE
+================================================== */
+
+function saveSetting(key, value) {
+
+    try {
+
+        localStorage.setItem(
+            key,
+            value
+        );
+
+    } catch (error) {
+
+        /*
+            Если браузер запрещает
+            Local Storage, приложение
+            всё равно продолжит работать.
+        */
+
+    }
+}
+
+
+function loadSetting(key) {
+
+    try {
+
+        return localStorage.getItem(
+            key
+        );
+
+    } catch (error) {
+
+        return null;
+    }
+}
+
+
+/* ==================================================
+   ТЕМА
 ================================================== */
 
 function updateThemeButton() {
@@ -1860,15 +1905,11 @@ function updateThemeButton() {
 }
 
 
-/* ==================================================
-   ЗАГРУЗКА СОХРАНЁННОЙ ТЕМЫ
-================================================== */
-
-function loadSavedTheme() {
+function loadTheme() {
 
     const savedTheme =
-        localStorage.getItem(
-            THEME_STORAGE_KEY
+        loadSetting(
+            STORAGE_KEYS.theme
         );
 
 
@@ -1890,10 +1931,6 @@ function loadSavedTheme() {
 }
 
 
-/* ==================================================
-   ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
-================================================== */
-
 themeButton.addEventListener(
     "click",
     function() {
@@ -1904,20 +1941,10 @@ themeButton.addEventListener(
             );
 
 
-        if (isDark) {
-
-            localStorage.setItem(
-                THEME_STORAGE_KEY,
-                "dark"
-            );
-
-        } else {
-
-            localStorage.setItem(
-                THEME_STORAGE_KEY,
-                "light"
-            );
-        }
+        saveSetting(
+            STORAGE_KEYS.theme,
+            isDark ? "dark" : "light"
+        );
 
 
         updateThemeButton();
@@ -1926,10 +1953,281 @@ themeButton.addEventListener(
 
 
 /* ==================================================
-   ЗАГРУЗКА ТЕМЫ ПРИ ЗАПУСКЕ
+   ЯЗЫК
 ================================================== */
 
-loadSavedTheme();
+languageSelect.addEventListener(
+    "change",
+    function() {
+
+        saveSetting(
+            STORAGE_KEYS.language,
+            languageSelect.value
+        );
+    }
+);
+
+
+/* ==================================================
+   СКОРОСТЬ
+================================================== */
+
+speedRange.addEventListener(
+    "input",
+    function() {
+
+        saveSetting(
+            STORAGE_KEYS.speed,
+            speedRange.value
+        );
+    }
+);
+
+
+/* ==================================================
+   ТОНАЛЬНОСТЬ
+================================================== */
+
+pitchRange.addEventListener(
+    "input",
+    function() {
+
+        saveSetting(
+            STORAGE_KEYS.pitch,
+            pitchRange.value
+        );
+    }
+);
+
+
+/* ==================================================
+   СОХРАНЕНИЕ РЕЖИМА
+================================================== */
+
+encodeButton.addEventListener(
+    "click",
+    function() {
+
+        saveSetting(
+            STORAGE_KEYS.mode,
+            "encode"
+        );
+    }
+);
+
+
+decodeButton.addEventListener(
+    "click",
+    function() {
+
+        saveSetting(
+            STORAGE_KEYS.mode,
+            "decode"
+        );
+    }
+);
+
+
+/* ==================================================
+   СОХРАНЕНИЕ ВВОДА
+================================================== */
+
+input.addEventListener(
+    "input",
+    function() {
+
+        saveSetting(
+            STORAGE_KEYS.input,
+            input.value
+        );
+    }
+);
+
+
+/* ==================================================
+   ВОССТАНОВЛЕНИЕ ЯЗЫКА
+================================================== */
+
+function loadLanguage() {
+
+    const savedLanguage =
+        loadSetting(
+            STORAGE_KEYS.language
+        );
+
+
+    if (
+        savedLanguage === "ru" ||
+        savedLanguage === "en"
+    ) {
+
+        languageSelect.value =
+            savedLanguage;
+    }
+
+
+    updateMorseTable();
+}
+
+
+/* ==================================================
+   ВОССТАНОВЛЕНИЕ СКОРОСТИ
+================================================== */
+
+function loadSpeed() {
+
+    const savedSpeed =
+        loadSetting(
+            STORAGE_KEYS.speed
+        );
+
+
+    if (savedSpeed !== null) {
+
+        const speed =
+            Number(savedSpeed);
+
+
+        if (
+            speed >= 0.25 &&
+            speed <= 3
+        ) {
+
+            speedRange.value =
+                savedSpeed;
+
+            speedValue.textContent =
+                savedSpeed + "×";
+        }
+    }
+}
+
+
+/* ==================================================
+   ВОССТАНОВЛЕНИЕ ТОНАЛЬНОСТИ
+================================================== */
+
+function loadPitch() {
+
+    const savedPitch =
+        loadSetting(
+            STORAGE_KEYS.pitch
+        );
+
+
+    if (savedPitch !== null) {
+
+        const pitch =
+            Number(savedPitch);
+
+
+        if (
+            pitch >= 300 &&
+            pitch <= 1200
+        ) {
+
+            pitchRange.value =
+                savedPitch;
+
+            pitchValue.textContent =
+                savedPitch + " Гц";
+        }
+    }
+}
+
+
+/* ==================================================
+   ВОССТАНОВЛЕНИЕ РЕЖИМА
+================================================== */
+
+function loadMode() {
+
+    const savedMode =
+        loadSetting(
+            STORAGE_KEYS.mode
+        );
+
+
+    if (savedMode === "decode") {
+
+        mode = "decode";
+
+        decodeButton.classList.add(
+            "active"
+        );
+
+        encodeButton.classList.remove(
+            "active"
+        );
+
+        inputLabel.textContent =
+            "Азбука Морзе";
+
+        resultLabel.textContent =
+            "Текст";
+
+        input.placeholder =
+            "Например: ... --- ...";
+
+    } else {
+
+        mode = "encode";
+
+        encodeButton.classList.add(
+            "active"
+        );
+
+        decodeButton.classList.remove(
+            "active"
+        );
+
+        inputLabel.textContent =
+            "Текст";
+
+        resultLabel.textContent =
+            "Азбука Морзе";
+
+        input.placeholder =
+            "Напиши текст...";
+    }
+}
+
+
+/* ==================================================
+   ВОССТАНОВЛЕНИЕ ВВЕДЁННОГО ТЕКСТА
+================================================== */
+
+function loadInput() {
+
+    const savedInput =
+        loadSetting(
+            STORAGE_KEYS.input
+        );
+
+
+    if (savedInput !== null) {
+
+        input.value =
+            savedInput;
+    }
+}
+
+
+/* ==================================================
+   ПЕРВЫЙ ЗАПУСК
+================================================== */
+
+loadTheme();
+
+loadLanguage();
+
+loadSpeed();
+
+loadPitch();
+
+loadMode();
+
+loadInput();
 
    
 </script>
