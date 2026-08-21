@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NeoMorse - v0.5.3</title>
+<title>NeoMorse - v0.5.2</title>
 
 <style>
 
@@ -583,22 +583,18 @@ body.dark-mode .setting-value {
 
 <header class="app-header">
 
-    <div class="brand">
+    <div class="app-logo">
+        NM
+    </div>
 
-        <div class="brand-logo">
-            NM
-        </div>
+    <div class="app-title-area">
 
-        <div class="brand-text">
+        <h1 class="app-title">
+            Neo Morse
+        </h1>
 
-            <div class="brand-name">
-                NeoMorse
-            </div>
-
-            <div class="brand-version">
-                Переводчик азбуки Морзе · версия 0.6.1
-            </div>
-
+        <div class="app-subtitle">
+            Переводчик азбуки Морзе — версия 0.5.1
         </div>
 
     </div>
@@ -1007,9 +1003,6 @@ const status =
 const languageSelect =
     document.getElementById("languageSelect");
 
-const morseTableBody =
-    document.getElementById("morseTableBody");
-
 const speedRange =
     document.getElementById("speedRange");
 
@@ -1022,308 +1015,190 @@ const pitchRange =
 const pitchValue =
     document.getElementById("pitchValue");
 
+const morseTableBody =
+    document.getElementById("morseTableBody");
+
 
 /* ==================================================
-   СОСТОЯНИЕ
+   РЕЖИМ КОДИРОВАНИЯ
 ================================================== */
 
 let mode = "encode";
 
-let isPlaying = false;
-
-let stopRequested = false;
-
-let audioContext = null;
-
-let oscillator = null;
-
 
 /* ==================================================
-   ТЕКСТ → МОРЗЕ
+   ПЕРЕВОД: ТЕКСТ → МОРЗЕ
 ================================================== */
 
-function textToMorse(text) {
+function encodeText(text) {
 
-    const morse =
-        getCurrentMorse();
+    const morse = getCurrentMorse();
 
-    text =
+    const upperText =
         text.toUpperCase();
 
-    let output = [];
+    let result = "";
 
-    for (
-        let i = 0;
-        i < text.length;
-        i++
-    ) {
+    for (let i = 0; i < upperText.length; i++) {
 
-        const character = text[i];
+        const char = upperText[i];
 
-        if (character === " ") {
+        if (morse[char]) {
 
-            output.push("/");
+            result += morse[char];
 
-        } else if (
-            morse[character]
-        ) {
+        } else if (char === " ") {
 
-            output.push(
-                morse[character]
-            );
+            result += " / ";
+
+        } else {
+
+            result += "?";
+        }
+
+        if (i < upperText.length - 1 && char !== " ") {
+
+            result += " ";
         }
     }
 
-    return output.join(" ");
+    return result;
 }
 
 
 /* ==================================================
-   МОРЗЕ → ТЕКСТ
+   ПЕРЕВОД: МОРЗЕ → ТЕКСТ
 ================================================== */
 
-function morseToText(text) {
+function decodeText(text) {
 
-    const reverse =
+    const reverseMorse =
         createReverseMorse(
             getCurrentMorse()
         );
 
-    text =
-        text.trim();
+    const codes =
+        text.split(" ");
 
-    if (text === "") {
-        return "";
-    }
+    let result = "";
 
-    const words =
-        text.split("/");
+    for (let i = 0; i < codes.length; i++) {
 
-    let output = [];
+        const code = codes[i];
 
-    for (
-        let w = 0;
-        w < words.length;
-        w++
-    ) {
+        if (code === "") {
 
-        const word =
-            words[w].trim();
-
-        if (word === "") {
             continue;
+
+        } else if (code === "/") {
+
+            result += " ";
+
+        } else if (reverseMorse[code]) {
+
+            result += reverseMorse[code];
+
+        } else {
+
+            result += "?";
         }
-
-        const letters =
-            word.split(/\s+/);
-
-        let decodedWord = "";
-
-        for (
-            let i = 0;
-            i < letters.length;
-            i++
-        ) {
-
-            const code =
-                letters[i];
-
-            if (
-                reverse[code]
-            ) {
-
-                decodedWord +=
-                    reverse[code];
-
-            } else {
-
-                decodedWord += "?";
-            }
-        }
-
-        output.push(
-            decodedWord
-        );
     }
 
-    return output.join(" ");
+    return result;
 }
 
 
 /* ==================================================
-   ПЕРЕВОД
-================================================== */
-
-function translate() {
-
-    stopPlayback();
-
-    const text =
-        input.value;
-
-    if (
-        text.trim() === ""
-    ) {
-
-        result.textContent =
-            "Здесь появится результат";
-
-        status.textContent = "";
-
-        return;
-    }
-
-    if (mode === "encode") {
-
-        result.textContent =
-            textToMorse(text);
-
-    } else {
-
-        result.textContent =
-            morseToText(text);
-    }
-
-    status.textContent =
-        "Готово";
-}
-
-
-/* ==================================================
-   ТАБЛИЦА
+   ОБНОВЛЕНИЕ ТАБЛИЦЫ МОРЗЕ
 ================================================== */
 
 function updateMorseTable() {
 
-    const morse = getCurrentMorse();
+    const morse =
+        getCurrentMorse();
 
     morseTableBody.innerHTML = "";
 
-    Object.keys(morse).forEach(function(symbol) {
+    for (const symbol in morse) {
 
-        const row = document.createElement("tr");
+        const code =
+            morse[symbol];
 
-        const symbolCell = document.createElement("td");
-        const codeCell = document.createElement("td");
+        const row =
+            document.createElement("tr");
+
+        const symbolCell =
+            document.createElement("td");
 
         symbolCell.textContent = symbol;
 
-        codeCell.textContent = morse[symbol];
-        codeCell.className = "morse-code";
+        const codeCell =
+            document.createElement("td");
+
+        codeCell.classList.add(
+            "morse-code"
+        );
+
+        codeCell.textContent = code;
 
         row.appendChild(symbolCell);
+
         row.appendChild(codeCell);
 
         morseTableBody.appendChild(row);
-
-    });
+    }
 }
 
 
 /* ==================================================
-   СМЕНА ЯЗЫКА
-================================================== */
-
-languageSelect.addEventListener(
-    "change",
-    function() {
-
-        stopPlayback();
-
-        updateMorseTable();
-
-        status.textContent = "Язык изменён";
-
-    }
-);
-
-
-/* ==================================================
-   РЕЖИМ ТЕКСТ → МОРЗЕ
-================================================== */
-
-encodeButton.addEventListener(
-    "click",
-    function() {
-
-        stopPlayback();
-
-        mode = "encode";
-
-        encodeButton.classList.add("active");
-        decodeButton.classList.remove("active");
-
-        inputLabel.textContent = "Текст";
-        resultLabel.textContent = "Азбука Морзе";
-
-        input.placeholder = "Напиши текст...";
-
-        input.value = "";
-
-        result.textContent =
-            "Здесь появится результат";
-
-        status.textContent = "";
-
-    }
-);
-
-
-/* ==================================================
-   РЕЖИМ МОРЗЕ → ТЕКСТ
-================================================== */
-
-decodeButton.addEventListener(
-    "click",
-    function() {
-
-        stopPlayback();
-
-        mode = "decode";
-
-        decodeButton.classList.add("active");
-        encodeButton.classList.remove("active");
-
-        inputLabel.textContent = "Азбука Морзе";
-        resultLabel.textContent = "Текст";
-
-        input.placeholder =
-            "Например: ... --- ...";
-
-        input.value = "";
-
-        result.textContent =
-            "Здесь появится результат";
-
-        status.textContent = "";
-
-    }
-);
-
-
-/* ==================================================
-   КНОПКА ПЕРЕВЕСТИ
+   КНОПКА: ПЕРЕВОДИТЬ
 ================================================== */
 
 translateButton.addEventListener(
     "click",
     function() {
 
-        translate();
+        const inputText =
+            input.value.trim();
 
+        if (inputText === "") {
+
+            result.textContent =
+                "Пусто";
+
+            status.textContent = "";
+
+            return;
+        }
+
+        let outputText;
+
+        if (mode === "encode") {
+
+            outputText =
+                encodeText(inputText);
+
+        } else {
+
+            outputText =
+                decodeText(inputText);
+        }
+
+        result.textContent =
+            outputText;
+
+        status.textContent = "";
     }
 );
 
 
 /* ==================================================
-   ОЧИСТКА
+   КНОПКА: ОЧИСТИТЬ
 ================================================== */
 
 clearButton.addEventListener(
     "click",
     function() {
-
-        stopPlayback();
 
         input.value = "";
 
@@ -1331,53 +1206,119 @@ clearButton.addEventListener(
             "Здесь появится результат";
 
         status.textContent = "";
-
     }
 );
 
 
 /* ==================================================
-   КОПИРОВАНИЕ
+   КНОПКА: КОПИРОВАТЬ
 ================================================== */
 
 copyButton.addEventListener(
     "click",
-    async function() {
+    function() {
 
         const text =
             result.textContent;
 
-        if (
-            !text ||
-            text === "Здесь появится результат"
-        ) {
+        if (text === "Здесь появится результат") {
 
             status.textContent =
-                "Нечего копировать";
+                "Нечего копировать!";
 
             return;
         }
 
-        try {
+        navigator.clipboard.writeText(text);
 
-            await navigator.clipboard.writeText(text);
+        status.textContent =
+            "Скопировано!";
 
-            status.textContent =
-                "Скопировано";
+        setTimeout(() => {
 
-        } catch (error) {
+            status.textContent = "";
 
-            status.textContent =
-                "Не удалось скопировать";
-
-        }
-
+        }, 2000);
     }
 );
 
 
 /* ==================================================
-   СКОРОСТЬ
+   ПЕРЕКЛЮЧЕНИЕ РЕЖИМА
+================================================== */
+
+encodeButton.addEventListener(
+    "click",
+    function() {
+
+        if (mode === "encode") return;
+
+        mode = "encode";
+
+        encodeButton.classList.add("active");
+
+        decodeButton.classList.remove("active");
+
+        inputLabel.textContent = "Текст";
+
+        resultLabel.textContent = "Азбука Морзе";
+
+        input.placeholder = "Напиши текст...";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+decodeButton.addEventListener(
+    "click",
+    function() {
+
+        if (mode === "decode") return;
+
+        mode = "decode";
+
+        decodeButton.classList.add("active");
+
+        encodeButton.classList.remove("active");
+
+        inputLabel.textContent = "Азбука Морзе";
+
+        resultLabel.textContent = "Текст";
+
+        input.placeholder = "Например: ... --- ...";
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+/* ==================================================
+   ВЫБОР ЯЗЫКА
+================================================== */
+
+languageSelect.addEventListener(
+    "change",
+    function() {
+
+        updateMorseTable();
+
+        result.textContent =
+            "Здесь появится результат";
+
+        status.textContent = "";
+    }
+);
+
+
+/* ==================================================
+   ОБНОВЛЕНИЕ СКОРОСТИ
 ================================================== */
 
 speedRange.addEventListener(
@@ -1386,13 +1327,12 @@ speedRange.addEventListener(
 
         speedValue.textContent =
             speedRange.value + "×";
-
     }
 );
 
 
 /* ==================================================
-   ТОНАЛЬНОСТЬ
+   ОБНОВЛЕНИЕ ТОНАЛЬНОСТИ
 ================================================== */
 
 pitchRange.addEventListener(
@@ -1401,455 +1341,166 @@ pitchRange.addEventListener(
 
         pitchValue.textContent =
             pitchRange.value + " Гц";
-
     }
 );
 
 
 /* ==================================================
-   СОЗДАНИЕ AUDIO CONTEXT
+   ВОСПРОИЗВЕДЕНИЕ ЗВУКА
 ================================================== */
 
-function createAudio() {
+function playMorse(morseCode) {
 
-    const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
-
-    if (!AudioContext) {
-
-        status.textContent =
-            "Браузер не поддерживает звук";
-
-        return false;
-    }
-
-    audioContext =
-        new AudioContext();
-
-    if (
-        audioContext.state === "suspended"
-    ) {
-
-        audioContext.resume();
-
-    }
-
-    return true;
-}
-
-
-/* ==================================================
-   ВОСПРОИЗВЕДЕНИЕ ОДНОГО СИГНАЛА
-================================================== */
-
-function playTone(duration) {
-
-    return new Promise(function(resolve) {
-
-        if (
-            stopRequested ||
-            !audioContext
-        ) {
-
-            resolve();
-            return;
-
-        }
-
-        oscillator =
-            audioContext.createOscillator();
-
-        const gain =
-            audioContext.createGain();
-
-        oscillator.type = "sine";
-
-        oscillator.frequency.value =
-            Number(pitchRange.value);
-
-        gain.gain.value = 0.15;
-
-        oscillator.connect(gain);
-
-        gain.connect(
-            audioContext.destination
-        );
-
-        oscillator.start();
-
-        setTimeout(function() {
-
-            if (oscillator) {
-
-                try {
-
-                    oscillator.stop();
-
-                } catch (error) {}
-
-                oscillator = null;
-
-            }
-
-            resolve();
-
-        }, duration);
-
-    });
-}
-
-
-/* ==================================================
-   ПАУЗА
-================================================== */
-
-function wait(ms) {
-
-    return new Promise(function(resolve) {
-
-        setTimeout(resolve, ms);
-
-    });
-}
-
-
-/* ==================================================
-   ОСТАНОВКА ВОСПРОИЗВЕДЕНИЯ
-================================================== */
-
-function stopPlayback() {
-
-    stopRequested = true;
-
-    isPlaying = false;
-
-    if (oscillator) {
-
-        try {
-
-            oscillator.stop();
-
-        } catch (error) {}
-
-        oscillator = null;
-
-    }
-
-    if (audioContext) {
-
-        try {
-
-            audioContext.close();
-
-        } catch (error) {}
-
-        audioContext = null;
-
-    }
-
-    playButton.textContent =
-        "▶ Воспроизвести";
-
-    playButton.classList.remove(
-        "playing"
-    );
-
-}
-
-
-/* ==================================================
-   ПОЛУЧИТЬ МОРЗЕ ДЛЯ ВОСПРОИЗВЕДЕНИЯ
-================================================== */
-
-function getMorseForPlayback() {
-
-    if (mode === "encode") {
-
-        const morse =
-            result.textContent.trim();
-
-        if (
-            !morse ||
-            morse === "Здесь появится результат"
-        ) {
-
-            return "";
-
-        }
-
-        return morse;
-
-    }
-
-    return input.value.trim();
-
-}
-
-
-/* ==================================================
-   ВОСПРОИЗВЕДЕНИЕ МОРЗЕ
-================================================== */
-
-async function playMorseSound(morseText) {
-
-    if (
-        !morseText ||
-        morseText ===
-        "Здесь появится результат"
-    ) {
-
-        status.textContent =
-            "Сначала получи перевод";
-
-        return;
-
-    }
-
-    if (!createAudio()) {
-
-        return;
-
-    }
-
-    stopRequested = false;
-    isPlaying = true;
-
-    playButton.textContent =
-        "■ Остановить";
-
-    playButton.classList.add(
-        "playing"
-    );
-
-    status.textContent =
-        "Воспроизведение...";
-
+    const audioContext =
+        new (window.AudioContext || window.webkitAudioContext)();
 
     const speed =
-        Number(speedRange.value);
+        1 / Number(speedRange.value);
 
-    const dot =
-        100 / speed;
+    const frequency =
+        Number(pitchRange.value);
 
+    const dotDuration =
+        speed * 50;
 
-    const words =
-        morseText.split("/");
+    const dashDuration =
+        speed * 150;
 
+    const gapDuration =
+        speed * 50;
 
-    for (
-        let w = 0;
-        w < words.length;
-        w++
-    ) {
+    const letterGapDuration =
+        speed * 150;
 
-        if (stopRequested) {
-            break;
+    const wordGapDuration =
+        speed * 350;
+
+    let currentTime =
+        audioContext.currentTime;
+
+    for (let i = 0; i < morseCode.length; i++) {
+
+        const char = morseCode[i];
+
+        if (char === ".") {
+
+            const osc =
+                audioContext.createOscillator();
+
+            const gain =
+                audioContext.createGain();
+
+            osc.frequency.value = frequency;
+
+            osc.connect(gain);
+
+            gain.connect(audioContext.destination);
+
+            osc.start(currentTime);
+
+            osc.stop(currentTime + dotDuration / 1000);
+
+            currentTime +=
+                dotDuration / 1000;
+
+        } else if (char === "-") {
+
+            const osc =
+                audioContext.createOscillator();
+
+            const gain =
+                audioContext.createGain();
+
+            osc.frequency.value = frequency;
+
+            osc.connect(gain);
+
+            gain.connect(audioContext.destination);
+
+            osc.start(currentTime);
+
+            osc.stop(currentTime + dashDuration / 1000);
+
+            currentTime +=
+                dashDuration / 1000;
+
+        } else if (char === " ") {
+
+            currentTime +=
+                gapDuration / 1000;
+
+        } else if (char === "/") {
+
+            currentTime +=
+                wordGapDuration / 1000 -
+                gapDuration / 1000;
         }
 
-        const word =
-            words[w].trim();
+        if (i < morseCode.length - 1 && char !== " " && char !== "/") {
 
-        if (!word) {
-            continue;
+            currentTime +=
+                gapDuration / 1000;
         }
-
-        const letters =
-            word.split(/\s+/);
-
-
-        for (
-            let l = 0;
-            l < letters.length;
-            l++
-        ) {
-
-            if (stopRequested) {
-                break;
-            }
-
-            const code =
-                letters[l];
-
-
-            for (
-                let i = 0;
-                i < code.length;
-                i++
-            ) {
-
-                if (stopRequested) {
-                    break;
-                }
-
-                const symbol =
-                    code[i];
-
-
-                if (symbol === ".") {
-
-                    await playTone(dot);
-
-                } else if (
-                    symbol === "-"
-                ) {
-
-                    await playTone(dot * 3);
-
-                }
-
-
-                if (
-                    i < code.length - 1 &&
-                    !stopRequested
-                ) {
-
-                    await wait(dot);
-
-                }
-
-            }
-
-
-            if (
-                l < letters.length - 1 &&
-                !stopRequested
-            ) {
-
-                await wait(dot * 3);
-
-            }
-
-        }
-
-
-        if (
-            w < words.length - 1 &&
-            !stopRequested
-        ) {
-
-            await wait(dot * 7);
-
-        }
-
     }
-
-
-    const wasStopped =
-        stopRequested;
-
-
-    if (oscillator) {
-
-        try {
-
-            oscillator.stop();
-
-        } catch (error) {}
-
-        oscillator = null;
-
-    }
-
-
-    if (audioContext) {
-
-        try {
-
-            await audioContext.close();
-
-        } catch (error) {}
-
-        audioContext = null;
-
-    }
-
-
-    isPlaying = false;
-
-    playButton.textContent =
-        "▶ Воспроизвести";
-
-    playButton.classList.remove(
-        "playing"
-    );
-
-
-    if (wasStopped) {
-
-        status.textContent =
-            "Воспроизведение остановлено";
-
-    } else {
-
-        status.textContent =
-            "Воспроизведение завершено";
-
-    }
-
 }
 
 
 /* ==================================================
-   КНОПКА ВОСПРОИЗВЕСТИ / ОСТАНОВИТЬ
+   КНОПКА: ВОСПРОИЗВЕСТИ
 ================================================== */
 
 playButton.addEventListener(
     "click",
     function() {
 
-        if (isPlaying) {
+        const text =
+            result.textContent;
 
-            stopPlayback();
+        if (text === "Здесь появится результат") {
 
             status.textContent =
-                "Воспроизведение остановлено";
+                "Нечего воспроизводить!";
 
             return;
-
         }
 
+        playButton.classList.add("playing");
 
-        const morseText =
-            getMorseForPlayback();
+        playMorse(text);
 
+        const maxDuration = 30000;
 
-        playMorseSound(
-            morseText
-        );
+        setTimeout(() => {
 
+            playButton.classList.remove("playing");
+
+        }, maxDuration);
     }
 );
 
 
 /* ==================================================
-   ПЕРВОНАЧАЛЬНАЯ ТАБЛИЦА
+   DARK MODE + LOCAL STORAGE
+   Neo Morse 0.6
 ================================================== */
 
-updateMorseTable();
+const STORAGE_KEYS = {
 
-
-/* ==================================================
-   NEO MORSE 0.6
-   FULL STATE LOCAL STORAGE
-================================================== */
-
-const STORAGE = {
     theme: "neoMorse_theme",
     language: "neoMorse_language",
     mode: "neoMorse_mode",
     speed: "neoMorse_speed",
     pitch: "neoMorse_pitch",
-    input: "neoMorse_input",
-    result: "neoMorse_result"
+    input: "neoMorse_input"
+
 };
 
 
 /* ==================================================
-   LOCAL STORAGE — БЕЗОПАСНЫЕ ФУНКЦИИ
+   БЕЗОПАСНАЯ РАБОТА С LOCAL STORAGE
 ================================================== */
 
-function saveLocal(key, value) {
+function saveSetting(key, value) {
 
     try {
 
@@ -1860,14 +1511,17 @@ function saveLocal(key, value) {
 
     } catch (error) {
 
-        console.log(
-            "Local Storage недоступен"
-        );
+        /*
+            Если браузер запрещает
+            Local Storage, приложение
+            всё равно продолжит работать.
+        */
+
     }
 }
 
 
-function loadLocal(key) {
+function loadSetting(key) {
 
     try {
 
@@ -1886,10 +1540,34 @@ function loadLocal(key) {
    ТЕМА
 ================================================== */
 
-function applyTheme() {
+function updateThemeButton() {
+
+    const isDark =
+        document.body.classList.contains(
+            "dark-mode"
+        );
+
+    const themeButton =
+        document.getElementById("themeButton");
+
+    if (isDark) {
+
+        themeButton.textContent = "☀️ Светлая тема";
+
+    } else {
+
+        themeButton.textContent = "🌙 Тёмная тема";
+    }
+}
+
+
+function loadTheme() {
 
     const savedTheme =
-        loadLocal(STORAGE.theme);
+        loadSetting(
+            STORAGE_KEYS.theme
+        );
+
 
     if (savedTheme === "dark") {
 
@@ -1908,38 +1586,28 @@ function applyTheme() {
 }
 
 
-function updateThemeButton() {
-
-    if (
-        document.body.classList.contains(
-            "dark-mode"
-        )
-    ) {
-
-        themeButton.textContent =
-            "☀️ Светлая тема";
-
-    } else {
-
-        themeButton.textContent =
-            "🌙 Тёмная тема";
-    }
-}
-
+const themeButton =
+    document.getElementById("themeButton");
 
 themeButton.addEventListener(
     "click",
     function() {
 
-        const dark =
-            document.body.classList.toggle(
+        document.body.classList.toggle(
+            "dark-mode"
+        );
+
+
+        const isDark =
+            document.body.classList.contains(
                 "dark-mode"
             );
 
-        saveLocal(
-            STORAGE.theme,
-            dark ? "dark" : "light"
+        saveSetting(
+            STORAGE_KEYS.theme,
+            isDark ? "dark" : "light"
         );
+
 
         updateThemeButton();
     }
@@ -1950,159 +1618,62 @@ themeButton.addEventListener(
    ЯЗЫК
 ================================================== */
 
-function saveLanguage() {
+languageSelect.addEventListener(
+    "change",
+    function() {
 
-    saveLocal(
-        STORAGE.language,
-        languageSelect.value
-    );
-}
+        saveSetting(
+            STORAGE_KEYS.language,
+            languageSelect.value
+        );
+    }
+);
 
 
 /* ==================================================
    СКОРОСТЬ
 ================================================== */
 
-function saveSpeed() {
+speedRange.addEventListener(
+    "input",
+    function() {
 
-    saveLocal(
-        STORAGE.speed,
-        speedRange.value
-    );
-}
-
-
-function updateSpeedText() {
-
-    speedValue.textContent =
-        speedRange.value + "×";
-}
+        saveSetting(
+            STORAGE_KEYS.speed,
+            speedRange.value
+        );
+    }
+);
 
 
 /* ==================================================
    ТОНАЛЬНОСТЬ
 ================================================== */
 
-function savePitch() {
-
-    saveLocal(
-        STORAGE.pitch,
-        pitchRange.value
-    );
-}
-
-
-function updatePitchText() {
-
-    pitchValue.textContent =
-        pitchRange.value + " Гц";
-}
-
-
-/* ==================================================
-   РЕЖИМ
-================================================== */
-
-function saveMode() {
-
-    saveLocal(
-        STORAGE.mode,
-        mode
-    );
-}
-
-
-/* ==================================================
-   ВВОД
-================================================== */
-
-function saveInput() {
-
-    saveLocal(
-        STORAGE.input,
-        input.value
-    );
-}
-
-
-/* ==================================================
-   РЕЗУЛЬТАТ
-================================================== */
-
-function saveResult() {
-
-    saveLocal(
-        STORAGE.result,
-        result.textContent
-    );
-}
-
-
-/* ==================================================
-   АВТОСОХРАНЕНИЕ ВВОДА
-================================================== */
-
-input.addEventListener(
-    "input",
-    function() {
-
-        saveInput();
-    }
-);
-
-
-/* ==================================================
-   АВТОСОХРАНЕНИЕ СКОРОСТИ
-================================================== */
-
-speedRange.addEventListener(
-    "input",
-    function() {
-
-        updateSpeedText();
-
-        saveSpeed();
-    }
-);
-
-
-/* ==================================================
-   АВТОСОХРАНЕНИЕ ТОНАЛЬНОСТИ
-================================================== */
-
 pitchRange.addEventListener(
     "input",
     function() {
 
-        updatePitchText();
-
-        savePitch();
+        saveSetting(
+            STORAGE_KEYS.pitch,
+            pitchRange.value
+        );
     }
 );
 
 
 /* ==================================================
-   АВТОСОХРАНЕНИЕ ЯЗЫКА
-================================================== */
-
-languageSelect.addEventListener(
-    "change",
-    function() {
-
-        saveLanguage();
-    }
-);
-
-
-/* ==================================================
-   АВТОСОХРАНЕНИЕ РЕЖИМА
+   СОХРАНЕНИЕ РЕЖИМА
 ================================================== */
 
 encodeButton.addEventListener(
     "click",
     function() {
 
-        saveMode();
+        saveSetting(
+            STORAGE_KEYS.mode,
+            "encode"
+        );
     }
 );
 
@@ -2111,7 +1682,26 @@ decodeButton.addEventListener(
     "click",
     function() {
 
-        saveMode();
+        saveSetting(
+            STORAGE_KEYS.mode,
+            "decode"
+        );
+    }
+);
+
+
+/* ==================================================
+   СОХРАНЕНИЕ ВВОДА
+================================================== */
+
+input.addEventListener(
+    "input",
+    function() {
+
+        saveSetting(
+            STORAGE_KEYS.input,
+            input.value
+        );
     }
 );
 
@@ -2120,19 +1710,23 @@ decodeButton.addEventListener(
    ВОССТАНОВЛЕНИЕ ЯЗЫКА
 ================================================== */
 
-function restoreLanguage() {
+function loadLanguage() {
 
-    const saved =
-        loadLocal(STORAGE.language);
+    const savedLanguage =
+        loadSetting(
+            STORAGE_KEYS.language
+        );
+
 
     if (
-        saved === "ru" ||
-        saved === "en"
+        savedLanguage === "ru" ||
+        savedLanguage === "en"
     ) {
 
         languageSelect.value =
-            saved;
+            savedLanguage;
     }
+
 
     updateMorseTable();
 }
@@ -2142,27 +1736,32 @@ function restoreLanguage() {
    ВОССТАНОВЛЕНИЕ СКОРОСТИ
 ================================================== */
 
-function restoreSpeed() {
+function loadSpeed() {
 
-    const saved =
-        loadLocal(STORAGE.speed);
+    const savedSpeed =
+        loadSetting(
+            STORAGE_KEYS.speed
+        );
 
-    if (saved !== null) {
 
-        const value =
-            Number(saved);
+    if (savedSpeed !== null) {
+
+        const speed =
+            Number(savedSpeed);
+
 
         if (
-            value >= 0.25 &&
-            value <= 3
+            speed >= 0.25 &&
+            speed <= 3
         ) {
 
             speedRange.value =
-                value;
+                savedSpeed;
+
+            speedValue.textContent =
+                savedSpeed + "×";
         }
     }
-
-    updateSpeedText();
 }
 
 
@@ -2170,27 +1769,32 @@ function restoreSpeed() {
    ВОССТАНОВЛЕНИЕ ТОНАЛЬНОСТИ
 ================================================== */
 
-function restorePitch() {
+function loadPitch() {
 
-    const saved =
-        loadLocal(STORAGE.pitch);
+    const savedPitch =
+        loadSetting(
+            STORAGE_KEYS.pitch
+        );
 
-    if (saved !== null) {
 
-        const value =
-            Number(saved);
+    if (savedPitch !== null) {
+
+        const pitch =
+            Number(savedPitch);
+
 
         if (
-            value >= 300 &&
-            value <= 1200
+            pitch >= 300 &&
+            pitch <= 1200
         ) {
 
             pitchRange.value =
-                value;
+                savedPitch;
+
+            pitchValue.textContent =
+                savedPitch + " Гц";
         }
     }
-
-    updatePitchText();
 }
 
 
@@ -2198,12 +1802,15 @@ function restorePitch() {
    ВОССТАНОВЛЕНИЕ РЕЖИМА
 ================================================== */
 
-function restoreMode() {
+function loadMode() {
 
-    const saved =
-        loadLocal(STORAGE.mode);
+    const savedMode =
+        loadSetting(
+            STORAGE_KEYS.mode
+        );
 
-    if (saved === "decode") {
+
+    if (savedMode === "decode") {
 
         mode = "decode";
 
@@ -2249,433 +1856,41 @@ function restoreMode() {
 
 
 /* ==================================================
-   ВОССТАНОВЛЕНИЕ ВВОДА
+   ВОССТАНОВЛЕНИЕ ВВЕДЁННОГО ТЕКСТА
 ================================================== */
 
-function restoreInput() {
+function loadInput() {
 
-    const saved =
-        loadLocal(STORAGE.input);
+    const savedInput =
+        loadSetting(
+            STORAGE_KEYS.input
+        );
 
-    if (saved !== null) {
+
+    if (savedInput !== null) {
 
         input.value =
-            saved;
+            savedInput;
     }
 }
 
 
 /* ==================================================
-   ВОССТАНОВЛЕНИЕ РЕЗУЛЬТАТА
+   ПЕРВЫЙ ЗАПУСК
 ================================================== */
 
-function restoreResult() {
+loadTheme();
 
-    const saved =
-        loadLocal(STORAGE.result);
+loadLanguage();
 
-    if (
-        saved !== null &&
-        saved !== ""
-    ) {
+loadSpeed();
 
-        result.textContent =
-            saved;
-    }
-}
+loadPitch();
 
+loadMode();
 
-/* ==================================================
-   СОХРАНЕНИЕ РЕЗУЛЬТАТА
-================================================== */
+loadInput();
 
-translateButton.addEventListener(
-    "click",
-    function() {
-
-        /*
-            Основной обработчик translate()
-            уже выполнил перевод.
-            Поэтому здесь только сохраняем
-            получившийся результат.
-        */
-
-        setTimeout(
-            function() {
-
-                saveInput();
-
-                saveResult();
-
-            },
-            0
-        );
-    }
-);
-
-
-/* ==================================================
-   ОЧИСТКА
-================================================== */
-
-clearButton.addEventListener(
-    "click",
-    function() {
-
-        setTimeout(
-            function() {
-
-                saveInput();
-
-                saveResult();
-
-            },
-            0
-        );
-    }
-);
-
-
-/* ==================================================
-   ПЕРВОНАЧАЛЬНАЯ ЗАГРУЗКА
-================================================== */
-
-applyTheme();
-
-restoreLanguage();
-
-restoreSpeed();
-
-restorePitch();
-
-restoreMode();
-
-restoreInput();
-
-restoreResult();
-
-
-/* ==================================================
-   NEO MORSE 0.6.1
-   INTERFACE UPDATE
-================================================== */
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 28px 18px 40px;
-
-    line-height: 1.5;
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
-
-/* ==================================================
-   HEADER
-================================================== */
-
-.app-header {
-    margin-bottom: 22px;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-}
-
-
-/* ==================================================
-   NM LOGO
-================================================== */
-
-.brand-logo {
-    width: 52px;
-    height: 52px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    background: #111;
-    color: white;
-
-    border-radius: 50%;
-
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: -1px;
-
-    user-select: none;
-
-    box-shadow:
-        0 3px 10px rgba(0, 0, 0, 0.12);
-}
-
-
-/* ==================================================
-   BRAND TEXT
-================================================== */
-
-.brand-name {
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-
-    line-height: 1.1;
-}
-
-.brand-version {
-    margin-top: 4px;
-
-    color: #777;
-
-    font-size: 14px;
-}
-
-
-/* ==================================================
-   BOXES
-================================================== */
-
-.box {
-    border-radius: 16px;
-
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.035);
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.box:hover {
-    box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.055);
-}
-
-
-/* ==================================================
-   BUTTONS
-================================================== */
-
-button,
-select {
-    transition:
-        background-color 0.15s ease,
-        color 0.15s ease,
-        border-color 0.15s ease,
-        transform 0.1s ease;
-}
-
-button:active {
-    transform: scale(0.98);
-}
-
-button:focus-visible,
-select:focus-visible,
-textarea:focus-visible,
-input[type="range"]:focus-visible {
-    outline: 2px solid #777;
-    outline-offset: 2px;
-}
-
-
-/* ==================================================
-   TEXTAREA
-================================================== */
-
-textarea {
-    min-height: 140px;
-
-    transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
-}
-
-textarea:focus {
-    border-color: #888;
-
-    box-shadow:
-        0 0 0 3px rgba(0, 0, 0, 0.05);
-}
-
-
-/* ==================================================
-   RESULT
-================================================== */
-
-.result {
-    border: 1px solid transparent;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease;
-}
-
-
-/* ==================================================
-   TABLE
-================================================== */
-
-.table-wrapper {
-    border-radius: 10px;
-    overflow-x: auto;
-}
-
-.morse-table th,
-.morse-table td {
-    transition:
-        background-color 0.15s ease;
-}
-
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width: 600px) {
-
-    body {
-        padding:
-            18px 12px 30px;
-    }
-
-    .app-header {
-        margin-bottom: 16px;
-    }
-
-    .brand-logo {
-        width: 46px;
-        height: 46px;
-
-        font-size: 14px;
-    }
-
-    .brand-name {
-        font-size: 22px;
-    }
-
-    .brand-version {
-        font-size: 12px;
-    }
-
-    .box {
-        padding: 16px;
-
-        border-radius: 14px;
-    }
-
-    textarea {
-        min-height: 125px;
-        font-size: 17px;
-    }
-
-    button,
-    select {
-        min-height: 44px;
-    }
-
-    .result {
-        font-size: 18px;
-    }
-}
-
-
-/* ==================================================
-   DARK MODE
-================================================== */
-
-body.dark-mode {
-
-    background: #101010;
-    color: #f2f2f2;
-}
-
-body.dark-mode .brand-logo {
-    background: #f2f2f2;
-    color: #111;
-
-    box-shadow:
-        0 3px 12px rgba(0, 0, 0, 0.35);
-}
-
-body.dark-mode .brand-version {
-    color: #999;
-}
-
-body.dark-mode .box {
-    background: #191919;
-    border-color: #2d2d2d;
-
-    box-shadow:
-        0 3px 12px rgba(0, 0, 0, 0.25);
-}
-
-body.dark-mode textarea,
-body.dark-mode select,
-body.dark-mode button {
-    background: #151515;
-    color: #f2f2f2;
-    border-color: #363636;
-}
-
-body.dark-mode textarea:focus {
-    border-color: #777;
-
-    box-shadow:
-        0 0 0 3px rgba(255, 255, 255, 0.06);
-}
-
-body.dark-mode button:hover,
-body.dark-mode select:hover {
-    background: #242424;
-}
-
-body.dark-mode button.active,
-body.dark-mode #playButton.playing {
-    background: #f2f2f2;
-    color: #111;
-}
-
-body.dark-mode .result {
-    background: #222;
-    border-color: #303030;
-    color: #f2f2f2;
-}
-
-body.dark-mode .morse-table {
-    background: #191919;
-}
-
-body.dark-mode .morse-table th {
-    background: #252525;
-}
-
-body.dark-mode .morse-table th,
-body.dark-mode .morse-table td {
-    border-color: #363636;
-}
-
-body.dark-mode #status {
-    color: #999;
-}
-
-body.dark-mode .setting-value {
-    color: #999;
-   }
-   
    
 </script>
 
