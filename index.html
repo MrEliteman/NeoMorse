@@ -4,103 +4,291 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Neo Morse 0.5</title>
+<title>Neo Morse 0.5.1</title>
 
 <style>
 
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
         font-family: Arial, sans-serif;
-        max-width: 650px;
-        margin: 40px auto;
-        padding: 20px;
-        background: #f5f5f5;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px 18px 40px;
+        background: #f2f4f7;
         color: #111;
     }
 
-    h1 {
-        margin-bottom: 5px;
+
+    /* ==================================================
+       HEADER
+    ================================================== */
+
+    .app-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding: 16px 18px;
+        background: white;
+        border: 1px solid #e1e4e8;
+        border-radius: 18px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
     }
 
-    .subtitle {
-        color: #666;
-        margin-bottom: 25px;
+
+    .app-logo {
+        width: 52px;
+        height: 52px;
+        flex: 0 0 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        background: #111;
+        color: white;
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -1px;
     }
+
+
+    .app-title-area {
+        min-width: 0;
+    }
+
+
+    .app-title {
+        margin: 0;
+        font-size: 25px;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+    }
+
+
+    .app-subtitle {
+        margin-top: 5px;
+        color: #777;
+        font-size: 13px;
+    }
+
+
+    /* ==================================================
+       BOXES
+    ================================================== */
 
     .box {
         background: white;
         padding: 20px;
-        border-radius: 15px;
+        border-radius: 17px;
         margin-bottom: 15px;
-        border: 1px solid #ddd;
+        border: 1px solid #e1e4e8;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.035);
     }
+
+
+    .box:last-child {
+        margin-bottom: 0;
+    }
+
+
+    /* ==================================================
+       LABELS
+    ================================================== */
+
+    .label {
+        font-weight: 700;
+        margin-bottom: 11px;
+        font-size: 15px;
+    }
+
+
+    .setting-label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+
+    /* ==================================================
+       TEXTAREA
+    ================================================== */
 
     textarea {
         width: 100%;
         height: 140px;
         box-sizing: border-box;
         resize: vertical;
-        padding: 12px;
+        padding: 14px;
         font-size: 18px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
+        font-family: Arial, sans-serif;
+        line-height: 1.45;
+        color: #111;
+        background: #fafbfc;
+        border: 1px solid #d7dbe0;
+        border-radius: 13px;
+        outline: none;
+        transition:
+            border-color 0.15s ease,
+            box-shadow 0.15s ease,
+            background 0.15s ease;
     }
+
+
+    textarea::placeholder {
+        color: #999;
+    }
+
+
+    textarea:hover {
+        background: #fff;
+        border-color: #c9ced4;
+    }
+
+
+    textarea:focus {
+        background: white;
+        border-color: #111;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.07);
+    }
+
+
+    /* ==================================================
+       BUTTONS
+    ================================================== */
 
     button,
     select {
         padding: 12px 16px;
         margin-top: 10px;
         margin-right: 5px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
+        border: 1px solid #d4d8dd;
+        border-radius: 11px;
         background: white;
+        color: #111;
         cursor: pointer;
         font-size: 15px;
+        font-family: Arial, sans-serif;
+        transition:
+            background 0.15s ease,
+            border-color 0.15s ease,
+            transform 0.08s ease,
+            box-shadow 0.15s ease;
     }
+
 
     button:hover,
     select:hover {
-        background: #eee;
+        background: #f3f4f5;
+        border-color: #c4c9cf;
     }
+
+
+    button:active {
+        transform: translateY(1px);
+    }
+
+
+    button:focus-visible,
+    select:focus-visible {
+        outline: none;
+        border-color: #111;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+    }
+
 
     button.active {
         background: #111;
         color: white;
+        border-color: #111;
     }
+
+
+    button.active:hover {
+        background: #222;
+    }
+
+
+    /* ==================================================
+       SELECT
+    ================================================== */
 
     select {
         width: 100%;
         margin-right: 0;
+        appearance: auto;
     }
+
+
+    /* ==================================================
+       RESULT
+    ================================================== */
 
     .result {
         min-height: 70px;
-        padding: 15px;
-        background: #eee;
-        border-radius: 10px;
+        padding: 16px;
+        background: #f0f1f3;
+        border: 1px solid #e0e2e5;
+        border-radius: 13px;
         font-size: 20px;
         word-break: break-word;
         white-space: pre-wrap;
+        line-height: 1.45;
     }
 
-    .label {
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
+
+    /* ==================================================
+       STATUS
+    ================================================== */
 
     #status {
+        min-height: 20px;
         margin-top: 10px;
-        color: #666;
+        color: #70757b;
+        font-size: 14px;
     }
+
+
+    /* ==================================================
+       PLAY BUTTON
+    ================================================== */
+
+    #playButton {
+        font-weight: 700;
+    }
+
+
+    #playButton.playing {
+        background: #111;
+        color: white;
+        border-color: #111;
+    }
+
+
+    /* ==================================================
+       TABLE
+    ================================================== */
 
     .table-title {
         margin-top: 0;
         margin-bottom: 15px;
+        font-size: 20px;
     }
+
 
     .table-wrapper {
         width: 100%;
         overflow-x: auto;
+        border: 1px solid #ddd;
+        border-radius: 12px;
     }
+
 
     .morse-table {
         width: 100%;
@@ -108,17 +296,30 @@
         background: white;
     }
 
+
     .morse-table th,
     .morse-table td {
         padding: 10px;
-        border: 1px solid #ddd;
+        border-bottom: 1px solid #e1e3e6;
         text-align: center;
     }
 
+
+    .morse-table tr:last-child td {
+        border-bottom: none;
+    }
+
+
     .morse-table th {
-        background: #eee;
+        background: #f0f1f3;
         font-weight: bold;
     }
+
+
+    .morse-table tbody tr:hover {
+        background: #fafafa;
+    }
+
 
     .morse-code {
         font-family: monospace;
@@ -126,55 +327,154 @@
         letter-spacing: 2px;
     }
 
+
+    /* ==================================================
+       SETTINGS
+    ================================================== */
+
     .setting {
-        margin-bottom: 20px;
+        margin-bottom: 22px;
+        padding: 13px 14px;
+        background: #f7f8f9;
+        border: 1px solid #e3e5e8;
+        border-radius: 13px;
     }
+
 
     .setting:last-child {
         margin-bottom: 0;
     }
 
-    .setting-label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    input[type="range"] {
-        width: 100%;
-    }
 
     .setting-value {
         display: block;
-        margin-top: 5px;
+        margin-top: 6px;
         color: #666;
         font-size: 14px;
     }
 
-    #playButton.playing {
-        background: #111;
-        color: white;
+
+    input[type="range"] {
+        width: 100%;
+        accent-color: #111;
+        cursor: pointer;
     }
+
+
+    /* ==================================================
+       MOBILE
+    ================================================== */
 
     @media (max-width: 500px) {
 
         body {
-            margin: 15px auto;
-            padding: 12px;
+            max-width: 100%;
+            margin: 0;
+            padding: 12px 10px 25px;
         }
+
+
+        .app-header {
+            padding: 14px;
+            margin-bottom: 12px;
+            border-radius: 16px;
+        }
+
+
+        .app-logo {
+            width: 46px;
+            height: 46px;
+            flex-basis: 46px;
+            border-radius: 13px;
+            font-size: 16px;
+        }
+
+
+        .app-title {
+            font-size: 22px;
+        }
+
+
+        .app-subtitle {
+            font-size: 12px;
+        }
+
 
         .box {
             padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 12px;
         }
 
-        button {
+
+        textarea {
+            height: 125px;
+            font-size: 17px;
+        }
+
+
+        button,
+        select {
             font-size: 14px;
             padding: 11px 12px;
         }
 
+
+        .result {
+            font-size: 18px;
+            padding: 14px;
+        }
+
+
         .morse-table th,
         .morse-table td {
             padding: 8px 5px;
+        }
+
+
+        .morse-code {
+            font-size: 17px;
+        }
+
+    }
+
+
+    /* ==================================================
+       VERY SMALL PHONES
+    ================================================== */
+
+    @media (max-width: 360px) {
+
+        body {
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+
+
+        .app-header {
+            gap: 10px;
+        }
+
+
+        .app-logo {
+            width: 42px;
+            height: 42px;
+            flex-basis: 42px;
+        }
+
+
+        .app-title {
+            font-size: 20px;
+        }
+
+
+        .box {
+            padding: 13px;
+        }
+
+
+        button {
+            padding: 10px;
         }
 
     }
@@ -184,14 +484,35 @@
 
 <body>
 
-<h1>Neo Morse</h1>
 
-<div class="subtitle">
-    Переводчик азбуки Морзе — версия 0.5
-</div>
+<!-- ==================================================
+     NEO MORSE HEADER
+================================================== -->
+
+<header class="app-header">
+
+    <div class="app-logo">
+        NM
+    </div>
+
+    <div class="app-title-area">
+
+        <h1 class="app-title">
+            Neo Morse
+        </h1>
+
+        <div class="app-subtitle">
+            Переводчик азбуки Морзе — версия 0.5.1
+        </div>
+
+    </div>
+
+</header>
 
 
-<!-- ЯЗЫК -->
+<!-- ==================================================
+     ЯЗЫК
+================================================== -->
 
 <div class="box">
 
@@ -214,7 +535,9 @@
 </div>
 
 
-<!-- РЕЖИМ -->
+<!-- ==================================================
+     РЕЖИМ
+================================================== -->
 
 <div class="box">
 
@@ -233,7 +556,9 @@
 </div>
 
 
-<!-- ВВОД -->
+<!-- ==================================================
+     ВВОД
+================================================== -->
 
 <div class="box">
 
@@ -259,7 +584,9 @@
 </div>
 
 
-<!-- РЕЗУЛЬТАТ -->
+<!-- ==================================================
+     РЕЗУЛЬТАТ
+================================================== -->
 
 <div class="box">
 
@@ -284,13 +611,16 @@
 </div>
 
 
-<!-- НАСТРОЙКИ ЗВУКА -->
+<!-- ==================================================
+     НАСТРОЙКИ ЗВУКА
+================================================== -->
 
 <div class="box">
 
     <div class="label">
         Настройки звука
     </div>
+
 
     <div class="setting">
 
@@ -344,7 +674,9 @@
 </div>
 
 
-<!-- ТАБЛИЦА -->
+<!-- ==================================================
+     ТАБЛИЦА
+================================================== -->
 
 <div class="box">
 
@@ -528,11 +860,6 @@ function createReverseMorse(morse) {
     for (const symbol in morse) {
 
         const code = morse[symbol];
-
-        /*
-            Если у двух символов одинаковый код,
-            первый вариант сохраняем.
-        */
 
         if (!reverse[code]) {
 
@@ -772,54 +1099,28 @@ function translate() {
 
 function updateMorseTable() {
 
-    const morse =
-        getCurrentMorse();
-
-    /*
-        Сначала полностью очищаем таблицу.
-    */
+    const morse = getCurrentMorse();
 
     morseTableBody.innerHTML = "";
 
-    /*
-        Затем создаём отдельную строку
-        для каждого символа.
-    */
+    Object.keys(morse).forEach(function(symbol) {
 
-    Object.keys(morse).forEach(
-        function(symbol) {
+        const row = document.createElement("tr");
 
-            const row =
-                document.createElement("tr");
+        const symbolCell = document.createElement("td");
+        const codeCell = document.createElement("td");
 
-            const symbolCell =
-                document.createElement("td");
+        symbolCell.textContent = symbol;
 
-            const codeCell =
-                document.createElement("td");
+        codeCell.textContent = morse[symbol];
+        codeCell.className = "morse-code";
 
-            symbolCell.textContent =
-                symbol;
+        row.appendChild(symbolCell);
+        row.appendChild(codeCell);
 
-            codeCell.textContent =
-                morse[symbol];
+        morseTableBody.appendChild(row);
 
-            codeCell.className =
-                "morse-code";
-
-            row.appendChild(
-                symbolCell
-            );
-
-            row.appendChild(
-                codeCell
-            );
-
-            morseTableBody.appendChild(
-                row
-            );
-        }
-    );
+    });
 }
 
 
@@ -835,8 +1136,8 @@ languageSelect.addEventListener(
 
         updateMorseTable();
 
-        status.textContent =
-            "Язык изменён";
+        status.textContent = "Язык изменён";
+
     }
 );
 
@@ -853,22 +1154,13 @@ encodeButton.addEventListener(
 
         mode = "encode";
 
-        encodeButton.classList.add(
-            "active"
-        );
+        encodeButton.classList.add("active");
+        decodeButton.classList.remove("active");
 
-        decodeButton.classList.remove(
-            "active"
-        );
+        inputLabel.textContent = "Текст";
+        resultLabel.textContent = "Азбука Морзе";
 
-        inputLabel.textContent =
-            "Текст";
-
-        resultLabel.textContent =
-            "Азбука Морзе";
-
-        input.placeholder =
-            "Напиши текст...";
+        input.placeholder = "Напиши текст...";
 
         input.value = "";
 
@@ -876,6 +1168,7 @@ encodeButton.addEventListener(
             "Здесь появится результат";
 
         status.textContent = "";
+
     }
 );
 
@@ -892,19 +1185,11 @@ decodeButton.addEventListener(
 
         mode = "decode";
 
-        decodeButton.classList.add(
-            "active"
-        );
+        decodeButton.classList.add("active");
+        encodeButton.classList.remove("active");
 
-        encodeButton.classList.remove(
-            "active"
-        );
-
-        inputLabel.textContent =
-            "Азбука Морзе";
-
-        resultLabel.textContent =
-            "Текст";
+        inputLabel.textContent = "Азбука Морзе";
+        resultLabel.textContent = "Текст";
 
         input.placeholder =
             "Например: ... --- ...";
@@ -915,6 +1200,7 @@ decodeButton.addEventListener(
             "Здесь появится результат";
 
         status.textContent = "";
+
     }
 );
 
@@ -928,6 +1214,7 @@ translateButton.addEventListener(
     function() {
 
         translate();
+
     }
 );
 
@@ -948,6 +1235,7 @@ clearButton.addEventListener(
             "Здесь появится результат";
 
         status.textContent = "";
+
     }
 );
 
@@ -965,8 +1253,7 @@ copyButton.addEventListener(
 
         if (
             !text ||
-            text ===
-            "Здесь появится результат"
+            text === "Здесь появится результат"
         ) {
 
             status.textContent =
@@ -977,8 +1264,7 @@ copyButton.addEventListener(
 
         try {
 
-            await navigator.clipboard
-                .writeText(text);
+            await navigator.clipboard.writeText(text);
 
             status.textContent =
                 "Скопировано";
@@ -987,7 +1273,9 @@ copyButton.addEventListener(
 
             status.textContent =
                 "Не удалось скопировать";
+
         }
+
     }
 );
 
@@ -1002,6 +1290,7 @@ speedRange.addEventListener(
 
         speedValue.textContent =
             speedRange.value + "×";
+
     }
 );
 
@@ -1016,12 +1305,13 @@ pitchRange.addEventListener(
 
         pitchValue.textContent =
             pitchRange.value + " Гц";
+
     }
 );
 
 
 /* ==================================================
-   СОЗДАНИЕ AUDIOCONTEXT
+   СОЗДАНИЕ AUDIO CONTEXT
 ================================================== */
 
 function createAudio() {
@@ -1041,170 +1331,15 @@ function createAudio() {
     audioContext =
         new AudioContext();
 
+    if (
+        audioContext.state === "suspended"
+    ) {
+
+        audioContext.resume();
+
+    }
+
     return true;
-}
-
-
-/* ==================================================
-   СИГНАЛ
-================================================== */
-
-function playTone(duration) {
-
-    return new Promise(
-        function(resolve) {
-
-            if (stopRequested) {
-
-                resolve();
-
-                return;
-            }
-
-            if (!audioContext) {
-
-                resolve();
-
-                return;
-            }
-
-            oscillator =
-                audioContext.createOscillator();
-
-            const gain =
-                audioContext.createGain();
-
-            oscillator.type =
-                "sine";
-
-            oscillator.frequency.value =
-                Number(
-                    pitchRange.value
-                );
-
-            gain.gain.value =
-                0.15;
-
-            oscillator.connect(gain);
-
-            gain.connect(
-                audioContext.destination
-            );
-
-            oscillator.start();
-
-            const timer =
-                setTimeout(
-                    function() {
-
-                        if (oscillator) {
-
-                            try {
-                                oscillator.stop();
-                            } catch (error) {}
-
-                            oscillator =
-                                null;
-                        }
-
-                        resolve();
-
-                    },
-                    duration
-                );
-        }
-    );
-}
-
-
-/* ==================================================
-   ПАУЗА
-================================================== */
-
-function wait(ms) {
-
-    return new Promise(
-        function(resolve) {
-
-            setTimeout(
-                resolve,
-                ms
-            );
-        }
-    );
-}
-
-
-/* ==================================================
-   ОСТАНОВКА
-================================================== */
-
-function stopPlayback() {
-
-    stopRequested = true;
-
-    isPlaying = false;
-
-    if (oscillator) {
-
-        try {
-            oscillator.stop();
-        } catch (error) {}
-
-        oscillator = null;
-    }
-
-    if (audioContext) {
-
-        try {
-            audioContext.close();
-        } catch (error) {}
-
-        audioContext = null;
-    }
-
-    playButton.textContent =
-        "▶ Воспроизвести";
-
-    playButton.classList.remove(
-        "playing"
-    );
-}
-
-
-/* ==================================================
-   ПОЛУЧИТЬ КОД ДЛЯ ЗВУКА
-================================================== */
-
-function getMorseForPlayback() {
-
-    /*
-        В режиме Текст → Морзе
-        используем уже полученный результат.
-    */
-
-    if (mode === "encode") {
-
-        const morse =
-            result.textContent.trim();
-
-        if (
-            !morse ||
-            morse === "Здесь появится результат"
-        ) {
-            return "";
-        }
-
-        return morse;
-    }
-
-
-    /*
-        В режиме Морзе → текст
-        используем введённый пользователем Морзе-код.
-    */
-
-    return input.value.trim();
 }
 
 
@@ -1223,8 +1358,8 @@ function playTone(duration) {
 
             resolve();
             return;
-        }
 
+        }
 
         oscillator =
             audioContext.createOscillator();
@@ -1232,15 +1367,12 @@ function playTone(duration) {
         const gain =
             audioContext.createGain();
 
-
         oscillator.type = "sine";
 
         oscillator.frequency.value =
             Number(pitchRange.value);
 
-
         gain.gain.value = 0.15;
-
 
         oscillator.connect(gain);
 
@@ -1248,19 +1380,20 @@ function playTone(duration) {
             audioContext.destination
         );
 
-
         oscillator.start();
-
 
         setTimeout(function() {
 
             if (oscillator) {
 
                 try {
+
                     oscillator.stop();
+
                 } catch (error) {}
 
                 oscillator = null;
+
             }
 
             resolve();
@@ -1286,48 +1419,6 @@ function wait(ms) {
 
 
 /* ==================================================
-   СОЗДАНИЕ AUDIO CONTEXT
-================================================== */
-
-function createAudio() {
-
-    const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
-
-
-    if (!AudioContext) {
-
-        status.textContent =
-            "Браузер не поддерживает звук";
-
-        return false;
-    }
-
-
-    audioContext =
-        new AudioContext();
-
-
-    /*
-        На некоторых мобильных браузерах
-        AudioContext после первого запуска
-        может быть приостановлен.
-    */
-
-    if (
-        audioContext.state === "suspended"
-    ) {
-
-        audioContext.resume();
-    }
-
-
-    return true;
-}
-
-
-/* ==================================================
    ОСТАНОВКА ВОСПРОИЗВЕДЕНИЯ
 ================================================== */
 
@@ -1337,39 +1428,29 @@ function stopPlayback() {
 
     isPlaying = false;
 
-
-    /*
-        Останавливаем текущий сигнал.
-    */
-
     if (oscillator) {
 
         try {
+
             oscillator.stop();
+
         } catch (error) {}
 
         oscillator = null;
+
     }
-
-
-    /*
-        Закрываем AudioContext.
-    */
 
     if (audioContext) {
 
         try {
+
             audioContext.close();
+
         } catch (error) {}
 
         audioContext = null;
+
     }
-
-
-    /*
-        Возвращаем кнопку
-        в обычное состояние.
-    */
 
     playButton.textContent =
         "▶ Воспроизвести";
@@ -1377,6 +1458,36 @@ function stopPlayback() {
     playButton.classList.remove(
         "playing"
     );
+
+}
+
+
+/* ==================================================
+   ПОЛУЧИТЬ МОРЗЕ ДЛЯ ВОСПРОИЗВЕДЕНИЯ
+================================================== */
+
+function getMorseForPlayback() {
+
+    if (mode === "encode") {
+
+        const morse =
+            result.textContent.trim();
+
+        if (
+            !morse ||
+            morse === "Здесь появится результат"
+        ) {
+
+            return "";
+
+        }
+
+        return morse;
+
+    }
+
+    return input.value.trim();
+
 }
 
 
@@ -1385,11 +1496,6 @@ function stopPlayback() {
 ================================================== */
 
 async function playMorseSound(morseText) {
-
-    /*
-        Проверяем, есть ли вообще
-        что воспроизводить.
-    */
 
     if (
         !morseText ||
@@ -1401,27 +1507,17 @@ async function playMorseSound(morseText) {
             "Сначала получи перевод";
 
         return;
+
     }
-
-
-    /*
-        Создаём звук.
-    */
 
     if (!createAudio()) {
 
         return;
+
     }
 
-
-    /*
-        Начинаем новое воспроизведение.
-    */
-
     stopRequested = false;
-
     isPlaying = true;
-
 
     playButton.textContent =
         "■ Остановить";
@@ -1430,18 +1526,9 @@ async function playMorseSound(morseText) {
         "playing"
     );
 
-
     status.textContent =
         "Воспроизведение...";
 
-
-    /*
-        Базовая длительность точки.
-
-        100 мс при скорости 1×.
-        Чем выше скорость,
-        тем быстрее воспроизведение.
-    */
 
     const speed =
         Number(speedRange.value);
@@ -1450,17 +1537,9 @@ async function playMorseSound(morseText) {
         100 / speed;
 
 
-    /*
-        Разделяем слова.
-    */
-
     const words =
         morseText.split("/");
 
-
-    /*
-        Воспроизводим каждое слово.
-    */
 
     for (
         let w = 0;
@@ -1472,20 +1551,12 @@ async function playMorseSound(morseText) {
             break;
         }
 
-
         const word =
             words[w].trim();
-
 
         if (!word) {
             continue;
         }
-
-
-        /*
-            Внутри слова буквы
-            разделены пробелами.
-        */
 
         const letters =
             word.split(/\s+/);
@@ -1501,15 +1572,9 @@ async function playMorseSound(morseText) {
                 break;
             }
 
-
             const code =
                 letters[l];
 
-
-            /*
-                Воспроизводим каждый
-                символ Морзе.
-            */
 
             for (
                 let i = 0;
@@ -1521,132 +1586,90 @@ async function playMorseSound(morseText) {
                     break;
                 }
 
-
                 const symbol =
                     code[i];
 
 
-                /*
-                    Точка.
-                */
-
                 if (symbol === ".") {
 
-                    await playTone(
-                        dot
-                    );
-                }
+                    await playTone(dot);
 
-
-                /*
-                    Тире.
-                */
-
-                else if (
+                } else if (
                     symbol === "-"
                 ) {
 
-                    await playTone(
-                        dot * 3
-                    );
+                    await playTone(dot * 3);
+
                 }
 
 
-                /*
-                    Пауза между точкой
-                    и следующим символом.
-                */
-
                 if (
-                    i <
-                    code.length - 1 &&
+                    i < code.length - 1 &&
                     !stopRequested
                 ) {
 
-                    await wait(
-                        dot
-                    );
+                    await wait(dot);
+
                 }
+
             }
 
 
-            /*
-                Пауза между буквами.
-            */
-
             if (
-                l <
-                letters.length - 1 &&
+                l < letters.length - 1 &&
                 !stopRequested
             ) {
 
-                await wait(
-                    dot * 3
-                );
+                await wait(dot * 3);
+
             }
+
         }
 
 
-        /*
-            Пауза между словами.
-        */
-
         if (
-            w <
-            words.length - 1 &&
+            w < words.length - 1 &&
             !stopRequested
         ) {
 
-            await wait(
-                dot * 7
-            );
+            await wait(dot * 7);
+
         }
+
     }
 
-
-    /*
-        Запоминаем,
-        была ли остановка.
-    */
 
     const wasStopped =
         stopRequested;
 
 
-    /*
-        Останавливаем остатки звука.
-    */
-
     if (oscillator) {
 
         try {
+
             oscillator.stop();
+
         } catch (error) {}
 
         oscillator = null;
+
     }
 
-
-    /*
-        Закрываем AudioContext.
-    */
 
     if (audioContext) {
 
         try {
+
             await audioContext.close();
+
         } catch (error) {}
 
         audioContext = null;
+
     }
 
 
-    /*
-        Воспроизведение закончено.
-    */
-
     isPlaying = false;
-
 
     playButton.textContent =
         "▶ Воспроизвести";
@@ -1665,7 +1688,9 @@ async function playMorseSound(morseText) {
 
         status.textContent =
             "Воспроизведение завершено";
+
     }
+
 }
 
 
@@ -1677,15 +1702,6 @@ playButton.addEventListener(
     "click",
     function() {
 
-        /*
-            Если звук уже идёт,
-            повторное нажатие
-            полностью его останавливает.
-
-            НОВОЕ воспроизведение
-            при этом не создаётся.
-        */
-
         if (isPlaying) {
 
             stopPlayback();
@@ -1694,53 +1710,18 @@ playButton.addEventListener(
                 "Воспроизведение остановлено";
 
             return;
+
         }
 
-
-        /*
-            Получаем Морзе,
-            который нужно воспроизвести.
-        */
 
         const morseText =
             getMorseForPlayback();
 
 
-        /*
-            Запускаем воспроизведение.
-        */
-
         playMorseSound(
             morseText
         );
-    }
-);
 
-
-/* ==================================================
-   СКОРОСТЬ
-================================================== */
-
-speedRange.addEventListener(
-    "input",
-    function() {
-
-        speedValue.textContent =
-            speedRange.value + "×";
-    }
-);
-
-
-/* ==================================================
-   ТОНАЛЬНОСТЬ
-================================================== */
-
-pitchRange.addEventListener(
-    "input",
-    function() {
-
-        pitchValue.textContent =
-            pitchRange.value + " Гц";
     }
 );
 
