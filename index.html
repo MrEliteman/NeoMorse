@@ -1826,40 +1826,110 @@ updateMorseTable();
 
 
 /* ==================================================
-   DARK MODE — Neo Morse 0.5.2
+   DARK MODE + LOCAL STORAGE
+   Neo Morse 0.6
 ================================================== */
 
 const themeButton =
     document.getElementById("themeButton");
 
+const THEME_STORAGE_KEY =
+    "neoMorseTheme";
+
+
+/* ==================================================
+   ОБНОВЛЕНИЕ ТЕКСТА КНОПКИ
+================================================== */
+
+function updateThemeButton() {
+
+    if (
+        document.body.classList.contains(
+            "dark-mode"
+        )
+    ) {
+
+        themeButton.textContent =
+            "☀️ Светлая тема";
+
+    } else {
+
+        themeButton.textContent =
+            "🌙 Тёмная тема";
+    }
+}
+
+
+/* ==================================================
+   ЗАГРУЗКА СОХРАНЁННОЙ ТЕМЫ
+================================================== */
+
+function loadSavedTheme() {
+
+    const savedTheme =
+        localStorage.getItem(
+            THEME_STORAGE_KEY
+        );
+
+
+    if (savedTheme === "dark") {
+
+        document.body.classList.add(
+            "dark-mode"
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            "dark-mode"
+        );
+    }
+
+
+    updateThemeButton();
+}
+
+
+/* ==================================================
+   ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
+================================================== */
 
 themeButton.addEventListener(
     "click",
     function() {
 
-        document.body.classList.toggle(
-            "dark-mode"
-        );
-
-
-        if (
-            document.body.classList.contains(
+        const isDark =
+            document.body.classList.toggle(
                 "dark-mode"
-            )
-        ) {
+            );
 
-            themeButton.textContent =
-                "☀️ Светлая тема";
+
+        if (isDark) {
+
+            localStorage.setItem(
+                THEME_STORAGE_KEY,
+                "dark"
+            );
 
         } else {
 
-            themeButton.textContent =
-                "🌙 Тёмная тема";
-
+            localStorage.setItem(
+                THEME_STORAGE_KEY,
+                "light"
+            );
         }
 
+
+        updateThemeButton();
     }
 );
+
+
+/* ==================================================
+   ЗАГРУЗКА ТЕМЫ ПРИ ЗАПУСКЕ
+================================================== */
+
+loadSavedTheme();
 
    
 </script>
