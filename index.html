@@ -1,711 +1,205 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
->
-
-<meta
-    name="theme-color"
-    content="#111111"
->
-
-<title>Neo Morse 0.6</title>
-
+<title>Neo Morse 0.5</title>
 
 <style>
 
-/* ==================================================
-   ОСНОВА
-================================================== */
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-
-    margin: 0;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    background:
-        #eef0f2;
-
-    color: #111;
-
-    min-height: 100vh;
-}
-
-
-.app {
-
-    width: 100%;
-
-    max-width: 720px;
-
-    margin: 0 auto;
-
-    padding:
-        18px 14px 35px;
-}
-
-
-/* ==================================================
-   HEADER
-================================================== */
-
-.header {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 15px;
-}
-
-.brand {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-}
-
-.logo {
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 12px;
-
-    background: #111;
-
-    color: white;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    font-weight: bold;
-
-    font-size: 18px;
-}
-
-h1 {
-
-    margin: 0;
-
-    font-size: 25px;
-}
-
-.version {
-
-    font-size: 12px;
-
-    color: #777;
-
-    margin-top: 3px;
-}
-
-.status-light {
-
-    width: 11px;
-    height: 11px;
-
-    border-radius: 50%;
-
-    background: #bbb;
-}
-
-.status-light.active {
-
-    background: #111;
-}
-
-
-/* ==================================================
-   CARD
-================================================== */
-
-.card {
-
-    background: white;
-
-    border:
-        1px solid #dedede;
-
-    border-radius: 18px;
-
-    padding: 17px;
-
-    margin-bottom: 13px;
-
-    box-shadow:
-        0 3px 12px rgba(
-            0,
-            0,
-            0,
-            0.04
-        );
-}
-
-
-.label {
-
-    font-size: 13px;
-
-    font-weight: bold;
-
-    color: #666;
-
-    margin-bottom: 9px;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.5px;
-}
-
-
-/* ==================================================
-   SELECT
-================================================== */
-
-select {
-
-    width: 100%;
-
-    border:
-        1px solid #ccc;
-
-    border-radius: 12px;
-
-    padding: 13px;
-
-    font-size: 16px;
-
-    background: #fff;
-
-    color: #111;
-
-    outline: none;
-}
-
-
-/* ==================================================
-   MODE BUTTONS
-================================================== */
-
-.mode-buttons {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 8px;
-}
-
-button {
-
-    border:
-        1px solid #ccc;
-
-    border-radius: 12px;
-
-    background: white;
-
-    color: #111;
-
-    padding: 12px 14px;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    transition:
-        0.15s ease;
-
-    -webkit-tap-highlight-color:
-        transparent;
-}
-
-button:active {
-
-    transform:
-        scale(0.98);
-}
-
-button:hover {
-
-    background: #f0f0f0;
-}
-
-button.active {
-
-    background: #111;
-
-    color: white;
-
-    border-color: #111;
-}
-
-
-/* ==================================================
-   TEXTAREA
-================================================== */
-
-textarea {
-
-    width: 100%;
-
-    min-height: 145px;
-
-    resize: vertical;
-
-    border:
-        1px solid #ccc;
-
-    border-radius: 14px;
-
-    padding: 14px;
-
-    font-size: 18px;
-
-    line-height: 1.45;
-
-    outline: none;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-}
-
-textarea:focus {
-
-    border-color: #777;
-}
-
-
-/* ==================================================
-   ACTIONS
-================================================== */
-
-.actions {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 8px;
-
-    margin-top: 9px;
-}
-
-.primary {
-
-    background: #111;
-
-    color: white;
-
-    border-color: #111;
-}
-
-.primary:hover {
-
-    background: #222;
-}
-
-
-/* ==================================================
-   RESULT
-================================================== */
-
-.result {
-
-    min-height: 90px;
-
-    background:
-        #f0f1f2;
-
-    border-radius: 14px;
-
-    padding: 15px;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    font-size: 20px;
-
-    line-height: 1.5;
-
-    word-break: break-word;
-
-    white-space: pre-wrap;
-}
-
-.result.morse {
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    letter-spacing: 2px;
-}
-
-
-/* ==================================================
-   RADIO BUTTON
-================================================== */
-
-.radio-control {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    padding: 8px 0 4px;
-}
-
-.play-button {
-
-    width: 125px;
-    height: 125px;
-
-    border-radius: 50%;
-
-    background: #111;
-
-    color: white;
-
-    border: 7px solid #ddd;
-
-    font-size: 17px;
-
-    font-weight: bold;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    margin: 8px 0 12px;
-
-    box-shadow:
-        0 5px 18px
-        rgba(
-            0,
-            0,
-            0,
-            0.15
-        );
-}
-
-.play-button:hover {
-
-    background: #222;
-}
-
-.play-button.playing {
-
-    background: #444;
-
-    border-color: #aaa;
-}
-
-.play-status {
-
-    font-size: 13px;
-
-    color: #777;
-
-    text-align: center;
-}
-
-
-/* ==================================================
-   SETTINGS
-================================================== */
-
-.setting {
-
-    margin-bottom: 18px;
-}
-
-.setting:last-child {
-
-    margin-bottom: 0;
-}
-
-.setting-title {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    font-size: 14px;
-
-    font-weight: bold;
-
-    margin-bottom: 8px;
-}
-
-.setting-value {
-
-    color: #777;
-
-    font-weight: normal;
-}
-
-input[type="range"] {
-
-    width: 100%;
-
-    accent-color: #111;
-
-    cursor: pointer;
-}
-
-
-/* ==================================================
-   TABLE
-================================================== */
-
-.table-wrapper {
-
-    overflow-x: auto;
-
-    border-radius: 12px;
-
-    border:
-        1px solid #ddd;
-}
-
-.morse-table {
-
-    width: 100%;
-
-    border-collapse:
-        collapse;
-
-    background: white;
-}
-
-.morse-table th,
-.morse-table td {
-
-    padding: 10px;
-
-    border-bottom:
-        1px solid #ddd;
-
-    text-align: center;
-}
-
-.morse-table th {
-
-    background:
-        #f0f0f0;
-
-    font-size: 13px;
-}
-
-.morse-table td {
-
-    font-size: 15px;
-}
-
-.morse-code {
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 17px !important;
-
-    letter-spacing: 2px;
-}
-
-
-/* ==================================================
-   STATUS
-================================================== */
-
-#status {
-
-    min-height: 18px;
-
-    margin-top: 9px;
-
-    text-align: center;
-
-    color: #666;
-
-    font-size: 13px;
-}
-
-
-/* ==================================================
-   FOOTER
-================================================== */
-
-.footer {
-
-    text-align: center;
-
-    color: #888;
-
-    font-size: 12px;
-
-    padding-top: 4px;
-}
-
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width: 520px) {
-
-    .app {
-
-        padding:
-            12px 10px 28px;
-    }
-
-    .card {
-
-        border-radius: 16px;
-
-        padding: 14px;
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #f5f5f5;
+        color: #111;
     }
 
     h1 {
+        margin-bottom: 5px;
+    }
 
-        font-size: 23px;
+    .subtitle {
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .box {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
     }
 
     textarea {
+        width: 100%;
+        height: 140px;
+        box-sizing: border-box;
+        resize: vertical;
+        padding: 12px;
+        font-size: 18px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
 
-        min-height: 125px;
+    button,
+    select {
+        padding: 12px 16px;
+        margin-top: 10px;
+        margin-right: 5px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        font-size: 15px;
+    }
 
-        font-size: 17px;
+    button:hover,
+    select:hover {
+        background: #eee;
+    }
+
+    button.active {
+        background: #111;
+        color: white;
+    }
+
+    select {
+        width: 100%;
+        margin-right: 0;
     }
 
     .result {
+        min-height: 70px;
+        padding: 15px;
+        background: #eee;
+        border-radius: 10px;
+        font-size: 20px;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
 
+    .label {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #status {
+        margin-top: 10px;
+        color: #666;
+    }
+
+    .table-title {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .morse-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    .morse-table th,
+    .morse-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .morse-table th {
+        background: #eee;
+        font-weight: bold;
+    }
+
+    .morse-code {
+        font-family: monospace;
         font-size: 18px;
+        letter-spacing: 2px;
     }
 
-    .play-button {
-
-        width: 115px;
-        height: 115px;
+    .setting {
+        margin-bottom: 20px;
     }
 
-}
-
-
-/* ==================================================
-   VERY SMALL SCREENS
-================================================== */
-
-@media (max-width: 360px) {
-
-    .mode-buttons,
-    .actions {
-
-        grid-template-columns:
-            1fr;
+    .setting:last-child {
+        margin-bottom: 0;
     }
 
-    .play-button {
-
-        width: 105px;
-        height: 105px;
+    .setting-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
     }
-}
+
+    input[type="range"] {
+        width: 100%;
+    }
+
+    .setting-value {
+        display: block;
+        margin-top: 5px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    #playButton.playing {
+        background: #111;
+        color: white;
+    }
+
+    @media (max-width: 500px) {
+
+        body {
+            margin: 15px auto;
+            padding: 12px;
+        }
+
+        .box {
+            padding: 15px;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 11px 12px;
+        }
+
+        .morse-table th,
+        .morse-table td {
+            padding: 8px 5px;
+        }
+
+    }
 
 </style>
-
 </head>
-
 
 <body>
 
+<h1>Neo Morse</h1>
 
-<div class="app">
-
-
-<!-- ==================================================
-     HEADER
-================================================== -->
-
-<header class="header">
-
-    <div class="brand">
-
-        <div class="logo">
-            NM
-        </div>
-
-        <div>
-
-            <h1>
-                Neo Morse
-            </h1>
-
-            <div class="version">
-                Morse translator · 0.6
-            </div>
-
-        </div>
-
-    </div>
-
-    <div
-        id="statusLight"
-        class="status-light"
-    ></div>
-
-</header>
+<div class="subtitle">
+    Переводчик азбуки Морзе — версия 0.5
+</div>
 
 
-<!-- ==================================================
-     LANGUAGE
-================================================== -->
+<!-- ЯЗЫК -->
 
-<div class="card">
+<div class="box">
 
     <div class="label">
         Язык
     </div>
 
     <select id="languageSelect">
-
-        <option value="az">
-            Azərbaycan
-        </option>
 
         <option value="ru">
             Русский
@@ -715,79 +209,35 @@ input[type="range"] {
             English
         </option>
 
-        <option value="tr">
-            Türkçe
-        </option>
-
-        <option value="de">
-            Deutsch
-        </option>
-
-        <option value="fr">
-            Français
-        </option>
-
-        <option value="es">
-            Español
-        </option>
-
-        <option value="it">
-            Italiano
-        </option>
-
-        <option value="pt">
-            Português
-        </option>
-
-        <option value="uk">
-            Українська
-        </option>
-
     </select>
 
 </div>
 
 
-<!-- ==================================================
-     MODE
-================================================== -->
+<!-- РЕЖИМ -->
 
-<div class="card">
+<div class="box">
 
     <div class="label">
         Режим
     </div>
 
-    <div class="mode-buttons">
+    <button id="encodeButton" class="active">
+        Текст → Морзе
+    </button>
 
-        <button
-            id="encodeButton"
-            class="active"
-        >
-            Текст → Морзе
-        </button>
-
-        <button
-            id="decodeButton"
-        >
-            Морзе → текст
-        </button>
-
-    </div>
+    <button id="decodeButton">
+        Морзе → текст
+    </button>
 
 </div>
 
 
-<!-- ==================================================
-     INPUT
-================================================== -->
+<!-- ВВОД -->
 
-<div class="card">
+<div class="box">
 
-    <div
-        class="label"
-        id="inputLabel"
-    >
+    <div class="label" id="inputLabel">
         Текст
     </div>
 
@@ -796,121 +246,57 @@ input[type="range"] {
         placeholder="Напиши текст..."
     ></textarea>
 
-    <div class="actions">
+    <br>
 
-        <button
-            id="translateButton"
-            class="primary"
-        >
-            Перевести
-        </button>
+    <button id="translateButton">
+        Перевести
+    </button>
 
-        <button
-            id="clearButton"
-        >
-            Очистить
-        </button>
-
-    </div>
+    <button id="clearButton">
+        Очистить
+    </button>
 
 </div>
 
 
-<!-- ==================================================
-     RESULT
-================================================== -->
+<!-- РЕЗУЛЬТАТ -->
 
-<div class="card">
+<div class="box">
 
-    <div
-        class="label"
-        id="resultLabel"
-    >
+    <div class="label" id="resultLabel">
         Азбука Морзе
     </div>
 
-    <div
-        id="result"
-        class="result morse"
-    >
+    <div id="result" class="result">
         Здесь появится результат
     </div>
 
-    <div class="actions">
+    <button id="copyButton">
+        Копировать
+    </button>
 
-        <button id="copyButton">
-            Копировать
-        </button>
+    <button id="playButton">
+        ▶ Воспроизвести
+    </button>
 
-        <button
-            id="useResultButton"
-        >
-            Использовать
-        </button>
-
-    </div>
+    <div id="status"></div>
 
 </div>
 
 
-<!-- ==================================================
-     RADIO / AUDIO
-================================================== -->
+<!-- НАСТРОЙКИ ЗВУКА -->
 
-<div class="card">
+<div class="box">
 
     <div class="label">
-        Морзе-радио
+        Настройки звука
     </div>
-
-    <div class="radio-control">
-
-        <button
-            id="playButton"
-            class="play-button"
-        >
-            ▶
-        </button>
-
-        <div
-            id="playStatus"
-            class="play-status"
-        >
-            Готово к передаче
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ==================================================
-     SOUND SETTINGS
-================================================== -->
-
-<div class="card">
-
-    <div class="label">
-        Настройки передачи
-    </div>
-
 
     <div class="setting">
 
-        <div class="setting-title">
-
-            <span>
-                Скорость
-            </span>
-
-            <span
-                id="speedValue"
-                class="setting-value"
-            >
-                1×
-            </span>
-
-        </div>
+        <span class="setting-label">
+            Скорость
+        </span>
 
         <input
             type="range"
@@ -921,25 +307,21 @@ input[type="range"] {
             value="1"
         >
 
+        <span
+            class="setting-value"
+            id="speedValue"
+        >
+            1×
+        </span>
+
     </div>
 
 
     <div class="setting">
 
-        <div class="setting-title">
-
-            <span>
-                Тональность
-            </span>
-
-            <span
-                id="pitchValue"
-                class="setting-value"
-            >
-                650 Гц
-            </span>
-
-        </div>
+        <span class="setting-label">
+            Тональность
+        </span>
 
         <input
             type="range"
@@ -950,20 +332,25 @@ input[type="range"] {
             value="650"
         >
 
+        <span
+            class="setting-value"
+            id="pitchValue"
+        >
+            650 Гц
+        </span>
+
     </div>
 
 </div>
 
 
-<!-- ==================================================
-     MORSE TABLE
-================================================== -->
+<!-- ТАБЛИЦА -->
 
-<div class="card">
+<div class="box">
 
-    <div class="label">
+    <h2 class="table-title">
         Таблица Морзе
-    </div>
+    </h2>
 
     <div class="table-wrapper">
 
@@ -972,22 +359,13 @@ input[type="range"] {
             <thead>
 
                 <tr>
-
-                    <th>
-                        Символ
-                    </th>
-
-                    <th>
-                        Морзе
-                    </th>
-
+                    <th>Символ</th>
+                    <th>Морзе</th>
                 </tr>
 
             </thead>
 
-            <tbody
-                id="morseTableBody"
-            ></tbody>
+            <tbody id="morseTableBody"></tbody>
 
         </table>
 
@@ -996,88 +374,13 @@ input[type="range"] {
 </div>
 
 
-<div class="footer">
-    Neo Morse 0.6 · Open Code
-</div>
-
-
-</div>
-
-
 <script>
 
 /* ==================================================
-   INTERNATIONAL MORSE
+   АЗБУКА МОРЗЕ — РУССКИЙ
 ================================================== */
 
-const INTERNATIONAL = {
-
-    A: ".-",
-    B: "-...",
-    C: "-.-.",
-    D: "-..",
-    E: ".",
-    F: "..-.",
-    G: "--.",
-    H: "....",
-    I: "..",
-    J: ".---",
-    K: "-.-",
-    L: ".-..",
-    M: "--",
-    N: "-.",
-    O: "---",
-    P: ".--.",
-    Q: "--.-",
-    R: ".-.",
-    S: "...",
-    T: "-",
-    U: "..-",
-    V: "...-",
-    W: ".--",
-    X: "-..-",
-    Y: "-.--",
-    Z: "--..",
-
-    "0": "-----",
-    "1": ".----",
-    "2": "..---",
-    "3": "...--",
-    "4": "....-",
-    "5": ".....",
-    "6": "-....",
-    "7": "--...",
-    "8": "---..",
-    "9": "----.",
-
-    ".": ".-.-.-",
-    ",": "--..--",
-    "?": "..--..",
-    "!": "-.-.--",
-    "'": ".----.",
-    "/": "-..-.",
-    "(": "-.--.",
-    ")": "-.--.-",
-    "&": ".-...",
-    ":": "---...",
-    ";": "-.-.-.",
-    "=": "-...-",
-    "+": ".-.-.",
-    "-": "-....-",
-    "_": "..--.-",
-    "\"": ".-..-.",
-    "$": "...-..-",
-    "@": ".--.-.",
-    "¿": "..-.-",
-    "¡": "--...-"
-};
-
-
-/* ==================================================
-   RUSSIAN
-================================================== */
-
-const RU_EXTRA = {
+const MORSE_RU = {
 
     "А": ".-",
     "Б": "-...",
@@ -1111,376 +414,194 @@ const RU_EXTRA = {
     "Ь": "-..-",
     "Э": "..-..",
     "Ю": "..--",
-    "Я": ".-.-"
+    "Я": ".-.-",
+
+    "0": "-----",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----.",
+
+    ".": ".-.-.-",
+    ",": "--..--",
+    "?": "..--..",
+    "!": "-.-.--",
+    ":": "---...",
+    ";": "-.-.-.",
+    "-": "-....-",
+    "\"": ".-..-.",
+    "(": "-.--.",
+    ")": "-.--.-",
+    "/": "-..-.",
+    "@": ".--.-."
 };
 
 
 /* ==================================================
-   UKRAINIAN
+   АЗБУКА МОРЗЕ — ENGLISH
 ================================================== */
 
-const UK_EXTRA = {
-
-    "А": ".-",
-    "Б": "-...",
-    "В": ".--",
-    "Г": "--.",
-    "Ґ": "--.",
-    "Д": "-..",
-    "Е": ".",
-    "Є": "..-..",
-    "Ж": "...-",
-    "З": "--..",
-    "И": "..",
-    "І": "..",
-    "Ї": ".---.",
-    "Й": ".---",
-    "К": "-.-",
-    "Л": ".-..",
-    "М": "--",
-    "Н": "-.",
-    "О": "---",
-    "П": ".--.",
-    "Р": ".-.",
-    "С": "...",
-    "Т": "-",
-    "У": "..-",
-    "Ф": "..-.",
-    "Х": "....",
-    "Ц": "-.-.",
-    "Ч": "---.",
-    "Ш": "----",
-    "Щ": "--.-",
-    "Ь": "-..-",
-    "Ю": "..--",
-    "Я": ".-.-"
-};
-
-
-/* ==================================================
-   AZERBAIJANI
-================================================== */
-
-const AZ_EXTRA = {
+const MORSE_EN = {
 
     "A": ".-",
     "B": "-...",
     "C": "-.-.",
-    "Ç": "-.-..",
     "D": "-..",
     "E": ".",
-    "Ə": ".-..-",
     "F": "..-.",
     "G": "--.",
-    "Ğ": "--.-.",
     "H": "....",
-    "X": "-..-",
     "I": "..",
-    "İ": ".-..-",
     "J": ".---",
     "K": "-.-",
-    "Q": "--.-",
     "L": ".-..",
     "M": "--",
     "N": "-.",
     "O": "---",
-    "Ö": "---.",
     "P": ".--.",
+    "Q": "--.-",
     "R": ".-.",
     "S": "...",
-    "Ş": "----",
     "T": "-",
     "U": "..-",
-    "Ü": "..--",
     "V": "...-",
+    "W": ".--",
+    "X": "-..-",
     "Y": "-.--",
     "Z": "--..",
 
-    "a": ".-",
-    "b": "-...",
-    "c": "-.-.",
-    "ç": "-.-..",
-    "d": "-..",
-    "e": ".",
-    "ə": ".-..-",
-    "f": "..-.",
-    "g": "--.",
-    "ğ": "--.-.",
-    "h": "....",
-    "x": "-..-",
-    "ı": "..",
-    "i": ".-..-",
-    "j": ".---",
-    "k": "-.-",
-    "q": "--.-",
-    "l": ".-..",
-    "m": "--",
-    "n": "-.",
-    "o": "---",
-    "ö": "---.",
-    "p": ".--.",
-    "r": ".-.",
-    "s": "...",
-    "ş": "----",
-    "t": "-",
-    "u": "..-",
-    "ü": "..--",
-    "v": "...-",
-    "y": "-.--",
-    "z": "--.."
+    "0": "-----",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----.",
+
+    ".": ".-.-.-",
+    ",": "--..--",
+    "?": "..--..",
+    "!": "-.-.--",
+    ":": "---...",
+    ";": "-.-.-.",
+    "-": "-....-",
+    "\"": ".-..-.",
+    "(": "-.--.",
+    ")": "-.--.-",
+    "/": "-..-.",
+    "@": ".--.-."
 };
 
 
 /* ==================================================
-   TURKISH
+   ПОЛУЧИТЬ ТЕКУЩУЮ АЗБУКУ
 ================================================== */
 
-const TR_EXTRA = {
+function getCurrentMorse() {
 
-    "Ç": "-.-..",
-    "Ğ": "--.-.",
-    "İ": "..",
-    "I": "..",
-    "Ö": "---.",
-    "Ş": "----",
-    "Ü": "..--",
-    "ı": ".."
-};
+    if (
+        languageSelect.value === "en"
+    ) {
+        return MORSE_EN;
+    }
 
-
-/* ==================================================
-   GERMAN
-================================================== */
-
-const DE_EXTRA = {
-
-    "Ä": ".-.-",
-    "Ö": "---.",
-    "Ü": "..--",
-    "ß": "...--.."
-};
-
-
-/* ==================================================
-   FRENCH
-================================================== */
-
-const FR_EXTRA = {
-
-    "À": ".--.-",
-    "Â": ".-.-",
-    "Ç": "-.-..",
-    "É": "..-..",
-    "È": ".-..-",
-    "Ê": "-..-.",
-    "Ë": ".-..-",
-    "Î": "..",
-    "Ï": "..",
-    "Ô": "---.",
-    "Ù": "..--",
-    "Û": "..--",
-    "Ü": "..--"
-};
-
-
-/* ==================================================
-   SPANISH
-================================================== */
-
-const ES_EXTRA = {
-
-    "Á": ".--.-",
-    "É": "..-..",
-    "Í": "..",
-    "Ó": "---.",
-    "Ú": "..--",
-    "Ü": "..--",
-    "Ñ": "--.--",
-    "¿": "..-.-",
-    "¡": "--...-"
-};
-
-
-/* ==================================================
-   ITALIAN
-================================================== */
-
-const IT_EXTRA = {
-
-    "À": ".--.-",
-    "È": ".-..-",
-    "É": "..-..",
-    "Ì": "..",
-    "Ò": "---.",
-    "Ù": "..--"
-};
-
-
-/* ==================================================
-   PORTUGUESE
-================================================== */
-
-const PT_EXTRA = {
-
-    "Á": ".--.-",
-    "Â": ".-.-",
-    "Ã": ".-.-",
-    "À": ".--.-",
-    "Ç": "-.-..",
-    "É": "..-..",
-    "Ê": "-..-.",
-    "Í": "..",
-    "Ó": "---.",
-    "Ô": "---.",
-    "Õ": "---.",
-    "Ú": "..--"
-};
-
-
-/* ==================================================
-   СОЗДАНИЕ ЯЗЫКОВ
-================================================== */
-
-function makeLatinMap(extra) {
-
-    return {
-        ...INTERNATIONAL,
-        ...extra
-    };
+    return MORSE_RU;
 }
 
 
-const LANGUAGES = {
+/* ==================================================
+   ОБРАТНАЯ ТАБЛИЦА
+================================================== */
 
-    az: makeLatinMap(AZ_EXTRA),
+function createReverseMorse(morse) {
 
-    en: makeLatinMap({}),
+    const reverse = {};
 
-    tr: makeLatinMap(TR_EXTRA),
+    for (const symbol in morse) {
 
-    de: makeLatinMap(DE_EXTRA),
+        const code = morse[symbol];
 
-    fr: makeLatinMap(FR_EXTRA),
+        /*
+            Если у двух символов одинаковый код,
+            первый вариант сохраняем.
+        */
 
-    es: makeLatinMap(ES_EXTRA),
+        if (!reverse[code]) {
 
-    it: makeLatinMap(IT_EXTRA),
+            reverse[code] = symbol;
+        }
+    }
 
-    pt: makeLatinMap(PT_EXTRA),
-
-    ru: RU_EXTRA,
-
-    uk: UK_EXTRA
-};
+    return reverse;
+}
 
 
 /* ==================================================
-   ELEMENTS
+   ЭЛЕМЕНТЫ
 ================================================== */
 
 const input =
-    document.getElementById(
-        "input"
-    );
+    document.getElementById("input");
 
 const result =
-    document.getElementById(
-        "result"
-    );
-
-const languageSelect =
-    document.getElementById(
-        "languageSelect"
-    );
-
-const encodeButton =
-    document.getElementById(
-        "encodeButton"
-    );
-
-const decodeButton =
-    document.getElementById(
-        "decodeButton"
-    );
+    document.getElementById("result");
 
 const translateButton =
-    document.getElementById(
-        "translateButton"
-    );
+    document.getElementById("translateButton");
 
 const clearButton =
-    document.getElementById(
-        "clearButton"
-    );
+    document.getElementById("clearButton");
 
 const copyButton =
-    document.getElementById(
-        "copyButton"
-    );
-
-const useResultButton =
-    document.getElementById(
-        "useResultButton"
-    );
+    document.getElementById("copyButton");
 
 const playButton =
-    document.getElementById(
-        "playButton"
-    );
+    document.getElementById("playButton");
 
-const playStatus =
-    document.getElementById(
-        "playStatus"
-    );
+const encodeButton =
+    document.getElementById("encodeButton");
 
-const status =
-    document.getElementById(
-        "status"
-    );
-
-const statusLight =
-    document.getElementById(
-        "statusLight"
-    );
+const decodeButton =
+    document.getElementById("decodeButton");
 
 const inputLabel =
-    document.getElementById(
-        "inputLabel"
-    );
+    document.getElementById("inputLabel");
 
 const resultLabel =
-    document.getElementById(
-        "resultLabel"
-    );
+    document.getElementById("resultLabel");
 
-const tableBody =
-    document.getElementById(
-        "morseTableBody"
-    );
+const status =
+    document.getElementById("status");
+
+const languageSelect =
+    document.getElementById("languageSelect");
+
+const morseTableBody =
+    document.getElementById("morseTableBody");
 
 const speedRange =
-    document.getElementById(
-        "speedRange"
-    );
+    document.getElementById("speedRange");
 
 const speedValue =
-    document.getElementById(
-        "speedValue"
-    );
+    document.getElementById("speedValue");
 
 const pitchRange =
-    document.getElementById(
-        "pitchRange"
-    );
+    document.getElementById("pitchRange");
 
 const pitchValue =
-    document.getElementById(
-        "pitchValue"
-    );
+    document.getElementById("pitchValue");
 
 
 /* ==================================================
-   STATE
+   СОСТОЯНИЕ
 ================================================== */
 
 let mode = "encode";
@@ -1495,47 +616,7 @@ let oscillator = null;
 
 
 /* ==================================================
-   CURRENT MORSE
-================================================== */
-
-function getCurrentMorse() {
-
-    return LANGUAGES[
-        languageSelect.value
-    ];
-}
-
-
-/* ==================================================
-   REVERSE MORSE
-================================================== */
-
-function createReverseMorse(morse) {
-
-    const reverse = {};
-
-    for (
-        const symbol in morse
-    ) {
-
-        const code =
-            morse[symbol];
-
-        if (
-            reverse[code] === undefined
-        ) {
-
-            reverse[code] =
-                symbol;
-        }
-    }
-
-    return reverse;
-}
-
-
-/* ==================================================
-   TEXT → MORSE
+   ТЕКСТ → МОРЗЕ
 ================================================== */
 
 function textToMorse(text) {
@@ -1546,8 +627,7 @@ function textToMorse(text) {
     text =
         text.toUpperCase();
 
-    const output = [];
-
+    let output = [];
 
     for (
         let i = 0;
@@ -1555,21 +635,13 @@ function textToMorse(text) {
         i++
     ) {
 
-        const character =
-            text[i];
+        const character = text[i];
 
-
-        if (
-            character === " "
-        ) {
+        if (character === " ") {
 
             output.push("/");
 
-            continue;
-        }
-
-
-        if (
+        } else if (
             morse[character]
         ) {
 
@@ -1579,13 +651,12 @@ function textToMorse(text) {
         }
     }
 
-
     return output.join(" ");
 }
 
 
 /* ==================================================
-   MORSE → TEXT
+   МОРЗЕ → ТЕКСТ
 ================================================== */
 
 function morseToText(text) {
@@ -1598,18 +669,14 @@ function morseToText(text) {
     text =
         text.trim();
 
-
-    if (!text) {
-
+    if (text === "") {
         return "";
     }
-
 
     const words =
         text.split("/");
 
-    const output = [];
-
+    let output = [];
 
     for (
         let w = 0;
@@ -1620,18 +687,14 @@ function morseToText(text) {
         const word =
             words[w].trim();
 
-
-        if (!word) {
-
+        if (word === "") {
             continue;
         }
-
 
         const letters =
             word.split(/\s+/);
 
-        let decoded = "";
-
+        let decodedWord = "";
 
         for (
             let i = 0;
@@ -1642,33 +705,30 @@ function morseToText(text) {
             const code =
                 letters[i];
 
-
             if (
                 reverse[code]
             ) {
 
-                decoded +=
+                decodedWord +=
                     reverse[code];
 
             } else {
 
-                decoded += "?";
+                decodedWord += "?";
             }
         }
 
-
         output.push(
-            decoded
+            decodedWord
         );
     }
-
 
     return output.join(" ");
 }
 
 
 /* ==================================================
-   TRANSLATE
+   ПЕРЕВОД
 ================================================== */
 
 function translate() {
@@ -1677,7 +737,6 @@ function translate() {
 
     const text =
         input.value;
-
 
     if (
         text.trim() === ""
@@ -1691,42 +750,24 @@ function translate() {
         return;
     }
 
-
-    if (
-        mode === "encode"
-    ) {
+    if (mode === "encode") {
 
         result.textContent =
             textToMorse(text);
-
-        result.classList.add(
-            "morse"
-        );
-
-        resultLabel.textContent =
-            "Азбука Морзе";
 
     } else {
 
         result.textContent =
             morseToText(text);
-
-        result.classList.remove(
-            "morse"
-        );
-
-        resultLabel.textContent =
-            "Текст";
     }
-
 
     status.textContent =
         "Готово";
 }
 
 
-    /* ==================================================
-   UPDATE TABLE
+/* ==================================================
+   ТАБЛИЦА
 ================================================== */
 
 function updateMorseTable() {
@@ -1734,25 +775,28 @@ function updateMorseTable() {
     const morse =
         getCurrentMorse();
 
-    tableBody.innerHTML = "";
+    /*
+        Сначала полностью очищаем таблицу.
+    */
+
+    morseTableBody.innerHTML = "";
+
+    /*
+        Затем создаём отдельную строку
+        для каждого символа.
+    */
 
     Object.keys(morse).forEach(
         function(symbol) {
 
             const row =
-                document.createElement(
-                    "tr"
-                );
+                document.createElement("tr");
 
             const symbolCell =
-                document.createElement(
-                    "td"
-                );
+                document.createElement("td");
 
             const codeCell =
-                document.createElement(
-                    "td"
-                );
+                document.createElement("td");
 
             symbolCell.textContent =
                 symbol;
@@ -1771,7 +815,7 @@ function updateMorseTable() {
                 codeCell
             );
 
-            tableBody.appendChild(
+            morseTableBody.appendChild(
                 row
             );
         }
@@ -1780,7 +824,7 @@ function updateMorseTable() {
 
 
 /* ==================================================
-   LANGUAGE
+   СМЕНА ЯЗЫКА
 ================================================== */
 
 languageSelect.addEventListener(
@@ -1798,7 +842,7 @@ languageSelect.addEventListener(
 
 
 /* ==================================================
-   ENCODE MODE
+   РЕЖИМ ТЕКСТ → МОРЗЕ
 ================================================== */
 
 encodeButton.addEventListener(
@@ -1826,10 +870,6 @@ encodeButton.addEventListener(
         input.placeholder =
             "Напиши текст...";
 
-        result.classList.add(
-            "morse"
-        );
-
         input.value = "";
 
         result.textContent =
@@ -1841,7 +881,7 @@ encodeButton.addEventListener(
 
 
 /* ==================================================
-   DECODE MODE
+   РЕЖИМ МОРЗЕ → ТЕКСТ
 ================================================== */
 
 decodeButton.addEventListener(
@@ -1869,10 +909,6 @@ decodeButton.addEventListener(
         input.placeholder =
             "Например: ... --- ...";
 
-        result.classList.remove(
-            "morse"
-        );
-
         input.value = "";
 
         result.textContent =
@@ -1884,17 +920,20 @@ decodeButton.addEventListener(
 
 
 /* ==================================================
-   TRANSLATE BUTTON
+   КНОПКА ПЕРЕВЕСТИ
 ================================================== */
 
 translateButton.addEventListener(
     "click",
-    translate
+    function() {
+
+        translate();
+    }
 );
 
 
 /* ==================================================
-   CLEAR
+   ОЧИСТКА
 ================================================== */
 
 clearButton.addEventListener(
@@ -1909,15 +948,12 @@ clearButton.addEventListener(
             "Здесь появится результат";
 
         status.textContent = "";
-
-        playStatus.textContent =
-            "Готово к передаче";
     }
 );
 
 
 /* ==================================================
-   COPY
+   КОПИРОВАНИЕ
 ================================================== */
 
 copyButton.addEventListener(
@@ -1957,39 +993,7 @@ copyButton.addEventListener(
 
 
 /* ==================================================
-   USE RESULT
-================================================== */
-
-useResultButton.addEventListener(
-    "click",
-    function() {
-
-        const text =
-            result.textContent;
-
-        if (
-            !text ||
-            text ===
-            "Здесь появится результат"
-        ) {
-
-            status.textContent =
-                "Результат пуст";
-
-            return;
-        }
-
-        input.value =
-            text;
-
-        status.textContent =
-            "Результат перенесён";
-    }
-);
-
-
-/* ==================================================
-   SPEED
+   СКОРОСТЬ
 ================================================== */
 
 speedRange.addEventListener(
@@ -2003,7 +1007,7 @@ speedRange.addEventListener(
 
 
 /* ==================================================
-   PITCH
+   ТОНАЛЬНОСТЬ
 ================================================== */
 
 pitchRange.addEventListener(
@@ -2017,7 +1021,7 @@ pitchRange.addEventListener(
 
 
 /* ==================================================
-   AUDIO CONTEXT
+   СОЗДАНИЕ AUDIOCONTEXT
 ================================================== */
 
 function createAudio() {
@@ -2037,20 +1041,12 @@ function createAudio() {
     audioContext =
         new AudioContext();
 
-    if (
-        audioContext.state ===
-        "suspended"
-    ) {
-
-        audioContext.resume();
-    }
-
     return true;
 }
 
 
 /* ==================================================
-   TONE
+   СИГНАЛ
 ================================================== */
 
 function playTone(duration) {
@@ -2058,10 +1054,14 @@ function playTone(duration) {
     return new Promise(
         function(resolve) {
 
-            if (
-                stopRequested ||
-                !audioContext
-            ) {
+            if (stopRequested) {
+
+                resolve();
+
+                return;
+            }
+
+            if (!audioContext) {
 
                 resolve();
 
@@ -2069,12 +1069,10 @@ function playTone(duration) {
             }
 
             oscillator =
-                audioContext
-                    .createOscillator();
+                audioContext.createOscillator();
 
             const gain =
-                audioContext
-                    .createGain();
+                audioContext.createGain();
 
             oscillator.type =
                 "sine";
@@ -2087,9 +1085,7 @@ function playTone(duration) {
             gain.gain.value =
                 0.15;
 
-            oscillator.connect(
-                gain
-            );
+            oscillator.connect(gain);
 
             gain.connect(
                 audioContext.destination
@@ -2097,33 +1093,32 @@ function playTone(duration) {
 
             oscillator.start();
 
-            setTimeout(
-                function() {
+            const timer =
+                setTimeout(
+                    function() {
 
-                    if (oscillator) {
+                        if (oscillator) {
 
-                        try {
+                            try {
+                                oscillator.stop();
+                            } catch (error) {}
 
-                            oscillator.stop();
+                            oscillator =
+                                null;
+                        }
 
-                        } catch (error) {}
+                        resolve();
 
-                        oscillator =
-                            null;
-                    }
-
-                    resolve();
-
-                },
-                duration
-            );
+                    },
+                    duration
+                );
         }
     );
 }
 
 
 /* ==================================================
-   WAIT
+   ПАУЗА
 ================================================== */
 
 function wait(ms) {
@@ -2141,7 +1136,7 @@ function wait(ms) {
 
 
 /* ==================================================
-   STOP PLAYBACK
+   ОСТАНОВКА
 ================================================== */
 
 function stopPlayback() {
@@ -2153,9 +1148,7 @@ function stopPlayback() {
     if (oscillator) {
 
         try {
-
             oscillator.stop();
-
         } catch (error) {}
 
         oscillator = null;
@@ -2164,69 +1157,244 @@ function stopPlayback() {
     if (audioContext) {
 
         try {
-
             audioContext.close();
-
         } catch (error) {}
 
         audioContext = null;
     }
 
     playButton.textContent =
-        "▶";
+        "▶ Воспроизвести";
 
     playButton.classList.remove(
         "playing"
     );
-
-    statusLight.classList.remove(
-        "active"
-    );
-
-    playStatus.textContent =
-        "Готово к передаче";
 }
 
 
-    /* ==================================================
-   GET MORSE FOR PLAYBACK
+/* ==================================================
+   ПОЛУЧИТЬ КОД ДЛЯ ЗВУКА
 ================================================== */
 
 function getMorseForPlayback() {
 
-    if (
-        mode === "encode"
-    ) {
+    /*
+        В режиме Текст → Морзе
+        используем уже полученный результат.
+    */
+
+    if (mode === "encode") {
 
         const morse =
             result.textContent.trim();
 
         if (
             !morse ||
-            morse ===
-            "Здесь появится результат"
+            morse === "Здесь появится результат"
         ) {
-
             return "";
         }
 
         return morse;
     }
 
+
+    /*
+        В режиме Морзе → текст
+        используем введённый пользователем Морзе-код.
+    */
+
     return input.value.trim();
 }
 
 
 /* ==================================================
-   PLAY MORSE SOUND
+   ВОСПРОИЗВЕДЕНИЕ ОДНОГО СИГНАЛА
 ================================================== */
 
-async function playMorseSound(
-    morseText
-) {
+function playTone(duration) {
+
+    return new Promise(function(resolve) {
+
+        if (
+            stopRequested ||
+            !audioContext
+        ) {
+
+            resolve();
+            return;
+        }
+
+
+        oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.value =
+            Number(pitchRange.value);
+
+
+        gain.gain.value = 0.15;
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+
+        setTimeout(function() {
+
+            if (oscillator) {
+
+                try {
+                    oscillator.stop();
+                } catch (error) {}
+
+                oscillator = null;
+            }
+
+            resolve();
+
+        }, duration);
+
+    });
+}
+
+
+/* ==================================================
+   ПАУЗА
+================================================== */
+
+function wait(ms) {
+
+    return new Promise(function(resolve) {
+
+        setTimeout(resolve, ms);
+
+    });
+}
+
+
+/* ==================================================
+   СОЗДАНИЕ AUDIO CONTEXT
+================================================== */
+
+function createAudio() {
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+
+    if (!AudioContext) {
+
+        status.textContent =
+            "Браузер не поддерживает звук";
+
+        return false;
+    }
+
+
+    audioContext =
+        new AudioContext();
+
+
+    /*
+        На некоторых мобильных браузерах
+        AudioContext после первого запуска
+        может быть приостановлен.
+    */
 
     if (
-        !morseText
+        audioContext.state === "suspended"
+    ) {
+
+        audioContext.resume();
+    }
+
+
+    return true;
+}
+
+
+/* ==================================================
+   ОСТАНОВКА ВОСПРОИЗВЕДЕНИЯ
+================================================== */
+
+function stopPlayback() {
+
+    stopRequested = true;
+
+    isPlaying = false;
+
+
+    /*
+        Останавливаем текущий сигнал.
+    */
+
+    if (oscillator) {
+
+        try {
+            oscillator.stop();
+        } catch (error) {}
+
+        oscillator = null;
+    }
+
+
+    /*
+        Закрываем AudioContext.
+    */
+
+    if (audioContext) {
+
+        try {
+            audioContext.close();
+        } catch (error) {}
+
+        audioContext = null;
+    }
+
+
+    /*
+        Возвращаем кнопку
+        в обычное состояние.
+    */
+
+    playButton.textContent =
+        "▶ Воспроизвести";
+
+    playButton.classList.remove(
+        "playing"
+    );
+}
+
+
+/* ==================================================
+   ВОСПРОИЗВЕДЕНИЕ МОРЗЕ
+================================================== */
+
+async function playMorseSound(morseText) {
+
+    /*
+        Проверяем, есть ли вообще
+        что воспроизводить.
+    */
+
+    if (
+        !morseText ||
+        morseText ===
+        "Здесь появится результат"
     ) {
 
         status.textContent =
@@ -2236,13 +1404,19 @@ async function playMorseSound(
     }
 
 
-    if (
-        !createAudio()
-    ) {
+    /*
+        Создаём звук.
+    */
+
+    if (!createAudio()) {
 
         return;
     }
 
+
+    /*
+        Начинаем новое воспроизведение.
+    */
 
     stopRequested = false;
 
@@ -2250,49 +1424,43 @@ async function playMorseSound(
 
 
     playButton.textContent =
-        "■";
+        "■ Остановить";
 
     playButton.classList.add(
         "playing"
     );
 
-    statusLight.classList.add(
-        "active"
-    );
-
-    playStatus.textContent =
-        "Передача...";
 
     status.textContent =
         "Воспроизведение...";
 
 
     /*
-       Скорость:
+        Базовая длительность точки.
 
-       1×  = обычная
-       2×  = в два раза быстрее
-       0.5× = в два раза медленнее
+        100 мс при скорости 1×.
+        Чем выше скорость,
+        тем быстрее воспроизведение.
     */
 
     const speed =
-        Number(
-            speedRange.value
-        );
-
+        Number(speedRange.value);
 
     const dot =
         100 / speed;
 
 
     /*
-       Делим сообщение
-       на слова через /
+        Разделяем слова.
     */
 
     const words =
         morseText.split("/");
 
+
+    /*
+        Воспроизводим каждое слово.
+    */
 
     for (
         let w = 0;
@@ -2300,10 +1468,7 @@ async function playMorseSound(
         w++
     ) {
 
-        if (
-            stopRequested
-        ) {
-
+        if (stopRequested) {
             break;
         }
 
@@ -2313,13 +1478,13 @@ async function playMorseSound(
 
 
         if (!word) {
-
             continue;
         }
 
 
         /*
-           Отдельные буквы
+            Внутри слова буквы
+            разделены пробелами.
         */
 
         const letters =
@@ -2332,10 +1497,7 @@ async function playMorseSound(
             l++
         ) {
 
-            if (
-                stopRequested
-            ) {
-
+            if (stopRequested) {
                 break;
             }
 
@@ -2345,9 +1507,8 @@ async function playMorseSound(
 
 
             /*
-               Каждый символ:
-               . = точка
-               - = тире
+                Воспроизводим каждый
+                символ Морзе.
             */
 
             for (
@@ -2356,10 +1517,7 @@ async function playMorseSound(
                 i++
             ) {
 
-                if (
-                    stopRequested
-                ) {
-
+                if (stopRequested) {
                     break;
                 }
 
@@ -2368,15 +1526,23 @@ async function playMorseSound(
                     code[i];
 
 
-                if (
-                    symbol === "."
-                ) {
+                /*
+                    Точка.
+                */
+
+                if (symbol === ".") {
 
                     await playTone(
                         dot
                     );
+                }
 
-                } else if (
+
+                /*
+                    Тире.
+                */
+
+                else if (
                     symbol === "-"
                 ) {
 
@@ -2387,13 +1553,13 @@ async function playMorseSound(
 
 
                 /*
-                   Пауза между
-                   элементами одной буквы
+                    Пауза между точкой
+                    и следующим символом.
                 */
 
                 if (
                     i <
-                        code.length - 1 &&
+                    code.length - 1 &&
                     !stopRequested
                 ) {
 
@@ -2405,12 +1571,12 @@ async function playMorseSound(
 
 
             /*
-               Пауза между буквами
+                Пауза между буквами.
             */
 
             if (
                 l <
-                    letters.length - 1 &&
+                letters.length - 1 &&
                 !stopRequested
             ) {
 
@@ -2422,12 +1588,12 @@ async function playMorseSound(
 
 
         /*
-           Пауза между словами
+            Пауза между словами.
         */
 
         if (
             w <
-                words.length - 1 &&
+            words.length - 1 &&
             !stopRequested
         ) {
 
@@ -2438,21 +1604,23 @@ async function playMorseSound(
     }
 
 
+    /*
+        Запоминаем,
+        была ли остановка.
+    */
+
     const wasStopped =
         stopRequested;
 
 
     /*
-       Останавливаем
-       оставшийся генератор
+        Останавливаем остатки звука.
     */
 
     if (oscillator) {
 
         try {
-
             oscillator.stop();
-
         } catch (error) {}
 
         oscillator = null;
@@ -2460,50 +1628,40 @@ async function playMorseSound(
 
 
     /*
-       Закрываем AudioContext
+        Закрываем AudioContext.
     */
 
     if (audioContext) {
 
         try {
-
             await audioContext.close();
-
         } catch (error) {}
 
         audioContext = null;
     }
 
 
+    /*
+        Воспроизведение закончено.
+    */
+
     isPlaying = false;
 
 
     playButton.textContent =
-        "▶";
+        "▶ Воспроизвести";
 
     playButton.classList.remove(
         "playing"
     );
 
-    statusLight.classList.remove(
-        "active"
-    );
 
-
-    if (
-        wasStopped
-    ) {
-
-        playStatus.textContent =
-            "Передача остановлена";
+    if (wasStopped) {
 
         status.textContent =
             "Воспроизведение остановлено";
 
     } else {
-
-        playStatus.textContent =
-            "Передача завершена";
 
         status.textContent =
             "Воспроизведение завершено";
@@ -2512,7 +1670,7 @@ async function playMorseSound(
 
 
 /* ==================================================
-   PLAY / STOP BUTTON
+   КНОПКА ВОСПРОИЗВЕСТИ / ОСТАНОВИТЬ
 ================================================== */
 
 playButton.addEventListener(
@@ -2520,16 +1678,15 @@ playButton.addEventListener(
     function() {
 
         /*
-           Если звук уже идёт,
-           повторное нажатие
-           НЕ запускает второй звук.
+            Если звук уже идёт,
+            повторное нажатие
+            полностью его останавливает.
 
-           Оно останавливает текущий.
+            НОВОЕ воспроизведение
+            при этом не создаётся.
         */
 
-        if (
-            isPlaying
-        ) {
+        if (isPlaying) {
 
             stopPlayback();
 
@@ -2540,41 +1697,61 @@ playButton.addEventListener(
         }
 
 
-        const morse =
+        /*
+            Получаем Морзе,
+            который нужно воспроизвести.
+        */
+
+        const morseText =
             getMorseForPlayback();
 
 
+        /*
+            Запускаем воспроизведение.
+        */
+
         playMorseSound(
-            morse
+            morseText
         );
     }
 );
 
 
 /* ==================================================
-   INITIAL TABLE
+   СКОРОСТЬ
+================================================== */
+
+speedRange.addEventListener(
+    "input",
+    function() {
+
+        speedValue.textContent =
+            speedRange.value + "×";
+    }
+);
+
+
+/* ==================================================
+   ТОНАЛЬНОСТЬ
+================================================== */
+
+pitchRange.addEventListener(
+    "input",
+    function() {
+
+        pitchValue.textContent =
+            pitchRange.value + " Гц";
+    }
+);
+
+
+/* ==================================================
+   ПЕРВОНАЧАЛЬНАЯ ТАБЛИЦА
 ================================================== */
 
 updateMorseTable();
 
-
-/* ==================================================
-   INITIAL VALUES
-================================================== */
-
-speedValue.textContent =
-    speedRange.value + "×";
-
-pitchValue.textContent =
-    pitchRange.value + " Гц";
-
-
-/* ==================================================
-   END
-================================================== */
-
-
-</script >
+</script>
 
 </body>
 </html>
