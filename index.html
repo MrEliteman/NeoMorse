@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NeoMorse — v0.7</title>
+<title>NeoMorse — a simple web-based Morse code translator • v1.0 – RELEASE</title>
 
 <style>
 
 /* =========================================================
-   NEO MORSE 0.7 — ОСНОВНЫЕ СТИЛИ
+   NEO MORSE 1.0 — ОСНОВНЫЕ СТИЛИ
 ========================================================= */
 
 :root {
@@ -394,7 +394,7 @@ input[type="range"] {
             </h1>
 
             <div class="brand-subtitle">
-                Переводчик азбуки Морзе • версия 0.7
+                Переводчик азбуки Морзе • Версия 1.0 – Релиз
             </div>
 
         </div>
@@ -650,9 +650,9 @@ input[type="range"] {
    КОНФИГУРАЦИЯ
 ========================================================= */
 
-const APP_VERSION = "0.7";
+const APP_VERSION = "1.0";
 
-const STORAGE_KEY = "neoMorseState_v07";
+const STORAGE_KEY = "neoMorseState_v1";
 
 const EMPTY_RESULT =
     "Здесь появится результат";
@@ -981,7 +981,7 @@ function saveState() {
         */
 
         console.warn(
-            "Neo Morse: не удалось сохранить состояние.",
+            "NeoMorse: не удалось сохранить состояние.",
             error
         );
     }
@@ -1040,7 +1040,7 @@ function loadState() {
         */
 
         console.warn(
-            "Neo Morse: повреждённые настройки. Используются стандартные.",
+            "NeoMorse: повреждённые настройки. Используются стандартные.",
             error
         );
 
@@ -2602,7 +2602,7 @@ playButton.addEventListener(
     function() {
 
         /*
-            Ключевая защита 0.7:
+            Ключевая защита 1.0:
 
             повторное нажатие во время
             воспроизведения НЕ запускает
@@ -2677,7 +2677,7 @@ function initializeApp() {
     ) {
 
         console.error(
-            "Neo Morse: элементы интерфейса не найдены."
+            "NeoMorse: элементы интерфейса не найдены."
         );
 
         return;
