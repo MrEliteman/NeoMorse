@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NeoMorse - v0.5.2</title>
+<title>NeoMorse - v0.5.3</title>
 
 <style>
 
@@ -1827,26 +1827,25 @@ updateMorseTable();
 
 /* ==================================================
    NEO MORSE 0.6
-   FULL LOCAL STORAGE
+   FULL STATE LOCAL STORAGE
 ================================================== */
 
-const STORAGE_KEYS = {
-
+const STORAGE = {
     theme: "neoMorse_theme",
     language: "neoMorse_language",
     mode: "neoMorse_mode",
     speed: "neoMorse_speed",
     pitch: "neoMorse_pitch",
-    input: "neoMorse_input"
-
+    input: "neoMorse_input",
+    result: "neoMorse_result"
 };
 
 
 /* ==================================================
-   БЕЗОПАСНАЯ РАБОТА С LOCAL STORAGE
+   LOCAL STORAGE — БЕЗОПАСНЫЕ ФУНКЦИИ
 ================================================== */
 
-function saveSetting(key, value) {
+function saveLocal(key, value) {
 
     try {
 
@@ -1857,17 +1856,14 @@ function saveSetting(key, value) {
 
     } catch (error) {
 
-        /*
-            Если браузер запрещает
-            Local Storage, приложение
-            всё равно продолжит работать.
-        */
-
+        console.log(
+            "Local Storage недоступен"
+        );
     }
 }
 
 
-function loadSetting(key) {
+function loadLocal(key) {
 
     try {
 
@@ -1885,6 +1881,28 @@ function loadSetting(key) {
 /* ==================================================
    ТЕМА
 ================================================== */
+
+function applyTheme() {
+
+    const savedTheme =
+        loadLocal(STORAGE.theme);
+
+    if (savedTheme === "dark") {
+
+        document.body.classList.add(
+            "dark-mode"
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            "dark-mode"
+        );
+    }
+
+    updateThemeButton();
+}
+
 
 function updateThemeButton() {
 
@@ -1905,47 +1923,19 @@ function updateThemeButton() {
 }
 
 
-function loadTheme() {
-
-    const savedTheme =
-        loadSetting(
-            STORAGE_KEYS.theme
-        );
-
-
-    if (savedTheme === "dark") {
-
-        document.body.classList.add(
-            "dark-mode"
-        );
-
-    } else {
-
-        document.body.classList.remove(
-            "dark-mode"
-        );
-    }
-
-
-    updateThemeButton();
-}
-
-
 themeButton.addEventListener(
     "click",
     function() {
 
-        const isDark =
+        const dark =
             document.body.classList.toggle(
                 "dark-mode"
             );
 
-
-        saveSetting(
-            STORAGE_KEYS.theme,
-            isDark ? "dark" : "light"
+        saveLocal(
+            STORAGE.theme,
+            dark ? "dark" : "light"
         );
-
 
         updateThemeButton();
     }
@@ -1956,62 +1946,159 @@ themeButton.addEventListener(
    ЯЗЫК
 ================================================== */
 
-languageSelect.addEventListener(
-    "change",
-    function() {
+function saveLanguage() {
 
-        saveSetting(
-            STORAGE_KEYS.language,
-            languageSelect.value
-        );
-    }
-);
+    saveLocal(
+        STORAGE.language,
+        languageSelect.value
+    );
+}
 
 
 /* ==================================================
    СКОРОСТЬ
 ================================================== */
 
-speedRange.addEventListener(
-    "input",
-    function() {
+function saveSpeed() {
 
-        saveSetting(
-            STORAGE_KEYS.speed,
-            speedRange.value
-        );
-    }
-);
+    saveLocal(
+        STORAGE.speed,
+        speedRange.value
+    );
+}
+
+
+function updateSpeedText() {
+
+    speedValue.textContent =
+        speedRange.value + "×";
+}
 
 
 /* ==================================================
    ТОНАЛЬНОСТЬ
 ================================================== */
 
-pitchRange.addEventListener(
+function savePitch() {
+
+    saveLocal(
+        STORAGE.pitch,
+        pitchRange.value
+    );
+}
+
+
+function updatePitchText() {
+
+    pitchValue.textContent =
+        pitchRange.value + " Гц";
+}
+
+
+/* ==================================================
+   РЕЖИМ
+================================================== */
+
+function saveMode() {
+
+    saveLocal(
+        STORAGE.mode,
+        mode
+    );
+}
+
+
+/* ==================================================
+   ВВОД
+================================================== */
+
+function saveInput() {
+
+    saveLocal(
+        STORAGE.input,
+        input.value
+    );
+}
+
+
+/* ==================================================
+   РЕЗУЛЬТАТ
+================================================== */
+
+function saveResult() {
+
+    saveLocal(
+        STORAGE.result,
+        result.textContent
+    );
+}
+
+
+/* ==================================================
+   АВТОСОХРАНЕНИЕ ВВОДА
+================================================== */
+
+input.addEventListener(
     "input",
     function() {
 
-        saveSetting(
-            STORAGE_KEYS.pitch,
-            pitchRange.value
-        );
+        saveInput();
     }
 );
 
 
 /* ==================================================
-   СОХРАНЕНИЕ РЕЖИМА
+   АВТОСОХРАНЕНИЕ СКОРОСТИ
+================================================== */
+
+speedRange.addEventListener(
+    "input",
+    function() {
+
+        updateSpeedText();
+
+        saveSpeed();
+    }
+);
+
+
+/* ==================================================
+   АВТОСОХРАНЕНИЕ ТОНАЛЬНОСТИ
+================================================== */
+
+pitchRange.addEventListener(
+    "input",
+    function() {
+
+        updatePitchText();
+
+        savePitch();
+    }
+);
+
+
+/* ==================================================
+   АВТОСОХРАНЕНИЕ ЯЗЫКА
+================================================== */
+
+languageSelect.addEventListener(
+    "change",
+    function() {
+
+        saveLanguage();
+    }
+);
+
+
+/* ==================================================
+   АВТОСОХРАНЕНИЕ РЕЖИМА
 ================================================== */
 
 encodeButton.addEventListener(
     "click",
     function() {
 
-        saveSetting(
-            STORAGE_KEYS.mode,
-            "encode"
-        );
+        saveMode();
     }
 );
 
@@ -2020,26 +2107,7 @@ decodeButton.addEventListener(
     "click",
     function() {
 
-        saveSetting(
-            STORAGE_KEYS.mode,
-            "decode"
-        );
-    }
-);
-
-
-/* ==================================================
-   СОХРАНЕНИЕ ВВОДА
-================================================== */
-
-input.addEventListener(
-    "input",
-    function() {
-
-        saveSetting(
-            STORAGE_KEYS.input,
-            input.value
-        );
+        saveMode();
     }
 );
 
@@ -2048,23 +2116,19 @@ input.addEventListener(
    ВОССТАНОВЛЕНИЕ ЯЗЫКА
 ================================================== */
 
-function loadLanguage() {
+function restoreLanguage() {
 
-    const savedLanguage =
-        loadSetting(
-            STORAGE_KEYS.language
-        );
-
+    const saved =
+        loadLocal(STORAGE.language);
 
     if (
-        savedLanguage === "ru" ||
-        savedLanguage === "en"
+        saved === "ru" ||
+        saved === "en"
     ) {
 
         languageSelect.value =
-            savedLanguage;
+            saved;
     }
-
 
     updateMorseTable();
 }
@@ -2074,32 +2138,27 @@ function loadLanguage() {
    ВОССТАНОВЛЕНИЕ СКОРОСТИ
 ================================================== */
 
-function loadSpeed() {
+function restoreSpeed() {
 
-    const savedSpeed =
-        loadSetting(
-            STORAGE_KEYS.speed
-        );
+    const saved =
+        loadLocal(STORAGE.speed);
 
+    if (saved !== null) {
 
-    if (savedSpeed !== null) {
-
-        const speed =
-            Number(savedSpeed);
-
+        const value =
+            Number(saved);
 
         if (
-            speed >= 0.25 &&
-            speed <= 3
+            value >= 0.25 &&
+            value <= 3
         ) {
 
             speedRange.value =
-                savedSpeed;
-
-            speedValue.textContent =
-                savedSpeed + "×";
+                value;
         }
     }
+
+    updateSpeedText();
 }
 
 
@@ -2107,32 +2166,27 @@ function loadSpeed() {
    ВОССТАНОВЛЕНИЕ ТОНАЛЬНОСТИ
 ================================================== */
 
-function loadPitch() {
+function restorePitch() {
 
-    const savedPitch =
-        loadSetting(
-            STORAGE_KEYS.pitch
-        );
+    const saved =
+        loadLocal(STORAGE.pitch);
 
+    if (saved !== null) {
 
-    if (savedPitch !== null) {
-
-        const pitch =
-            Number(savedPitch);
-
+        const value =
+            Number(saved);
 
         if (
-            pitch >= 300 &&
-            pitch <= 1200
+            value >= 300 &&
+            value <= 1200
         ) {
 
             pitchRange.value =
-                savedPitch;
-
-            pitchValue.textContent =
-                savedPitch + " Гц";
+                value;
         }
     }
+
+    updatePitchText();
 }
 
 
@@ -2140,15 +2194,12 @@ function loadPitch() {
    ВОССТАНОВЛЕНИЕ РЕЖИМА
 ================================================== */
 
-function loadMode() {
+function restoreMode() {
 
-    const savedMode =
-        loadSetting(
-            STORAGE_KEYS.mode
-        );
+    const saved =
+        loadLocal(STORAGE.mode);
 
-
-    if (savedMode === "decode") {
+    if (saved === "decode") {
 
         mode = "decode";
 
@@ -2194,41 +2245,111 @@ function loadMode() {
 
 
 /* ==================================================
-   ВОССТАНОВЛЕНИЕ ВВЕДЁННОГО ТЕКСТА
+   ВОССТАНОВЛЕНИЕ ВВОДА
 ================================================== */
 
-function loadInput() {
+function restoreInput() {
 
-    const savedInput =
-        loadSetting(
-            STORAGE_KEYS.input
-        );
+    const saved =
+        loadLocal(STORAGE.input);
 
-
-    if (savedInput !== null) {
+    if (saved !== null) {
 
         input.value =
-            savedInput;
+            saved;
     }
 }
 
 
 /* ==================================================
-   ПЕРВЫЙ ЗАПУСК
+   ВОССТАНОВЛЕНИЕ РЕЗУЛЬТАТА
 ================================================== */
 
-loadTheme();
+function restoreResult() {
 
-loadLanguage();
+    const saved =
+        loadLocal(STORAGE.result);
 
-loadSpeed();
+    if (
+        saved !== null &&
+        saved !== ""
+    ) {
 
-loadPitch();
+        result.textContent =
+            saved;
+    }
+}
 
-loadMode();
 
-loadInput();
+/* ==================================================
+   СОХРАНЕНИЕ РЕЗУЛЬТАТА
+================================================== */
 
+translateButton.addEventListener(
+    "click",
+    function() {
+
+        /*
+            Основной обработчик translate()
+            уже выполнил перевод.
+            Поэтому здесь только сохраняем
+            получившийся результат.
+        */
+
+        setTimeout(
+            function() {
+
+                saveInput();
+
+                saveResult();
+
+            },
+            0
+        );
+    }
+);
+
+
+/* ==================================================
+   ОЧИСТКА
+================================================== */
+
+clearButton.addEventListener(
+    "click",
+    function() {
+
+        setTimeout(
+            function() {
+
+                saveInput();
+
+                saveResult();
+
+            },
+            0
+        );
+    }
+);
+
+
+/* ==================================================
+   ПЕРВОНАЧАЛЬНАЯ ЗАГРУЗКА
+================================================== */
+
+applyTheme();
+
+restoreLanguage();
+
+restoreSpeed();
+
+restorePitch();
+
+restoreMode();
+
+restoreInput();
+
+restoreResult();
+   
    
 </script>
 
