@@ -1,6 +1,6 @@
-# Neo Morse
+# NeoMorse
 
-Neo Morse is a simple web-based Morse code translator.
+«NeoMorse» is a simple web-based Morse code translator.
 
 ## Features
 
@@ -16,7 +16,7 @@ Neo Morse is a simple web-based Morse code translator.
 - Light and dark themes
 - Mobile-friendly interface
 
-## Technologies
+## Languages
 
 - HTML
 - CSS
@@ -24,7 +24,7 @@ Neo Morse is a simple web-based Morse code translator.
 
 ## Version
 
-Current version: 0.5.2
+Current version: 1.0
 
 ## License
 
